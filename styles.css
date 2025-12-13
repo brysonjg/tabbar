@@ -1,0 +1,210 @@
+:root {
+    --topper-height: 30px;
+    --font-size: 16px;
+    --fg-color: #d4d4d4;
+    --topper-color: #2a2e32;
+    --hard-outline-color: #64686b;
+    --hard-outline-width: 1px;
+    --tab-inactive: #23262a;
+    --tab-horz-padding: 10px;
+    --dark-blue-hl: #1f485e;
+    --lighter-blue-hl: #3daee9;
+    --blue-outline: #587180;
+    --active-tab-topper-border: 3px;
+    --tab-inactive-blue: #296A8C;
+    --font: 'font';
+
+    --tab-close-1: brightness(0) saturate(100%) invert(56.9%) saturate(2.8%) hue-rotate(210deg);
+    --tab-close-2: brightness(1) saturate(75%) hue-rotate(340deg) brightness(100%);
+    --tab-close-3: brightness(1) saturate(100%) hue-rotate(340deg) brightness(100%);
+
+    --action-btn-1: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%);
+    --action-btn-2: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4);
+    --action-btn-3: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2);
+}
+
+@font-face {
+    font-family: 'font';
+    src: url('./font.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body, html {
+    background-color: var(--topper-color);
+    color: var(--fg-color);
+    font-family: var(--font);
+    font-size: var(--font-size);
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+div.topper-bar {
+    height: var(--topper-height);
+    background-color: var(--topper-color);
+    border-bottom: var(--hard-outline-width) solid var(--hard-outline-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+div.tab-container {
+    height: var(--topper-height);
+    display: flex;
+    position: relative;
+    white-space: nowrap;
+    flex-grow: 1;
+}
+
+div.tab {
+    background-color: var(--tab-inactive);
+    height: var(--topper-height);
+    display: inline-flex;
+    align-items: center;
+    padding: 0 var(--tab-horz-padding);
+    user-select: none;
+    cursor: default;
+    transition: transform 150ms cubic-bezier(.25,.8,.25,1), background-color 0.15s ease;
+    position: relative;
+    z-index: 1;
+}
+
+
+div.tab:not(.active):hover {
+    background-color: var(--dark-blue-hl);
+    border-bottom: var(--hard-outline-width) solid var(--blue-outline);
+}
+
+body.dragging-tabs div.tab:hover {
+    background-color: var(--tab-inactive) !important;
+    border: none !important;
+}
+
+div.tab.active {
+    background-color: var(--topper-color);
+    border-left: var(--hard-outline-width) solid var(--hard-outline-color);
+    border-right: var(--hard-outline-width) solid var(--hard-outline-color);
+    border-top-left-radius: var(--active-tab-topper-border);
+    border-top-right-radius: var(--active-tab-topper-border);
+    height: calc(var(--topper-height) + 2px);
+}
+
+div.tab.active::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -1px;
+    width: calc(100% + 2px);
+    height: var(--active-tab-topper-border);
+    background: var(--lighter-blue-hl);
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+}
+
+body.window-inactive div.tab.active::before {
+    background: var(--tab-inactive-blue);
+}
+
+div.tab.dragged {
+    z-index: 1000;
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    transform: none !important;
+    transition: none !important;
+}
+
+.tab-placeholder {
+    background-color: var(--topper-color);
+    height: var(--topper-height);
+    display: inline-block;
+    flex-shrink: 0;
+    transition: width 150ms ease;
+}
+
+iframe#chungusmain {
+    height: calc(100vh - var(--topper-height));
+    width: 100%;
+    border: none;
+    user-select: none;
+}
+
+iframe.lowZFrame {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: none;
+    z-index: -9999;
+}
+
+div.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100000000000000000000000000000000000000000000000;
+    background: transparent;
+}
+
+div.tab div.close {
+    font-size: 1px;
+    margin-left: calc(var(--tab-horz-padding) / 2);
+}
+
+div.tab div.close::after {
+    content: '';
+    display: block;
+    width: calc(var(--topper-height) - var(--tab-horz-padding) / 2);
+    height: calc(var(--topper-height) - var(--tab-horz-padding) / 2);
+
+    background-image: url(./icons/tabclose1.svg);
+    filter: var(--tab-close-1);
+
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+div.tab div.close:hover::after {
+    background-image: url(./icons/tabclose2.svg);
+    filter: var(--tab-close-2);
+}
+
+div.tab div.close:active::after {
+    background-image: url(./icons/tabclose3.svg);
+    filter: var(--tab-close-3)
+}
+
+.topper-right {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    border: none;
+    user-select: none;
+    width: 130px;
+    height: calc(var(--topper-height));
+    border-bottom: 1px solid var(--hard-outline-color);
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 5;
+    background-color: var(--topper-color);
+}
+
+img.actionBtn {
+    width: calc(var(--topper-height) - var(--tab-horz-padding));
+    height: calc(var(--topper-height) - var(--tab-horz-padding));
+    margin-right: calc(var(--tab-horz-padding) / 2);
+    user-select: none;
+    filter: var(--action-btn-1);
+}
+
+img.actionBtn:hover {
+    filter: var(--action-btn-2);
+}
+
+img.actionBtn:active {
+    filter: var(--action-btn-3);
+}

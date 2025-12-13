@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings &gt; Appearance</title>
+    <style>
+        :root {
+            /* Core tokens */
+            --font-size: 16px;
+            --bg-color: #2a2e32;
+            --fg-color: #d4d4d4;
+            --hard-outline-color: #64686b;
+            --hard-outline-width: 1px;
+            --dark-blue-hl: #1f485e;
+            --light-blue-hl: #3daee9;
+            --denyal-red: #da4453;
+            --blue-outline: #587180;
+            --font: font;
+
+            /* icons */
+            --icon-filter: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%);
+            --icon-hover: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(70%);
+            --icon-active: brightness(1000);
+            --action-btn-1: "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(70%)";
+            --action-btn-2: "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(50%)";
+            --action-btn-3: "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(30%)";
+
+            /* Greys used for scrollbars, outlines, etc */
+            --grey-40: #585b5e40;
+            --grey-50: #585b5e50;
+            --grey-80: #585b5e80;
+            --grey-90: #585b5e90;
+            --grey-99: #585b5e99;
+            --grey-ff: #585b5eff;
+            --grey-solid: #585b5e;
+
+            /* Accent / link colors */
+            --link-blue: #0da9f5;
+            --link-purple: #aa00aa;
+            --link-active-red: red;
+            --bg-blue-dark: #254455;
+
+            /* Copy button states */
+            --copy-border: #585b5e;
+            --copy-bg: #3c3f42;
+            --copy-fg: #d4d4d4;
+            --copy-border-hover: #d4d4d480;
+            --copy-bg-hover: #d4d4d430;
+            --copy-border-active: #d4d4d499;
+            --copy-bg-active: #d4d4d440;
+            --copy-success-bd: #00ff9999;
+            --copy-success-bg: #00ff9919;
+            --copy-success-fg: #00ff9919;
+
+            /* Menu + context hover highlight */
+            --context-hover-border: #66b8e3;
+            --context-hover-bg: #1f485e40;
+            --context-hover-fg: #9dc6cd;
+            --context-active-bg: #1f485eab;
+        }
+
+        @font-face {
+            font-family: 'font';
+            src: url('../../font.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+            color: var(--fg-color);
+            font-family: var(--font);
+            font-size: 16px;
+            width: 100vw;
+            height: 100vh;
+            user-select: none;
+            -webkit-user-select: none;
+            position: absolute;
+        }
+
+        div.master-container {
+            height: fit-content;
+            width: calc(100vw - 100px);
+            margin-left: 50px;
+            margin-right: 50px;
+            margin-top: 20px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 15px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+            border-left: 1px solid var(--grey-40);
+            border-bottom: 1px solid var(--grey-40);
+            border-top: 1px solid var(--grey-40);
+        }
+
+        ::-webkit-scrollbar-track:hover {
+            border-left: 1px solid var(--grey-99);
+            border-bottom: 1px solid var(--grey-99);
+            border-top: 1px solid var(--grey-99);
+        }
+
+        ::-webkit-scrollbar-track:active {
+            border-left: 1px solid var(--grey-ff);
+            border-bottom: 1px solid var(--grey-ff);
+            border-top: 1px solid var(--grey-ff);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--grey-40);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--grey-99);
+        }
+
+        ::-webkit-scrollbar-thumb:active {
+            background: var(--grey-ff);
+        }
+
+        div.account-infermation {
+            min-height: 50px;
+            height: fit-content;
+            width: 100%;
+            display: flex;
+            align-items: top;
+            padding: 10px 0;
+        }
+
+        img.user-account-icon {
+            height: 100px;
+            width: 100px;
+            border: 2px solid var(--fg-color);
+            margin-left: 10px;
+            border-radius: 40%;
+            padding: 0;
+        }
+
+        div:has(> img.user-account-icon) {
+            position: relative;
+        }
+
+        div:has(> img.user-account-icon):hover::after {
+            content: "Edit Avatar";
+            font-size: 15px;
+            z-index: 2;
+            background-color: var(--grey-40);
+            position: absolute;
+            bottom: 5px;
+            left: 10px;
+            width: calc(100% - 10px);
+            height: 47px;
+            display: flex;
+            justify-content: center;
+            border-bottom-left-radius: 41.6px;
+            border-bottom-right-radius: 41.6px;
+        }
+
+        input.account-shown-name {
+            height: calc(1em + 5px);
+            font-size: 2.3em;
+            font-family: var(--font);
+            width: 100%;
+            border: 1px solid transparent;
+            outline: none;
+            background-color: transparent;
+            margin-left: 10px;
+            margin-right: 10px;
+            color: var(--fg-color);
+            border-radius: 3px;
+            padding-left: 1px;
+        }
+
+        input.account-shown-name:focus {
+            border: 1px solid var(--light-blue-hl);
+        }
+
+        input.account-shown-name:focus::selection {
+            background-color: var(--light-blue-hl);
+            color: var(--bg-color);
+        }
+
+        input.account-shown-name:not(:focus)::selection {
+            background-color: transparent;
+            color: var(--fg-color);
+        }
+
+
+        input.account-user-name {
+            height: calc(1.1em + 2px);
+            font-size: 1.5em;
+            font-family: var(--font);
+            width: 100%;
+            border: 1px solid transparent;
+            outline: none;
+            background-color: transparent;
+            margin-left: 10px;
+            margin-right: 10px;
+            color: var(--grey-solid);
+            border-radius: 3px;
+            padding-left: 1px;
+        }
+
+        input.account-user-name:focus {
+            border: 1px solid var(--light-blue-hl);
+        }
+
+        input.account-user-name:focus::selection {
+            background-color: var(--light-blue-hl);
+            color: var(--bg-color);
+        }
+
+        input.account-user-name:not(:focus)::selection {
+            background-color: transparent;
+            color: var(--grey-solid);
+        }
+
+        @keyframes blackOutFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes blackOutFadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        div.blackout {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #0008;
+            animation: 0.25s blackOutFadeIn ease-in-out;
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        div.blackout.leaving {
+            animation: 0.25s blackOutFadeOut ease-in-out;
+        }
+
+        img.exitIcon {
+            width: 20px;
+            height: 20px;
+            position: fixed;
+            top: 10px;
+            left: 5px;
+            filter: var(--icon-filter);
+        }
+
+        img.exitIcon:hover {
+            filter: var(--icon-hover);
+        }
+
+        img.exitIcon:active {
+            filter: var(--icon-active);
+        }
+
+        div.mainContainerAfterBlackout {
+            width: 80%;
+            height: 80%;
+            background-color: var(--bg-color);
+            border: 1px solid var(--fg-color);
+            border-radius: 3px;
+        }
+
+        div.mainContainerAfterBlackout .tabBar {
+            height: 30px;
+            width: 100%;
+            border-bottom: 1px solid var(--fg-color);
+            display: flex;
+            background-color: var(--grey-40);
+        }
+
+        div.mainContainerAfterBlackout .tabBar .tab {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            background-color: var(--bg-color);
+            transition: background-color 150ms ease-in-out;
+        }
+
+        div.mainContainerAfterBlackout .tabBar .tab:hover {
+            background-color: var(--dark-blue-hl);
+        }
+
+        div.mainContainerAfterBlackout .tabBar .tab.active {
+            background-color: var(--bg-color);
+            border-left: 1px solid var(--fg-color);
+            border-right: 1px solid var(--fg-color);
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            border-bottom: none;
+            height: 12px;
+            position: relative;
+        }
+
+        div.mainContainerAfterBlackout .tabBar .tab.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -1;
+            height: 4px;
+            width: calc(100% + 2px);
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            background-color: var(--light-blue-hl);
+        }
+
+        div.mainContainerAfterBlackout .body {
+            background-color: var(--bg-color);
+            width: 100%;
+            height: calc(100% - 91px);
+            padding: 0;
+            margin: 0;
+        }
+
+        div.mainContainerAfterBlackout .body iframe {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            border: none;
+        }
+
+        div.mainContainerAfterBlackout .submitLine {
+            background-color: var(--bg-color);
+            width: calc(100% - 30px);
+            height: 30px;
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+            padding: 15px;
+            position: relative;
+        }
+
+        div.mainContainerAfterBlackout .submitLine .submit {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+
+            width: fit-content;
+            padding: 0 15px;
+            font-size: 20px;
+            height: 30px;
+            border-radius: 3px;
+            border: 1px solid var(--fg-color);
+            display: flex;
+            align-items: center;
+        }
+
+        div.mainContainerAfterBlackout .submitLine .submit:hover {
+            background-color: var(--bg-color);
+            color: var(--light-blue-hl);
+            border: 1px solid var(--light-blue-hl);
+        }
+
+        div.mainContainerAfterBlackout .submitLine .submit:active {
+            background-color: var(--light-blue-hl);
+            color: var(--bg-color);
+            border: 1px solid var(--light-blue-hl);
+        }
+
+        div.mainContainerAfterBlackout.confirm {
+            width: 50%;
+            height: 50%;
+            background-color: var(--bg-color);
+            border: 1px solid var(--fg-color);
+            border-radius: 3px;
+        }
+
+        div.mainContainerAfterBlackout .body.chunky {
+            background-color: var(--bg-color);
+            width: calc(100% - 20px);
+            height: calc(100% - 80px);
+            padding: 10px;
+            margin: 0;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        div.mainContainerAfterBlackout .submitLine .submit.no {
+            position: absolute;
+            top: 15px;
+            right: calc(15px + 5lh);
+
+            width: fit-content;
+            padding: 0 15px;
+            font-size: 20px;
+            height: 30px;
+            border-radius: 3px;
+            border: 1px solid var(--fg-color);
+            display: flex;
+            align-items: center;
+        }
+
+        div.mainContainerAfterBlackout .submitLine .submit.no:hover {
+            background-color: var(--bg-color);
+            color: var(--denyal-red);
+            border: 1px solid var(--denyal-red);
+        }
+
+        div.mainContainerAfterBlackout .submitLine .submit.no:active {
+            background-color: var(--denyal-red);
+            color: var(--bg-color);
+            border: 1px solid var(--denyal-red);
+        }
+
+    </style>
+  </head>
+  <body>
+    <div class="master-container">
+        <div class="account-infermation">
+            <div>
+                <img src="../../icons/defualt-user.svg" class="user-account-icon" />
+            </div>
+
+            <div>
+                <input type="text" value="User" class="account-shown-name" autocorrect="off" autocapitalize="off" spellcheck="false" autocomplete="off" />
+                <input type="text" value="user" class="account-user-name" autocorrect="off" autocapitalize="off" spellcheck="false" autocomplete="off" />
+            </div>
+        </div>
+    </div>
+
+    <script src="../../controlcommands.js"></script>
+    <script src="../../utils/reftheme.js"></script>
+    <script src="../../utils/kbutils.js"></script>
+    <script>
+        // Message streaming setup
+        let modalIframe = null;
+        let blackoutElement = null;
+
+        // Account state
+        let currentAccountData = {
+            avatar: null, // Will store data URL or null for default
+            username: "User Name",
+            displayname: "Display Name"
+        };
+
+        // Load account data from settables
+        async function loadAccountSettings() {
+            try {
+                const settables = await getSettablesAsJson();
+
+                if (settables && settables.account) {
+                    currentAccountData = {
+                        ...currentAccountData,
+                        ...settables.account
+                    };
+
+                    // Update UI with loaded data
+                    const displayNameInput = document.querySelector('.account-shown-name');
+                    const userNameInput = document.querySelector('.account-user-name');
+                    const avatarImg = document.querySelector('.user-account-icon');
+
+                    if (currentAccountData.displayname && currentAccountData.displayname !== "Display Name") {
+                        displayNameInput.value = currentAccountData.displayname;
+                    }
+
+                    if (currentAccountData.username && currentAccountData.username !== "User Name") {
+                        userNameInput.value = currentAccountData.username;
+                    }
+
+                    if (currentAccountData.avatar) {
+                        avatarImg.src = currentAccountData.avatar;
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load account settings:', error);
+            }
+        }
+
+        // Save account data to settables
+        async function saveAccountSettings() {
+            try {
+                const settables = await getSettablesAsJson() || {};
+
+                // Create or update account struct
+                settables.account = currentAccountData;
+
+                // Save to settables
+                setSettablesByJson(settables);
+            } catch (error) {
+                console.error('Failed to save account settings:', error);
+            }
+        }
+
+        // Listen for messages from parent (settings page)
+        window.addEventListener("message", (event) => {
+            if (event.source !== window.parent) return;
+
+            // Handle theme updates
+            if (event.data?.type === "updtTheme") {
+                setTimeout(async () => {
+                    await fixThemeOverSettable("chungus");
+                }, 35);
+                return;
+            }
+
+            // Forward saveQuit to close modal
+            if (event.data?.type === "saveQuit") {
+                if (blackoutElement) {
+                    blackoutElement.classList.add("leaving");
+                    setTimeout(() => {
+                        blackoutElement.remove();
+                        modalIframe = null;
+                        blackoutElement = null;
+                    }, 200);
+                }
+                return;
+            }
+
+            // Forward other messages to modal iframe
+            if (modalIframe && modalIframe.contentWindow) {
+                modalIframe.contentWindow.postMessage(event.data, "*");
+            }
+
+            // Forward to parent (if not from parent)
+            if (event.source !== window.parent) {
+                window.parent.postMessage(event.data, "*");
+            }
+        });
+
+        // Listen for messages from modal iframe
+        window.addEventListener("message", (event) => {
+            // Handle avatar message from iframe
+            if (event.data?.type === "avatar") {
+                if (event.data?.content) {
+                    // Update avatar image
+                    const avatarImg = document.querySelector('.user-account-icon');
+                    avatarImg.src = event.data.content;
+
+                    // Update account data
+                    currentAccountData.avatar = event.data.content;
+                    saveAccountSettings();
+                }
+
+                if (blackoutElement) {
+                    blackoutElement.classList.add("leaving");
+                    setTimeout(() => {
+                        blackoutElement.remove();
+                        modalIframe = null;
+                        blackoutElement = null;
+                    }, 200);
+                }
+                return;
+            }
+
+            // Forward other messages from iframe to parent (settings page)
+            if (modalIframe && event.source === modalIframe.contentWindow) {
+                window.parent.postMessage(event.data, "*");
+            }
+        });
+
+        // Initialize theme and load account settings
+        document.addEventListener('DOMContentLoaded', async () => {
+            await fixThemeOverSettable("chungus");
+            await loadAccountSettings();
+        });
+
+        // Prevent context menu
+        document.addEventListener('contextmenu', (event) => {
+            event.preventDefault();
+        });
+
+        // Enhanced input field handlers with account saving
+        function addEventListenersInput(element, fieldName) {
+            element.addEventListener("click", () => {
+                element.focus();
+                element.dataset.oldValue = element.value;
+            });
+
+            element.addEventListener("keydown", (event) => {
+                if (event.key == "Escape") {
+                    element.blur();
+                    element.value = element.dataset.oldValue;
+                }
+            });
+
+            // Save on blur (when user leaves the field)
+            element.addEventListener("blur", async () => {
+                // Update account data
+                currentAccountData[fieldName] = element.value;
+
+                // Save to settables
+                await saveAccountSettings();
+            });
+
+            // Also save on Enter key
+            element.addEventListener("keydown", async (event) => {
+                if (event.key === "Enter") {
+                    element.blur();
+                    currentAccountData[fieldName] = element.value;
+                    await saveAccountSettings();
+                }
+            });
+        }
+
+        // Apply input handlers to display name and username fields
+        addEventListenersInput(
+            document.querySelector(".account-infermation input.account-shown-name"),
+            "displayname"
+        );
+        addEventListenersInput(
+            document.querySelector(".account-infermation input.account-user-name"),
+            "username"
+        );
+
+        // Avatar click handler - opens modal
+        document.querySelector(".account-infermation div:first-child").addEventListener("click", () => {
+            // Create blackout modal
+            let blackout = document.createElement('div');
+            blackout.classList.add("blackout");
+            blackout.innerHTML = `
+                <img src="../../icons/go-up-settings-lvl.svg" class="exitIcon" />
+                <div class="mainContainerAfterBlackout">
+                    <div class="tabBar">
+                        <div class="tab active" data-url="./uploadavatar.html">
+                            Upload File
+                        </div>
+                        <div class="tab" data-url="./avatarlinkimg.html">
+                            Link Image
+                        </div>
+                    </div>
+                    <div class="body">
+                        <iframe src="./uploadavatar.html"></iframe>
+                    </div>
+                    <div class="submitLine">
+                        <div class="submit">
+                            Submit
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(blackout);
+            blackoutElement = blackout;
+
+            // Get reference to modal iframe
+            modalIframe = blackout.querySelector("iframe");
+
+            // Tab switching functionality
+            document.querySelectorAll(".blackout .mainContainerAfterBlackout .tabBar .tab").forEach((element) => {
+                element.addEventListener("click", () => {
+                    document.querySelectorAll(".blackout .mainContainerAfterBlackout .tabBar .tab").forEach((tab) => {
+                        tab.classList.remove("active");
+                    });
+
+                    element.classList.add("active");
+
+                    const iframe = document.querySelector(".blackout .mainContainerAfterBlackout .body iframe");
+                    iframe.src = element.dataset.url;
+
+                    // Update modalIframe reference to new iframe
+                    modalIframe = iframe;
+                });
+            });
+
+            // Close modal handler
+            blackout.querySelector("img.exitIcon").addEventListener("click", () => {
+                blackout.classList.add("leaving");
+                setTimeout(() => {
+                    blackout.remove();
+                    modalIframe = null;
+                    blackoutElement = null;
+                }, 200);
+            });
+
+            // Submit button handler
+            blackout.querySelector(".submit").addEventListener("click", () => {
+                if (modalIframe && modalIframe.contentWindow) {
+                    // Send submit message to iframe
+                    modalIframe.contentWindow.postMessage({ type: "submitAvatar" }, "*");
+                }
+            });
+
+            // Wheel navigation for tabs
+            document.querySelector(".blackout .mainContainerAfterBlackout .tabBar")
+                .addEventListener("wheel", (event) => {
+                    const tabs = Array.from(document.querySelectorAll('.blackout .mainContainerAfterBlackout .tabBar .tab'));
+                    const activeTab = document.querySelector('.blackout .mainContainerAfterBlackout .tabBar .tab.active');
+
+                    let currentIndex = tabs.indexOf(activeTab);
+                    currentIndex += event.deltaY / Math.abs(event.deltaY);
+                    currentIndex += tabs.length;
+                    currentIndex %= tabs.length;
+
+                    document.querySelectorAll(".blackout .mainContainerAfterBlackout .tabBar .tab").forEach((tab) => {
+                        tab.classList.remove("active");
+                    });
+
+                    tabs[currentIndex].classList.add("active");
+
+                    const iframe = document.querySelector(".blackout .mainContainerAfterBlackout .body iframe");
+                    iframe.src = document.querySelector(".tab.active").dataset.url;
+
+                    // Update modalIframe reference
+                    modalIframe = iframe;
+
+                }, { passive: false }
+            );
+        });
+
+        function yesNoElementConfirm(label) {
+            return new Promise((resolve) => {
+                const blackout = document.createElement('div');
+                blackout.classList.add("blackout");
+
+                blackout.innerHTML = `
+                    <img src="../../icons/go-up-settings-lvl.svg" class="exitIcon" />
+                    <div class="mainContainerAfterBlackout confirm">
+                        <div class="body chunky">${label}</div>
+                        <div class="submitLine">
+                            <div class="submit no">Deny</div>
+                            <div class="submit yes">Confirm</div>
+                        </div>
+                    </div>
+                `;
+
+                document.body.appendChild(blackout);
+
+                const exitIcon = blackout.querySelector(".exitIcon");
+                const confirmBtn = blackout.querySelector(".submit.yes");
+                const denyBtn = blackout.querySelector(".submit.no");
+                const popup = blackout.querySelector(".mainContainerAfterBlackout");
+
+                function close(result) {
+                    resolve(result);
+
+                    if (blackout) {
+                        blackout.classList.add("leaving");
+                        setTimeout(() => {
+                            blackout.remove();
+                        }, 200);
+                    }
+                }
+
+                // Clicking Confirm
+                confirmBtn.addEventListener("click", () => close(true));
+
+                // Clicking Deny
+                denyBtn.addEventListener("click", () => close(false));
+
+                // Clicking exit icon
+                exitIcon.addEventListener("click", () => close(false));
+
+                // Clicking outside the popup
+                blackout.addEventListener("click", (e) => {
+                    if (!popup.contains(e.target)) {
+                        close(false);
+                    }
+                });
+            });
+        }
+
+        // Reset avatar to default
+        document.querySelector(".user-account-icon").addEventListener("contextmenu", async (event) => {
+            event.preventDefault();
+
+            if (await yesNoElementConfirm("Reset avatar to default?")) {
+                const avatarImg = document.querySelector('.user-account-icon');
+                avatarImg.src = "../../icons/defualt-user.svg";
+
+                // Set avatar to null in account data (indicating default)
+                currentAccountData.avatar = null;
+                saveAccountSettings();
+            }
+        });
+    </script>
+  </body>
+</html>

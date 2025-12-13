@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 500 500"
+   width="500px"
+   height="500px"
+   version="1.1"
+   id="svg6787"
+   sodipodi:docname="doqumentation.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:bx="https://boxy-svg.com">
+  <sodipodi:namedview
+     id="namedview6789"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="1.2430937"
+     inkscape:cx="191.05559"
+     inkscape:cy="200.70892"
+     inkscape:window-width="1920"
+     inkscape:window-height="1008"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6787" />
+  <defs
+     id="defs6781">
+    <bx:export>
+      <bx:file
+         format="svg"
+         path="default_file.svg" />
+    </bx:export>
+  </defs>
+  <title
+     id="title6783">default_file</title>
+  <path
+     d="M 315.39312,43.669168 H 87.035305 V 461.78735 H 412.96471 V 142.01712 Z M 116.66498,431.92126 V 73.534393 h 177.78084 v 89.597357 h 88.89081 v 268.78951 z"
+     style="fill:#696c6e;fill-opacity:1;stroke-width:0.833911"
+     id="path6785" />
+</svg>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings &gt; Appearance</title>
+    <style>
+        :root {
+            --font: "font";
+            --bg-color: transparent;
+            --fg-color: #d4d4d4;
+            --man-color: #000a;
+
+            --card-1-filt: brightness(1);
+            --card-2-filt: brightness(1.25);
+            --card-3-filt: brightness(2);
+
+            --light-blue-hl: #3daee9,
+        }
+
+        @font-face {
+            font-family: 'font';
+            src: url('../../font.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body, html {
+            padding: 0;
+            margin: 0;
+            color: var(--fg-color);
+            font-family: var(--font);
+            font-size: 16px;
+            width: 100vw;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        div.section {
+            height: fit-content;
+            width: calc(100vw - 20px);
+            padding-left: 10px;
+            margin-right: 10px;
+        }
+
+        div.section div.title {
+            width: 100%;
+            border-bottom: 1px solid var(--fg-color);
+            font-size: 25px;
+        }
+
+        div.section div.body {
+            padding-left: 5em;
+            width: 100%;
+            font-size: 20px;
+            position: relative;
+        }
+
+        div.theme-container {
+            width: calc(100vw - 5em - 21px - 10px);
+            margin-top: 10px;
+            border: 1px solid var(--fg-color);
+            border-radius: 3px;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        div.theme-cont-left {
+            width: 100%;
+        }
+
+        div.theme-cont-right {
+            max-width: fit-content;
+            width: 200%;
+        }
+
+        .theme-img-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .theme-img-wrapper:hover::after {
+            content: attr(data-label);
+            display: block;
+            position: absolute;
+            bottom: 6px;
+            right: 1px;
+            background-color: var(--man-color);
+            color: var(--fg-color);
+            padding: 2px 4px;
+            border-radius: 2px;
+            white-space: nowrap;
+            z-index: 1;
+            font-size: 14px;
+        }
+
+        img.theme-showcase {
+            max-width: 200px;
+            width: 16vw;
+            border: 1px solid var(--fg-color);
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            filter: var(--card-1-filt);
+        }
+
+        img.theme-showcase:hover {
+            filter: var(--card-2-filt);
+        }
+
+        img.theme-showcase:active {
+            filter: var(--card-3-filt);
+        }
+
+        div.buffer {
+            height: 10px;
+            width: 100%;
+            display: block;
+        }
+
+        h1.font {
+            margin: 0;
+            width: calc(100% - 100px);
+            position: relative;
+        }
+
+        h1.font:after {
+            position: absolute;
+            content: "";
+            right: 0;
+        }
+
+        div.section.font {
+            width: calc(100vw - 130px);
+        }
+
+        div#morefonts {
+            position: absolute;
+            right: 100px;
+            bottom: 0px;
+
+            border: 1px solid var(--fg-color);
+            width: fit-content;
+            padding: 0 0.5em;
+            border-radius: 3px;
+            color: var(--fg-color);
+        }
+
+        div.section div.body:has(div#morefonts) {
+            height: 220px;
+        }
+
+        #morefonts:hover {
+            border: 1px solid var(--light-blue-hl);
+            color: var(--light-blue-hl);
+        }
+    </style>
+  </head>
+  <body>
+    <div class="section">
+        <div class="title">Themes</div>
+        <div class="body">
+            <div class="theme-container">
+                <div class="theme-cont-left">
+                    <div class="theme-img-wrapper" data-label="breeze dark" id="darktheme">
+                        <img class="theme-showcase" src="./theme_imgs/brz-dark.svg" alt="">
+                    </div>
+                    <div class="theme-img-wrapper" data-label="breeze light" id="lighttheme">
+                        <img class="theme-showcase" src="./theme_imgs/brz-light.svg" alt="">
+                    </div>
+                </div>
+
+                <div class="theme-cont-right">
+                    <div class="theme-img-wrapper" data-label="more themes" id="morethemes">
+                        <img class="theme-showcase" src="./theme_imgs/more-themes.svg" alt="">
+                    </div>
+                    <div class="theme-img-wrapper" data-label="custum themes" id="customthemes">
+                        <img class="theme-showcase" src="./theme_imgs/custom-themes.svg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="section">
+        <div class="title">Fonts</div>
+        <div class="body">
+            <div class="section font">
+                <br />
+                <div class="title">Defult Font</div>
+                <div class="body">
+                    <h1 class="font" data-font="font">
+                        Thing In Font
+                    </h1>
+                </div>
+            </div>
+            <div class="section font">
+                <div class="title">Comic Sans</div>
+                <div class="body">
+                    <h1 class="font" data-font="Comic Relief">
+                        Thing In Font
+                    </h1>
+                </div>
+            </div>
+            <div id="morefonts">MoreFonts</div>
+        </div>
+    </div>
+
+    <script src="../../controlcommands.js"></script>
+    <script src="../../utils/reftheme.js"></script>
+    <script src="../../utils/kbutils.js"></script>
+    <script src= "./theme_json/brz-dark.js"></script>
+    <script src= "./theme_json/brz-light.js"></script>
+    <script>
+        window.onload = async () => {
+            await fixThemeOverSettable(); // correct themedge
+        }
+
+        document.addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+        });
+
+        document.getElementById("darktheme").addEventListener("click", async () => {
+            let json = await getSettablesAsJson() || {};
+            json.theme = window.theme_brz_dark;
+
+            setSettablesByJson(json);
+
+            updateTopLevelTheme();
+            await fixThemeOverSettable(); // correct themedge
+        });
+
+        document.getElementById("lighttheme").addEventListener("click", async () => {
+            let json = await getSettablesAsJson() || {};
+            json.theme = window.theme_brz_light;
+
+            setSettablesByJson(json);
+
+            updateTopLevelTheme();
+            await fixThemeOverSettable(); // correct themedge
+        });
+
+        document.getElementById("morethemes").addEventListener("click", () => {
+            window.location.href = "./morethemes.html";
+        });
+
+        document.getElementById("customthemes").addEventListener("click", () => {
+            window.location.href = "./customthemes.html";
+        });
+
+        document.querySelectorAll("h1.font").forEach( (element) => {
+            element.addEventListener("click", async () => {
+                let json = await getSettablesAsJson() || {};
+                json.font = {"font": element.dataset.font};
+
+                setSettablesByJson(json);
+
+                updateTopLevelTheme();
+                await fixThemeOverSettable(); // correct themedge
+            });
+        });
+
+
+        let fontSelectors = document.querySelectorAll('h1.font');
+        fontSelectors.forEach( async (element) => {
+            const font = element.dataset.font;
+            if (font) {
+                await loadGoogleFontForThemingSettables(font);
+                element.style.fontFamily = font;
+            }
+        });
+
+        document.getElementById("morefonts").addEventListener("click", () => {
+            window.location.href = "./morefonts.html";
+        });
+    </script>
+  </body>
+</html>

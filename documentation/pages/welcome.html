@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Chat Index</title>
+    <style>
+        :root {
+            --font: 'font';
+            --bg-color: #2a2e32;
+            --fg-color: #d4d4d4;
+
+            --grey-40: #585b5e40;
+            --grey-99: #585b5e99;
+            --grey-ff: #585b5eff;
+        }
+
+        @font-face {
+            font-family: 'font';
+            src: url('../../font.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body, html {
+            background-color: var(--bg-color);
+            color: var(--fg-color);
+            overflow-x: hidden;
+            overflow-y: visible;
+            font-family: var(--font);
+            user-select: none;
+            margin: 5px;
+            margin-top: 2px;
+            padding: 0;
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+            border-left: 1px solid var(--grey-40);
+        }
+        ::-webkit-scrollbar-track:hover {
+            border-left: 1px solid var(--grey-99);
+        }
+        ::-webkit-scrollbar-track:active {
+            border-left: 1px solid var(--grey-ff);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--grey-40);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--grey-99);
+        }
+
+        ::-webkit-scrollbar-thumb:active {
+            background: var(--grey-ff);
+        }
+
+        h1 {
+            border-bottom: 1px solid var(--fg-color);
+            margin-top: 5px;
+            padding-bottom: 5px;
+        }
+    </style>
+  </head>
+  <body>
+    <h1>Welcome to Chat Index</h1>
+
+    <p>
+        Chat Index is a fast, flexible, and highly customizable AI chating application<br />
+        designed for users who like to keep multiple conversations organized and<br />
+        accessible. Its tab-based interface makes switching between chats feel<br />
+        natural, smooth, and immediate.<br />
+    </p>
+
+    <p>
+        The app provides powerful customization options while keeping the default<br />
+        setup simple and ready to use. You can tailor almost every part of the<br />
+        experience — from selecting custom models through OpenRouter API names, to<br />
+        choosing themes from a built-in library or defining your own with JSON, to<br />
+        creating custom keyboard shortcuts and attaching scripts to them.<br />
+    </p>
+
+    <p>
+        Chat Index focuses on responsiveness, clarity, and control. Whether you<br />
+        prefer a clean, minimal layout or a fully personalized workspace, the<br />
+        interface adapts to the way you work. Multiple chats, flexible layouts,<br />
+        custom themes, configurable models, and shortcut scripting all come<br />
+        together to support a workspace that stays fast and reliable even as your<br />
+        workflow expands.<br />
+    </p>
+
+    <p>
+        This documentation will guide you through the app’s features,<br />
+        customization tools, and interfaces, helping you get started quickly and<br />
+        explore the parts that matter most to you.<br />
+    </p>
+
+    <script src="../../controlcommands.js"></script>
+    <script src="../../utils/reftheme.js"></script>
+    <script src="../../utils/kbutils.js"></script>
+    <script>
+
+        window.onload = async () => {
+            await fixThemeOverSettable("chungus");
+        };
+
+        document.addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+        })
+
+    </script>
+  </body>
+</html>

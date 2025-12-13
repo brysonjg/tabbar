@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>chungusmain</title>
+    <link rel="stylesheet" href="./chungus.css">
+
+    <!--   katex   -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+      <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+    <!--   prism   -->
+      <link rel="stylesheet" href="./prism/prism.css">
+      <script src="./prism/prism.js"></script>
+
+  </head>
+  <body>
+
+    <div class="chat-outerer">
+      <img class="change-title-btn" src="../icons/document-edit.svg" alt="Change Title" title="change title">
+      <div class="chat-outer">
+        <div class="blame-column" id="blameColumn">
+        </div>
+        <div id="chat-container">
+        </div>
+      </div>
+    </div>
+
+      <div class="usr-input-master-container befor-messages">
+        <div class="initMessage">How can I help you?</div>
+        <div class="usr-input-master">
+          <div class="usr-input-topper">
+            <input type="file" id="hidden-file-input" multiple> </input>
+            <div class="context" id="add-context">Add Context</div>
+            <div id="file-feild"></div>
+          </div>
+          <div class="usr-input-body">
+            <textarea id="text-input"></textarea>
+          </div>
+          <div class="usr-input-bottom">
+            <div class="usr-input-left">
+              <div class="menu">
+                Models
+                <div class="dropdown-nul">
+                  <div class="menu-item" type="setModel" model="openai/gpt-oss-20b:free">GPT OSS</div>
+                  <div class="menu-item" type="setModel" model="qwen/qwen3-coder:free">Qwen Coder</div>
+                  <div class="menu-item" type="setModel" model="google/gemma-3n-e2b-it:free">Gemma Smol</div>
+                </div>
+              </div>
+            </div>
+            <div class="usr-input-right">
+              <img src="../icons/sendmessage.svg" class="submition-icon" id="submitionIcon">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <script src="../controlcommands.js"></script>
+    <script src="../utils/reftheme.js"></script>
+    <script src="../utils/kbutils.js"></script>
+    <script src="./chungus.js"></script>
+
+  </body>
+</html>

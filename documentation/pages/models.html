@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started</title>
+    <style>
+        :root {
+            --font: font;
+            --bg-color: #2a2e32;
+            --fg-color: #d4d4d4;
+
+            --grey-40: #585b5e40;
+            --grey-99: #585b5e99;
+            --grey-ff: #585b5eff;
+        }
+
+        @font-face {
+            font-family: 'font';
+            src: url('../../font.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body, html {
+            background-color: var(--bg-color);
+            color: var(--fg-color);
+            overflow-x: hidden;
+            overflow-y: visible;
+            font-family: var(--font);
+            user-select: none;
+            margin: 5px;
+            margin-top: 2px;
+            padding: 0;
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+            border-left: 1px solid var(--grey-40);
+        }
+        ::-webkit-scrollbar-track:hover {
+            border-left: 1px solid var(--grey-99);
+        }
+        ::-webkit-scrollbar-track:active {
+            border-left: 1px solid var(--grey-ff);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--grey-40);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--grey-99);
+        }
+
+        ::-webkit-scrollbar-thumb:active {
+            background: var(--grey-ff);
+        }
+
+        h1 {
+            border-bottom: 1px solid var(--fg-color);
+            margin-top: 5px;
+            padding-bottom: 5px;
+        }
+    </style>
+  </head>
+  <body>
+    <h1>Documentation on Models</h1>
+    Your on your own.<br>
+    Maybe try useing <a href="https://chatgpt.com" target="_blank">ChatGPT</a> to figer it out.
+
+    <script src="../../controlcommands.js"></script>
+    <script src="../../utils/reftheme.js"></script>
+    <script src="../../utils/kbutils.js"></script>
+    <script>
+
+        window.onload = async () => {
+            await fixThemeOverSettable("chungus");
+        };
+
+        document.addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+        })
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,186 @@
+/* PrismJS 1.30.0 — semantic variable architecture */
+
+@font-face {
+    font-family: 'font';
+    src: url('../../font.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --font: font;
+
+    --prism-line-height: 1.5;
+
+    --prism-tab-size: 4;
+    --prism-block-padding: 1em;
+    --prism-inline-padding: 0.1em;
+    --prism-block-margin: 0.5em;
+    --prism-inline-radius: 0.3em;
+
+    --prism-block-bg: #31353990;
+    --prism-inline-bg: #31353990;
+    --prism-text-color: #ccc;
+
+    --prism-comment: #999;
+    --prism-punctuation: #ccc;
+
+    --prism-tag: #e2777a;
+    --prism-attr-name: #e2777a;
+    --prism-attr-value: #7ec699;
+
+    --prism-operator: #67cdcc;
+    --prism-entity: #67cdcc;
+    --prism-url: #67cdcc;
+    --prism-symbol: #f8c555;
+
+    --prism-string: #7ec699;
+    --prism-char: #7ec699;
+    --prism-regex: #7ec699;
+
+    --prism-number: #f08d49;
+    --prism-constant: #f8c555;
+
+    --prism-variable: #7ec699;
+
+    --prism-class-name: #f8c555;
+    --prism-function: #f08d49;
+    --prism-function-name: #6196cc;
+
+    --prism-keyword: #cc99cd;
+    --prism-selector: #cc99cd;
+    --prism-builtin: #cc99cd;
+    --prism-important: #cc99cd;
+    --prism-atrule: #cc99cd;
+
+    --prism-deleted: #e2777a;
+    --prism-inserted: #00d000;
+
+    --prism-bold-weight: 700;
+    --prism-italic-style: italic;
+}
+
+code[class*=language-],
+pre[class*=language-] {
+    color: var(--prism-text-color);
+    background: none;
+    font-family: var(--font);
+    font-size: 1em;
+    line-height: var(--prism-line-height);
+    white-space: pre;
+    word-break: normal;
+    tab-size: var(--prism-tab-size);
+}
+
+pre[class*=language-] {
+    padding: var(--prism-block-padding);
+    margin: var(--prism-block-margin) 0;
+    background: var(--prism-block-bg);
+    overflow: auto;
+}
+
+:not(pre)>code[class*=language-] {
+    padding: var(--prism-inline-padding);
+    border-radius: var(--prism-inline-radius);
+    background: var(--prism-inline-bg);
+    white-space: normal;
+}
+
+.token.comment,
+.token.block-comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: var(--prism-comment);
+}
+
+.token.punctuation {
+    color: var(--prism-punctuation);
+}
+
+.token.tag {
+    color: var(--prism-tag);
+}
+
+.token.attr-name {
+    color: var(--prism-attr-name);
+}
+
+.token.attr-value {
+    color: var(--prism-attr-value);
+}
+
+.token.deleted {
+    color: var(--prism-deleted);
+}
+
+.token.entity,
+.token.operator,
+.token.url {
+    color: var(--prism-entity);
+}
+
+.token.symbol {
+    color: var(--prism-symbol);
+}
+
+.token.char {
+    color: var(--prism-char);
+}
+
+.token.regex {
+    color: var(--prism-regex);
+}
+
+.token.string {
+    color: var(--prism-string);
+}
+
+.token.number {
+    color: var(--prism-number);
+}
+
+.token.constant {
+    color: var(--prism-constant);
+}
+
+.token.variable {
+    color: var(--prism-variable);
+}
+
+.token.class-name {
+    color: var(--prism-class-name);
+}
+
+.token.function {
+    color: var(--prism-function);
+}
+
+.token.function-name {
+    color: var(--prism-function-name);
+}
+
+.token.keyword,
+.token.selector,
+.token.builtin,
+.token.important,
+.token.atrule {
+    color: var(--prism-keyword);
+}
+
+.token.bold,
+.token.important {
+    font-weight: var(--prism-bold-weight);
+}
+
+.token.italic {
+    font-style: var(--prism-italic-style);
+}
+
+.token.inserted {
+    color: var(--prism-inserted);
+}
+
+.token.entity {
+    cursor: help;
+}

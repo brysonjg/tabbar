@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Avatar</title>
+    <style>
+
+      :root {
+        --font: font;
+        --bg-color: #2a2e32;
+        --fg-color: #d4d4d4;
+
+        --grey-40: #585b5e40;
+      }
+
+      @font-face {
+          font-family: 'font';
+          src: url('../../font.ttf') format('truetype');
+          font-weight: normal;
+          font-style: normal;
+      }
+
+      html, body {
+          min-height: 100vh;
+          width: 100vw;
+          margin: 0;
+          padding: 5vh 2vw;
+          padding-bottom: 20vh;
+          background-color: var(--bg-color);
+          color: var(--fg-color);
+          font-family: var(--font);
+          box-sizing: border-box;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+      }
+
+      input {
+          font-size: 2em;
+          height: calc(1em + 5px);
+          font-family: var(--font);
+          width: 100%;
+          border: 1px solid var(--fg-color);
+          outline: none;
+          background-color: transparent;
+          margin-left: 10px;
+          margin-right: 10px;
+          color: var(--fg-color);
+          border-radius: 3px;
+          padding-left: 1px;
+      }
+
+        input:focus {
+            border: 1px solid var(--light-blue-hl);
+        }
+
+        input:focus::selection {
+            background-color: var(--light-blue-hl);
+            color: var(--bg-color);
+        }
+
+    </style>
+  </head>
+  <body>
+
+    <input />
+
+    <script src="../../controlcommands.js"></script>
+    <script src="../../utils/reftheme.js"></script>
+    <script>
+
+      let fileURL = null;
+
+      window.onload = async () => {await fixThemeOverSettable("chungus")};
+
+      window.addEventListener("message", (event) => {
+          if (event.data.type == "submitAvatar") {
+            window.parent.postMessage({type: "avatar", content: fileURL}, "*");
+          }
+      });
+
+      document.querySelector("input").addEventListener('change', (event) => {
+        const content = document.querySelector("input").valued;
+
+        if (content == "") {
+            fileURL = null
+            return;
+        }
+
+        fileURL = content;
+    });
+
+      window.addEventListener("contextmenu", (event) => {
+          event.preventDefault();
+      });
+
+    </script>
+  </body>
+</html>

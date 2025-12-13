@@ -1,0 +1,231 @@
+window.theme_brz_light = {
+                            indx: {
+                                "bg-color": "#eff0f1",
+                                "fg-color": "#232629",
+
+                                "input-bg-color": "#fcfcfc",
+                                "input-fg-color": "#0068c0"
+                            },
+                            chungus: {
+                                "bg-color": "#eff0f1",
+                                "fg-color": "#232629",
+                                "hard-outline-color": "#7f8c8d",
+                                "dark-blue-hl": "#2980b9",
+                                "light-blue-hl": "#3daee9",
+                                "denyal-red": "#ff98a2",
+                                "blue-outline": "#8ab4c8",
+
+                                "icon-filter": "brightness(1000) saturate(15%) hue-rotate(210deg) brightness(16%)",
+                                "icon-hover": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(40%)",
+                                "icon-active": "brightness(0)",
+
+                                "action-btn-1": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(70%)",
+                                "action-btn-2": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(50%)",
+                                "action-btn-3": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(30%)",
+
+                                "grey-40": "#7f8c8d40",
+                                "grey-50": "#7f8c8d50",
+                                "grey-80": "#7f8c8d80",
+                                "grey-90": "#7f8c8d90",
+                                "grey-99": "#7f8c8d99",
+                                "grey-ff": "#7f8c8dff",
+                                "grey-solid": "#7f8c8d",
+
+                                "link-blue": "#0068c0",
+                                "link-purple": "#7a3daa",
+                                "link-active-red": "#c62430",
+                                "bg-blue-dark": "#d7eaf6",
+
+                                "code-bg": "#ddd",
+
+                                "copy-border": "#232629",
+                                "copy-bg": "#585b5e11",
+                                "copy-fg": "#232629",
+                                "copy-border-hover": "#232629",
+                                "copy-bg-hover": "#23262922",
+                                "copy-border-active": "#232629",
+                                "copy-bg-active": "#23262933",
+                                "copy-success-bd": "#0c6",
+                                "copy-success-bg": "#0f92",
+                                "copy-success-fg": "#0c6",
+
+                                "context-hover-border": "#3daee9",
+                                "context-hover-bg": "#3daee920",
+                                "context-hover-fg": "#004b6d",
+                                "context-active-bg": "#3daee950",
+
+                                "table-header-bg": "#bdc3c780",
+                                "table-row-alt-bg": "#e8eaec",
+                                "table-header-fg": "#131619",
+
+                                "prism-block-bg": "#aeeef69",
+                                "prism-inline-bg": "#aeeef69",
+                                "prism-text-color": "#1f1c1b",
+                                "prism-comment": "#7a8185",
+                                "prism-punctuation": "#4b5963",
+                                "prism-tag": "#0057ae",
+                                "prism-keyword": "#0057ae",
+                                "prism-selector": "#0057ae",
+                                "prism-builtin": "#0057ae",
+                                "prism-important": "#a6278f",
+                                "prism-atrule": "#a6278f",
+                                "prism-attr-name": "#644a9b",
+                                "prism-function-name": "#644a9b",
+                                "prism-attr-value": "#0a7c4a",
+                                "prism-string": "#0a7c4a",
+                                "prism-char": "#0a7c4a",
+                                "prism-variable": "#0a7c4a",
+                                "prism-inserted": "#0a7c4a",
+                                "prism-operator": "#067ab8",
+                                "prism-entity": "#067ab8",
+                                "prism-url": "#067ab8",
+                                "prism-number": "#b94d00",
+                                "prism-function": "#b94d00",
+                                "prism-regex": "#0a7c4a",
+                                "prism-constant": "#b57200",
+                                "prism-symbol": "#b57200",
+                                "prism-class-name": "#b57200",
+                                "prism-deleted": "#c62828",
+                            },
+                            settings: {
+                                "bg-color": "#eff0f1",
+                                "fg-color": "#232629",
+                                "menu-hover": "#9dd5f299",
+                            },
+                            appearance:
+                            {
+                                "fg-color": "#232629",
+                                "man-color": "#fffa",
+
+                                "card-1-filt": "brightness(2)",
+                                "card-2-filt": "brightness(1.75)",
+                                "card-3-filt": "brightness(1)",
+
+                                "light-blue-hl": "#3daee9",
+                            },
+                            morethemes:
+                            {
+                                "bg-color": "#eff0f1",
+                                "fg-color": "#232629",
+                                "man-color": "#fffa",
+
+                                "card-1": "brightness(2)",
+                                "card-2": "brightness(1.75)",
+                                "card-3": "brightness(1)",
+
+                                "icon-1": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(70%)",
+                                "icon-2": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(50%)",
+                                "icon-3": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(30%)",
+                            },
+                            customthemes: {
+                                "bg-color": "#eff0f1",
+                                "fg-color": "#232629",
+
+                                "icon-1": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(70%)",
+                                "icon-2": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(50%)",
+                                "icon-3": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(30%)",
+
+                                "prism-block-bg": "#aeeef69",
+                                "prism-inline-bg": "#aeeef69",
+                                "prism-text-color": "#1f1c1b",
+                                "prism-comment": "#7a8185",
+                                "prism-punctuation": "#4b5963",
+                                "prism-tag": "#0057ae",
+                                "prism-keyword": "#0057ae",
+                                "prism-selector": "#0057ae",
+                                "prism-builtin": "#0057ae",
+                                "prism-important": "#a6278f",
+                                "prism-atrule": "#a6278f",
+                                "prism-attr-name": "#644a9b",
+                                "prism-function-name": "#644a9b",
+                                "prism-attr-value": "#0a7c4a",
+                                "prism-string": "#0a7c4a",
+                                "prism-char": "#0a7c4a",
+                                "prism-variable": "#0a7c4a",
+                                "prism-inserted": "#0a7c4a",
+                                "prism-operator": "#067ab8",
+                                "prism-entity": "#067ab8",
+                                "prism-url": "#067ab8",
+                                "prism-number": "#b94d00",
+                                "prism-function": "#b94d00",
+                                "prism-regex": "#0a7c4a",
+                                "prism-constant": "#b57200",
+                                "prism-symbol": "#b57200",
+                                "prism-class-name": "#b57200",
+                                "prism-deleted": "#c62828",
+                            },
+                            morefonts: {
+                                "bg-color": "#eff0f1",
+                                "fg-color": "#232629",
+
+                                "hl-blue-1": "#3daee9",
+                                "hl-blue-2": "#3daee922",
+                                "hl-blue-3": "#2eb7ff",
+                                "hl-blue-4": "#2eb7ff40",
+
+                                "icon-1": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%)",
+                                "icon-2": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4)",
+                                "icon-3": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2)",
+                            },
+                            models: {
+                                "bg-color": "#eff0f1",
+                                "fg-color": "#232629",
+                                "table-waght": "#dee4ed",
+
+                                "hl-blue-1": "#3daee9",
+                                "hl-blue-2": "#c2dfef",
+
+                                "row-filter": "brightness(0) invert(17%)",
+                                "filt-hover": "#0001",
+                                "filt-raw": "#0003",
+
+                                "rm-action-defult": "brightness(0) invert(17%)",
+                                "rm-action-hover": "brightness(0) saturate(100%) invert(14%) sepia(83%) saturate(2200%) hue-rotate(330deg) brightness(150%) contrast(124%)",
+                                "rm-action-active": "brightness(0) saturate(100%) invert(14%) sepia(83%) saturate(2200%) hue-rotate(330deg) brightness(200%) contrast(124%)",
+
+                                "mv-defult": "brightness(0) invert(17%)",
+                                "mv-filter": "invert(62%) sepia(92%) saturate(1934%) hue-rotate(171deg) brightness(99%) contrast(84%)",
+
+                                "act-defult": "brightness(0) invert(17%)",
+                                "act-active": "invert(44%) sepia(89%) saturate(375%) hue-rotate(92deg) brightness(94%) contrast(91%)",
+                                "act-active": "invert(60%) sepia(70%) saturate(358%) hue-rotate(97deg) brightness(94%) contrast(88%)",
+                            },
+                            keybindings: {
+                                "bg-color": "#eff0f1",
+                                "fg-color": "#232629",
+                                "table-waght": "#dee4ed",
+
+                                "hl-blue-1": "#3daee9",
+                                "hl-blue-2": "#c2dfef",
+
+                                "row-filter": "brightness(0) invert(17%)",
+                                "filt-hover": "#0001",
+                                "filt-raw": "#0003",
+
+                                "rm-action-defult": "brightness(0) invert(17%)",
+                                "rm-action-hover": "brightness(0) saturate(100%) invert(14%) sepia(83%) saturate(2200%) hue-rotate(330deg) brightness(150%) contrast(124%)",
+                                "rm-action-active": "brightness(0) saturate(100%) invert(14%) sepia(83%) saturate(2200%) hue-rotate(330deg) brightness(200%) contrast(124%)",
+
+                                "mv-defult": "brightness(0) invert(17%)",
+                                "mv-filter": "invert(62%) sepia(92%) saturate(1934%) hue-rotate(171deg) brightness(99%) contrast(84%)",
+                            },
+                            master: {
+                                "bg-color": "#eff0f1",
+                                "fg-color": "#232629",
+                                "topper-color": "#eff0f1",
+                                "hard-outline-color": "#7f8c8d",
+                                "tab-inactive": "#e5e9eb",
+                                "dark-blue-hl": "#9dd5f2",
+                                "lighter-blue-hl": "#3daee9",
+                                "blue-outline": "#8ab4c8",
+                                "tab-inactive-blue": "#a7d3eb",
+
+                                "tab-close-1": "brightness(0) saturate(100%) invert(10%) sepia(0%) saturate(300%) hue-rotate(0deg) brightness(100%)",
+                                "tab-close-2": "brightness(1) saturate(70%) hue-rotate(340deg)",
+                                "tab-close-3": "brightness(1) saturate(100%) hue-rotate(340deg) brightness(100%)",
+
+                                "action-btn-1": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(70%)",
+                                "action-btn-2": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(50%)",
+                                "action-btn-3": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(30%)",
+                            }
+                        }

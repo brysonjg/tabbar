@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Index</title>
+    <link rel="icon" type="image/svg" href="./icons/dialog-messages.svg">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div class="topper-bar">
+      <div class="tab-container" id="tabContainer">
+        <div class="tab active" tabid="0">
+          Index
+        <div class="close">&nbsp;</div>
+      </div>
+    </div>
+
+    <div class="topper-right">
+      <img src="icons/addtab.svg" class="actionBtn" alt="New Tab" title="new tab" id="newTabBtn">
+      <img src="icons/rmtab.svg" class="actionBtn" alt="Clsoe Tab" title="close tab" id="rmTabBtn">
+<!--
+      <img src="icons/undo.svg" class="actionBtn" alt="Undo" title="undo" onclickaction="undo">
+      <img src="icons/redo.svg" class="actionBtn" alt="Redo" title="redo" onclickaction="redo">
+-->
+      <img src="icons/index.svg" class="actionBtn" alt="Index" title="index" id="indexSw">
+      <img src="icons/settings.svg" class="actionBtn" alt="Settings" title="settings" id="settings">
+      <img src="icons/doqumentation.svg" class="actionBtn" alt="Documentation" title="documentation" id="documentation">
+      </div>
+    </div>
+
+    <iframe src="./index/indx.html" id="chungusmain"></iframe>
+
+    <script src="./utils/reftheme.js"></script>
+    <script src="./scripts.js"></script>
+  </body>
+</html>

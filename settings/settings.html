@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link rel="stylesheet" href="./settings.css">
+  </head>
+  <body>
+    <div class="menu-side-bar">
+      <div class="menu active" data-url="./menus/account.html">Account</div>
+      <hr />
+      <div class="menu" data-url="./menus/appearance.html">Appearance</div>
+      <div class="menu" data-url="./menus/models.html">Models</div>
+      <div class="menu" data-url="./menus/keybindings.html">Keybindings</div>
+    </div>
+
+    <div class="iframe-major">
+      <iframe class="menu-iframe" id="menuIFrame" src="./menus/account.html"></iframe>
+    </div>
+
+    <script src="../controlcommands.js"></script>
+    <script src="../utils/reftheme.js"></script>
+    <script src="../utils/kbutils.js"></script>
+    <script src="./settings.js"></script>
+  </body>
+</html>

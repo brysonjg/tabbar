@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Customisations</title>
+    <style>
+        @font-face {
+            font-family: 'font';
+            src: url('../../font.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        :root {
+            --font: 'font';
+            --bg-color: #2a2e32;
+            --fg-color: #d4d4d4;
+            --table-waght: #35383c;
+
+            /* Accent Colors */
+            --hl-blue-1: #3daee9;
+            --hl-blue-2: #2f4e60;
+
+            /* Filters */
+            --row-filter: brightness(0) invert(83%);
+            --filt-hover: #fff1;
+            --filt-raw: #fff3;
+
+            --rm-action-defult: brightness(0) invert(83%);
+            --rm-action-hover: brightness(0) saturate(100%) invert(14%) sepia(83%) saturate(2200%) hue-rotate(330deg) brightness(150%) contrast(124%);
+            --rm-action-active: brightness(0) saturate(100%) invert(14%) sepia(83%) saturate(2200%) hue-rotate(330deg) brightness(200%) contrast(124%);
+
+            --mv-defult: brightness(0) invert(83%);
+            --mv-filter: invert(62%) sepia(92%) saturate(1934%) hue-rotate(171deg) brightness(99%) contrast(84%);
+
+            --act-defult: brightness(0) invert(83%);
+            --act-active: invert(44%) sepia(89%) saturate(375%) hue-rotate(92deg) brightness(94%) contrast(91%);
+            --act-active: invert(60%) sepia(70%) saturate(358%) hue-rotate(97deg) brightness(94%) contrast(88%);
+        }
+
+        body, html {
+            padding: 0;
+            margin: 0;
+            color: var(--fg-color);
+            background-color: var(--bg-color);
+            font-family: var(--font);
+            font-size: 16px;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        div.section {
+            height: fit-content;
+            width: calc(100vw - 20.5px);
+            padding-left: 10px;
+            margin-right: 10px;
+        }
+
+        div.section div.title {
+            width: calc(100% - 5px);
+            border-bottom: 1px solid var(--fg-color);
+            font-size: 25px;
+            z-index: 999;
+            background-color: var(--bg-color);
+        }
+
+        div.section div.body {
+            width: calc(100vw - 20.5px);
+            font-size: 20px;
+            padding-top: .25em;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        div.master-cont {
+            width: 100%;
+            padding-top: 2.5px;
+            padding-left: 2.5px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        div.master-cont::-webkit-scrollbar {
+            width: 15px;
+        }
+
+        div.master-cont::-webkit-scrollbar-track {
+            background: transparent;
+            border-left: 1px solid #8884;
+            border-bottom: 1px solid #8884;
+            border-top: 1px solid #8884;
+        }
+
+        div.master-cont::-webkit-scrollbar-track:hover {
+            border-left: 1px solid #8889;
+            border-bottom: 1px solid #8889;
+            border-top: 1px solid #8889;
+        }
+
+        div.master-cont::-webkit-scrollbar-track:active {
+            border-left: 1px solid #888;
+            border-bottom: 1px solid #888;
+            border-top: 1px solid #888;
+        }
+
+        div.master-cont::-webkit-scrollbar-thumb {
+            background: #8884;
+        }
+
+        div.master-cont::-webkit-scrollbar-thumb:hover {
+            background: #8889;
+        }
+
+        div.master-cont::-webkit-scrollbar-thumb:active {
+            background: #888;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: calc(100% - 5px);
+        }
+
+        table tr td {
+            border: 1px solid transparent;
+            padding: 5px;
+            text-align: left;
+            transition: border 0.15s;
+        }
+
+        table tr:first-child {
+            position: sticky;
+            top: -1px;
+            z-index: 999;
+            background-color: var(--table-waght);
+
+            box-shadow: -1.5px 0 0 var(--table-waght), 1.5px 0 0 var(--table-waght);
+        }
+
+        table tr:first-child td {
+            border: 1px solid var(--table-waght);
+            z-index: 9999;
+        }
+
+        table:hover tr:not(:hover) td {
+            border-right: 1px solid var(--hl-blue-1);
+            z-index: 1;
+        }
+
+        table:hover tr:first-child td {
+            border-left: 1px solid var(--table-waght);
+            border-right: 1px solid var(--table-waght);
+            border-bottom: 1.25px solid var(--hl-blue-1);
+        }
+
+        table:hover tr td:last-child {
+            border-right: 1px solid transparent;
+        }
+
+        tr:nth-child(odd) td {
+            background-color: var(--table-waght);
+        }
+
+        body:not(.mov) tr:nth-child(odd):not(:first-child):hover {
+            background-color: var(--bg-color);
+        }
+
+        body:not(.mov) tr:nth-child(odd):not(:first-child):hover td {
+            background-color: var(--hl-blue-2);
+        }
+
+        body:not(.mov) table:hover tr:not(:first-child):hover {
+            background-color: var(--hl-blue-2);
+            box-shadow: 0 1px 0 var(--hl-blue-1), 0 -1px 0 var(--hl-blue-1), 1px 0 0 var(--hl-blue-1), -1px 0 0 var(--hl-blue-1);
+        }
+
+        body:not(.mov) table:hover tr:not(:first-child):nth-child(even):hover {
+            background-color: var(--hl-blue-2);
+            box-shadow: inset 0 -1px 0 var(--hl-blue-1), 0 -1px 0 var(--hl-blue-1), 1px 0 0 var(--hl-blue-1), -1px 0 0 var(--hl-blue-1);
+        }
+
+        table tr td:first-child {
+            width: 5.5em;
+            padding-right: 0.5em;
+            color: var(--fg-color);
+        }
+
+        table tr:not(:first-child) td:first-child {
+            text-align: right;
+            color: transparent;
+            position: relative;
+        }
+
+        table tr:not(:first-child) td:first-child img.del {
+            height: 30px;
+            width: 30px;
+            position: absolute;
+            right: 23px;
+            top: 2px;
+            filter: opacity(0);
+        }
+
+        img {
+            -webkit-user-drag: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+
+        table:hover tr:not(:first-child):hover td:first-child img.del {
+            filter: var(--rm-action-defult);
+        }
+
+        table:hover tr:not(:first-child):hover td:first-child img.del:hover {
+            filter: var(--rm-action-hover);
+        }
+
+        table:hover tr:not(:first-child):hover td:first-child img.del:active {
+            filter: var(--rm-action-active);
+        }
+
+        table tr:not(:first-child) td:first-child img.mov {
+            padding-top: 4px;
+            height: 23px;
+            width: 23px;
+            position: absolute;
+            right: 0px;
+            top: 2px;
+            filter: opacity(0);
+            cursor: grab;
+        }
+
+        table:hover tr:not(:first-child):hover td:first-child img.mov {
+            filter: var(--mv-defult);
+        }
+
+        table:hover tr:not(:first-child):hover td:first-child img.mov:hover {
+            filter: var(--mv-filter);
+        }
+
+        table:hover tr:not(:first-child):hover td:first-child img.mov:active {
+            cursor: grabbing;
+            filter: var(--mv-filter);
+        }
+
+        table tr:not(:first-child) td:first-child img.act {
+            padding-top: 4px;
+            height: 23px;
+            width: 23px;
+            position: absolute;
+            right: 55px;
+            top: 2px;
+            filter: opacity(0);
+        }
+
+        table:hover tr:not(:first-child):hover td:first-child img.act {
+            filter: var(--act-defult);
+        }
+
+        table:hover tr:not(:first-child):hover td:first-child img.act:hover {
+            filter: var(--act-active);
+        }
+
+        table:hover tr:not(:first-child):hover td:first-child img.act:active {
+            filter: var(--act-after);
+        }
+
+        table tr:not(:first-child) td:first-child img.act.aft {
+            filter: var(--act-after) !important;
+        }
+
+        .dragged-row {
+            background-color: var(--hl-blue-2) !important;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+        }
+
+        .dragged-row td {
+            background-color: transparent !important;
+        }
+
+        .dragged-row img.del,
+        .dragged-row img.mov,
+        .dragged-row img.act {
+            visibility: visible !important;
+            filter: var(--mv-filter) !important;
+        }
+
+        .row-placeholder {
+            background-color: rgba(61, 174, 233, 0.1);
+        }
+
+        .row-placeholder td {
+            border: 2px dashed var(--hl-blue-1) !important;
+            background-color: rgba(61, 174, 233, 0.1) !important;
+            height: 20px;
+        }
+
+        img.new-row-to-table {
+            background-color: transparent;
+            filter: var(--row-filter);
+            width: 20px;
+            height: 20px;
+            margin-left: 20px;
+            padding: 3px;
+            border-radius: 4px;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        img.new-row-to-table:hover {
+            background-color: var(--filt-hover);
+        }
+
+        img.new-row-to-table:active {
+            background-color: var(--filt-raw);
+        }
+
+        td[contenteditable]:focus,
+        td[contenteditable]:active {
+            outline: none;
+        }
+    </style>
+  </head>
+  <body>
+
+    <div class="master-cont">
+      <div class="section">
+        <div class="title">
+          Model Customisations
+        </div>
+        <div class="body">
+          <table>
+            <tr>
+              <td data-editable="false">Actions</td>
+              <td data-editable="false">Model Title</td>
+              <td data-editable="false">OpRtr-API Key</td>
+            </tr>
+            <tr>
+              <td data-editable="false"><img src="../../icons/modelkeyacctive.svg" class="act aft"><img src="../../icons/removetablerow.svg" class="del"><img src="../../icons/moverow.svg" class="mov"></td>
+              <td data-editable="true">GPT OSS</td>
+              <td data-editable="true">openai/gpt-oss-20b:free</td>
+            </tr>
+            <tr>
+              <td data-editable="false"><img src="../../icons/modelkeyacctive.svg" class="act"><img src="../../icons/removetablerow.svg" class="del"><img src="../../icons/moverow.svg" class="mov"></td>
+              <td data-editable="true">Qwen Coder</td>
+              <td data-editable="true">qwen/qwen3-coder:free</td>
+            </tr>
+            <tr>
+              <td data-editable="false"><img src="../../icons/modelkeyacctive.svg" class="act"><img src="../../icons/removetablerow.svg" class="del"><img src="../../icons/moverow.svg" class="mov"></td>
+              <td data-editable="true">Gemma Smol</td>
+              <td data-editable="true">google/gemma-3n-e2b-it:free</td>
+            </tr>
+          </table>
+
+          <img class="new-row-to-table" src="../../icons/add-table-row.svg" title="Add new model">
+        </div>
+      </div>
+    </div>
+
+    <script src="../../controlcommands.js"></script>
+    <script src="../../utils/reftheme.js"></script>
+    <script src="../../utils/kbutils.js"></script>
+    <script>
+        const tableBody = document.querySelector("div.body table tbody");
+        let isEditing = false;
+        let currentEditCell = null;
+
+        setTimeout(() => {
+            document.body.classList.remove("mov");
+        }, 100)
+
+        async function loadAndSetTable() {
+            await fixThemeOverSettable();
+
+            const settingsJSON = await getSettablesAsJson();
+            if (!settingsJSON || !settingsJSON.models) {
+                attachCellEditing();
+                attachRowMovListeners();
+                return;
+            }
+
+            const tbody = tableBody;
+            // Keep first row (header), remove the rest
+            tbody.querySelectorAll("tr:not(:first-child)").forEach(r => r.remove());
+
+            const { activeIndex = 0, models = [] } = settingsJSON.models;
+
+            models.forEach((model, i) => {
+                const tr = document.createElement("tr");
+
+                const tdDel = document.createElement("td");
+                tdDel.dataset.editable = "false";
+                tdDel.innerHTML = '<img src="../../icons/modelkeyacctive.svg" class="act"><img src="../../icons/removetablerow.svg" class="del"><img src="../../icons/moverow.svg" class="mov">';
+                tr.appendChild(tdDel);
+
+                // Set .aft for the active row
+                if (i === activeIndex) {
+                    const actImg = tdDel.querySelector("img.act");
+                    if (actImg) actImg.classList.add("aft");
+                }
+
+                const tdName = document.createElement("td");
+                tdName.textContent = model.userspace_name;
+                tdName.dataset.editable = "true";
+                tr.appendChild(tdName);
+
+                const tdAPI = document.createElement("td");
+                tdAPI.textContent = model.api_name;
+                tdAPI.dataset.editable = "true";
+                tr.appendChild(tdAPI);
+
+                tbody.appendChild(tr);
+            });
+
+            attachCellEditing();
+            attachRowMovListeners();
+        }
+
+        function getModelJSON() {
+            const rows = Array.from(tableBody.querySelectorAll("tr")).slice(1); // skip header
+            const models = rows.map(row => {
+                const cells = row.querySelectorAll("td");
+                return {
+                    userspace_name: cells[1].textContent.trim() || cells[1].textContent,
+                    api_name: cells[2].textContent.trim() || cells[2].textContent
+                };
+            });
+
+            // Determine active row index
+            let activeIndex = rows.findIndex(row => row.querySelector("img.act")?.classList.contains("aft"));
+            if (activeIndex === -1) activeIndex = 0; // fallback to first row
+
+            return { activeIndex, models };
+        }
+
+        async function commitModelJSON() {
+            const modelData = getModelJSON();
+            const settings = await getSettablesAsJson() || {};
+            settings.models = modelData;
+            setSettablesByJson(settings);
+        }
+
+        function attachCellEditing() {
+            const cells = tableBody.querySelectorAll("td[data-editable='true']");
+            cells.forEach(cell => {
+                if (cell.dataset.listenerAttached === "true") return;
+                cell.dataset.listenerAttached = "true";
+
+                const toggleEdit = () => {
+                    if (isEditing && currentEditCell === cell) return;
+
+                    // Finish any existing edit
+                    if (isEditing && currentEditCell) {
+                        finishEdit(currentEditCell);
+                    }
+
+                    cells.forEach(other => {
+                        other.contentEditable = false;
+                        other.classList.remove("editing");
+                        other.dataset.editing = "false";
+                        other.dataset.originalValue = other.textContent;
+                    });
+
+                    setTimeout(() => {
+                        cell.dataset.originalValue = cell.childNodes[0]?.nodeType === 3 ? cell.childNodes[0].textContent : cell.textContent;
+                        cell.contentEditable = "true";
+                        cell.spellcheck = false;
+                        cell.autocapitalize = "off";
+                        cell.autocomplete = "off";
+                        cell.classList.add("editing");
+                        cell.focus();
+
+                        const range = document.createRange();
+                        const textNode = cell.childNodes[0]?.nodeType === 3 ? cell.childNodes[0] : cell;
+                        range.selectNodeContents(textNode);
+                        const sel = window.getSelection();
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+
+                        cell.dataset.editing = "true";
+                        isEditing = true;
+                        currentEditCell = cell;
+                    }, 5);
+                };
+
+                cell.addEventListener("click", (e) => {
+                    if (e.target.classList.contains('edit-hint')) return;
+                    e.stopPropagation();
+                    toggleEdit();
+                });
+
+                cell.addEventListener("keydown", async (event) => {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        finishEdit(cell);
+                    }
+                    if (event.key === "Escape") {
+                        event.preventDefault();
+                        if (cell.childNodes[0]?.nodeType === 3) {
+                            cell.childNodes[0].textContent = cell.dataset.originalValue;
+                        } else {
+                            cell.textContent = cell.dataset.originalValue;
+                        }
+                        finishEdit(cell);
+                    }
+                    if (event.key === "Tab") {
+                        event.preventDefault();
+
+                        // Insert a tab character at the cursor position
+                        const selection = window.getSelection();
+                        const range = selection.getRangeAt(0);
+                        const tabNode = document.createTextNode("\t");
+                        range.insertNode(tabNode);
+
+                        // Move the cursor after the inserted tab
+                        range.setStartAfter(tabNode);
+                        range.setEndAfter(tabNode);
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                    }
+                });
+
+                // Auto-save when clicking outside
+                cell.addEventListener("blur", () => {
+                    if (cell.dataset.editing === "true") {
+                        setTimeout(() => {
+                            if (!cell.contains(document.activeElement)) {
+                                finishEdit(cell);
+                            }
+                        }, 10);
+                    }
+                });
+            });
+
+            tableBody.querySelectorAll("td[data-editable='false'] img.del").forEach(img => {
+                img.addEventListener("click", async () => {
+                    const row = img.closest("tr");
+                    if (!row || row.parentElement.children.length <= 2) return; // Don't delete if only header + one row
+
+                    const isActive = row.querySelector("img.act")?.classList.contains("aft");
+
+                    // Fade out then remove
+                    row.style.opacity = "0.5";
+                    setTimeout(async () => {
+                        const nextRow = row.nextElementSibling;
+                        const prevRow = row.previousElementSibling;
+
+                        row.remove();
+
+                        if (isActive) {
+                            let newActiveRow = nextRow || prevRow;
+
+                            if (newActiveRow) {
+                                const actImg = newActiveRow.querySelector("img.act");
+                                if (actImg) actImg.classList.add("aft");
+                            } else {
+                                // No rows left, create a new default row
+                                const tr = document.createElement("tr");
+
+                                const tdDel = document.createElement("td");
+                                tdDel.dataset.editable = "false";
+                                tdDel.innerHTML = '<img src="../../icons/modelkeyacctive.svg" class="act aft"><img src="../../icons/removetablerow.svg" class="del"><img src="../../icons/moverow.svg" class="mov">';
+                                tr.appendChild(tdDel);
+
+                                const tdName = document.createElement("td");
+                                tdName.textContent = "New Model";
+                                tdName.dataset.editable = "true";
+                                tr.appendChild(tdName);
+
+                                const tdAPI = document.createElement("td");
+                                tdAPI.textContent = "provider/model-name:free";
+                                tdAPI.dataset.editable = "true";
+                                tr.appendChild(tdAPI);
+
+                                tableBody.appendChild(tr);
+                                attachCellEditing();
+                                attachRowMovListeners();
+                            }
+                        }
+
+                        await commitModelJSON();
+                    }, 150);
+                });
+            });
+
+            tableBody.querySelectorAll("td[data-editable='false'] img.act").forEach( (img) => {
+                img.addEventListener("click", async () => {
+                    tableBody.querySelectorAll("td[data-editable='false'] img.act").forEach( (imgb) => {
+                        imgb.classList.remove("aft");
+                    });
+
+                    img.classList.add("aft");
+
+                    await commitModelJSON();
+                });
+            });
+
+            // Click outside to save
+            document.addEventListener('click', (e) => {
+                if (isEditing && currentEditCell && !currentEditCell.contains(e.target)) {
+                    finishEdit(currentEditCell);
+                }
+            });
+        }
+
+        function finishEdit(cell) {
+            cell.contentEditable = false;
+            cell.classList.remove("editing");
+            cell.dataset.editing = "false";
+            isEditing = false;
+            currentEditCell = null;
+            commitModelJSON();
+        }
+
+        let draggedRow = null;
+        let placeholder = null;
+        let rowRects = [];
+        let currentIndex = 0;
+        let isDragging = false;
+        let grabOffsetY = 0;
+        let dragStartY = 0;
+
+        function attachRowMovListeners() {
+            document.body.classList.add("mov");
+
+            const movImgs = tableBody.querySelectorAll("tr:not(:first-child) img.mov");
+            movImgs.forEach(img => {
+                if (img.dataset.dragListenerAttached === "true") return;
+                img.dataset.dragListenerAttached = "true";
+
+                img.addEventListener("mousedown", (e) => {
+                    e.preventDefault();
+
+                    draggedRow = img.closest("tr");
+                    dragStartY = e.clientY;
+                    grabOffsetY = e.clientY - draggedRow.getBoundingClientRect().top;
+
+                    document.addEventListener("mousemove", onMouseMove, true);
+                    document.addEventListener("mouseup", onMouseUp, true);
+
+                    return false;
+                });
+
+                img.addEventListener("dragstart", (e) => {
+                    e.preventDefault();
+                    return false;
+                });
+            });
+        }
+
+        function startRowDrag() {
+            isDragging = true;
+
+            const rows = Array.from(tableBody.querySelectorAll("tr:not(:first-child)"));
+            rowRects = rows.map(r => r.getBoundingClientRect());
+            currentIndex = rows.indexOf(draggedRow);
+
+            placeholder = document.createElement("tr");
+            placeholder.className = "row-placeholder";
+
+            // Create cells for placeholder to maintain column structure
+            const headerCells = tableBody.querySelector("tr:first-child").cells;
+            for (let i = 0; i < headerCells.length; i++) {
+                const placeholderCell = document.createElement("td");
+                placeholderCell.style.width = `${headerCells[i].offsetWidth}px`;
+                placeholderCell.style.minWidth = `${headerCells[i].offsetWidth}px`;
+                placeholder.appendChild(placeholderCell);
+            }
+
+            draggedRow.parentNode.insertBefore(placeholder, draggedRow.nextSibling);
+
+            draggedRow.classList.add("dragged-row");
+
+            // Preserve the table structure by setting fixed widths on dragged row cells
+            const draggedCells = draggedRow.cells;
+            const headerRow = tableBody.querySelector("tr:first-child");
+
+            for (let i = 0; i < draggedCells.length; i++) {
+                const headerCell = headerRow.cells[i];
+                draggedCells[i].style.width = `${headerCell.offsetWidth}px`;
+                draggedCells[i].style.minWidth = `${headerCell.offsetWidth}px`;
+            }
+
+            draggedRow.style.width = `${tableBody.offsetWidth}px`;
+            draggedRow.style.position = "absolute";
+            draggedRow.style.left = `${draggedRow.getBoundingClientRect().left}px`;
+            draggedRow.style.top = `${draggedRow.getBoundingClientRect().top}px`;
+            draggedRow.style.zIndex = "999";
+            draggedRow.style.pointerEvents = "none";
+        }
+
+        function onMouseMove(e) {
+            if (!draggedRow) return;
+
+            if (!isDragging) {
+                const dy = e.clientY - dragStartY;
+                if (Math.abs(dy) > 5) startRowDrag();
+                else return;
+            }
+
+            draggedRow.style.top = `${e.clientY - grabOffsetY}px`;
+
+            let newIndex = 0;
+            rowRects.forEach((rect, i) => {
+                const midY = rect.top + rect.height / 2;
+                if (e.clientY > midY) newIndex = i + 1;
+            });
+
+            if (newIndex !== currentIndex) {
+                currentIndex = newIndex;
+                if (placeholder && placeholder.parentNode) {
+                    placeholder.remove();
+                }
+                const rows = Array.from(tableBody.querySelectorAll("tr:not(:first-child)"));
+                if (currentIndex >= rows.length) {
+                    tableBody.appendChild(placeholder);
+                } else {
+                    tableBody.insertBefore(placeholder, rows[currentIndex]);
+                }
+            }
+        }
+
+        async function onMouseUp(e) {
+            document.removeEventListener("mousemove", onMouseMove, true);
+            document.removeEventListener("mouseup", onMouseUp, true);
+            document.removeEventListener("mousemove", onMouseMove);
+            document.removeEventListener("mouseup", onMouseUp);
+
+            document.body.classList.remove("mov");
+
+            if (!draggedRow || !isDragging) return;
+
+            const placeholderRect = placeholder.getBoundingClientRect();
+            draggedRow.style.transition = "all 150ms cubic-bezier(.25,.8,.25,1)";
+            draggedRow.style.top = `${placeholderRect.top}px`;
+            draggedRow.style.transform = "rotate(0deg)";
+
+            setTimeout(() => {
+                if (placeholder && placeholder.parentNode) {
+                    tableBody.insertBefore(draggedRow, placeholder);
+                    placeholder.remove();
+                }
+
+                resetDraggedRowStyles();
+
+                draggedRow = null;
+                placeholder = null;
+                commitModelJSON();
+            }, 150);
+
+            isDragging = false;
+        }
+
+        function resetDraggedRowStyles() {
+            if (!draggedRow) return;
+
+            draggedRow.classList.remove("dragged-row");
+            const stylesToReset = [
+                'position', 'left', 'top', 'width', 'z-index',
+                'pointer-events', 'transition', 'transform', 'opacity'
+            ];
+
+            stylesToReset.forEach(style => {
+                draggedRow.style[style] = '';
+            });
+
+            const draggedCells = draggedRow.cells;
+            for (let i = 0; i < draggedCells.length; i++) {
+                draggedCells[i].style.width = '';
+                draggedCells[i].style.minWidth = '';
+            }
+        }
+
+        document.querySelector("img.new-row-to-table")?.addEventListener("click", async () => {
+            const tr = document.createElement("tr");
+
+            const tdDel = document.createElement("td");
+            tdDel.dataset.editable = "false";
+            tdDel.innerHTML = '<img src="../../icons/modelkeyacctive.svg" class="act"><img src="../../icons/removetablerow.svg" class="del"><img src="../../icons/moverow.svg" class="mov">';
+            tr.appendChild(tdDel);
+
+            const tdName = document.createElement("td");
+            tdName.textContent = "New Model";
+            tdName.dataset.editable = "true";
+            tr.appendChild(tdName);
+
+            const tdAPI = document.createElement("td");
+            tdAPI.textContent = "provider/model-name:free";
+            tdAPI.dataset.editable = "true";
+            tr.appendChild(tdAPI);
+
+            tableBody.appendChild(tr);
+            attachCellEditing();
+            attachRowMovListeners();
+
+            // Auto-focus the model name for immediate editing
+            setTimeout(() => {
+                tdName.click();
+            }, 50);
+
+            document.body.classList.remove("mov");
+            await commitModelJSON();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            // Ctrl+Enter or Cmd+Enter to add new row
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                document.querySelector("img.new-row-to-table").click();
+            }
+
+            // Escape to cancel editing
+            if (e.key === 'Escape' && isEditing) {
+                if (currentEditCell.childNodes[0]?.nodeType === 3) {
+                    currentEditCell.childNodes[0].textContent = currentEditCell.dataset.originalValue;
+                } else {
+                    currentEditCell.textContent = currentEditCell.dataset.originalValue;
+                }
+                finishEdit(currentEditCell);
+            }
+
+            // Tab key handling for indentation
+            if (e.key === "Tab") {
+              const activeElement = document.activeElement;
+              if (
+                activeElement.tagName === "TEXTAREA" ||
+                activeElement.isContentEditable
+              ) {
+                e.preventDefault();
+                const selection = window.getSelection();
+                const range = selection.getRangeAt(0);
+
+                if (activeElement.isContentEditable) {
+                  const tabNode = document.createTextNode("\t");
+                  range.insertNode(tabNode);
+                  range.setStartAfter(tabNode);
+                  range.setEndAfter(tabNode);
+                  selection.removeAllRanges();
+                  selection.addRange(range);
+                } else if (activeElement.tagName === "TEXTAREA") {
+                  const start = activeElement.selectionStart;
+                  const end = activeElement.selectionEnd;
+                  activeElement.value =
+                    activeElement.value.substring(0, start) +
+                    "\t" +
+                    activeElement.value.substring(end);
+                  activeElement.selectionStart = activeElement.selectionEnd = start + 1;
+                }
+              }
+            }
+        });
+
+        window.addEventListener("DOMContentLoaded", loadAndSetTable);
+
+        document.addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+        });
+    </script>
+  </body>
+</html>

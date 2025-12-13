@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>More Themes</title>
+    <style>
+      @font-face {
+          font-family: 'font';
+          src: url('../../font.ttf') format('truetype');
+          font-weight: normal;
+          font-style: normal;
+      }
+
+      :root {
+          --font: 'font';
+          --bg-color: #2a2e32;
+          --fg-color: #d4d4d4;
+          --man-color: #000a;
+
+          --card-1: brightness(1);
+          --card-2: brightness(1.75);
+          --card-3: brightness(2);
+
+          --icon-1: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%);
+          --icon-2: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4);
+          --icon-3: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2);
+      }
+
+      body, html {
+          padding: 0;
+          margin: 0;
+          color: var(--fg-color);
+          background-color: var(--bg-color);
+          font-family: var(--font);
+          font-size: 16px;
+          width: 100vw;
+          height: 100vh;
+          overflow: hidden;
+          user-select: none;
+          -webkit-user-select: none;
+          position: relative;
+          display: flex;
+          justify-content: center;
+      }
+
+      div.section {
+          height: fit-content;
+          width: calc(100vw - 35px);
+          padding-left: 10px;
+          margin-right: 10px;
+      }
+
+      div.section div.title {
+          position: sticky;
+          top: -25px;
+          width: calc(100% - 32px);
+          border-bottom: 1px solid var(--fg-color);
+          font-size: 25px;
+          z-index: 999;
+          background-color: var(--bg-color);
+      }
+
+      div.section div.body {
+          width: 100%;
+          font-size: 20px;
+          padding-top: 1em;
+          display: flex;
+          flex-wrap: wrap;
+      }
+
+      img.exitIcon {
+          width: 20px;
+          height: 20px;
+          position: fixed;
+          top: 10px;
+          left: 5px;
+          filter: var(--icon-1);
+      }
+
+      img.exitIcon:hover {
+          filter: var(--icon-2);
+      }
+
+      img.exitIcon:active {
+          filter: var(--icon-3);
+      }
+
+      div.master-cont {
+          width: 100%;
+          padding-top: 25px;
+          padding-left: 32.5px;
+          overflow-y: auto;
+          overflow-x: hidden;
+      }
+
+      div.master-cont::-webkit-scrollbar {
+          width: 15px;
+      }
+
+      div.master-cont::-webkit-scrollbar-track {
+          background: transparent;
+          border-left: 1px solid #8884;
+          border-bottom: 1px solid #8884;
+          border-top: 1px solid #8884;
+      }
+
+      div.master-cont::-webkit-scrollbar-track:hover {
+          border-left: 1px solid #8889;
+          border-bottom: 1px solid #8889;
+          border-top: 1px solid #8889;
+      }
+
+      div.master-cont::-webkit-scrollbar-track:active {
+          border-left: 1px solid #888;
+          border-bottom: 1px solid #888;
+          border-top: 1px solid #888;
+      }
+
+      div.master-cont::-webkit-scrollbar-thumb {
+          background: #8884;
+      }
+
+      div.master-cont::-webkit-scrollbar-thumb:hover {
+          background: #8889;
+      }
+
+      div.master-cont::-webkit-scrollbar-thumb:active {
+          background: #888;
+      }
+
+      .theme-img-wrapper {
+          position: relative;
+          display: inline-block;
+          margin-right: 10px;
+          margin-bottom: 10px;
+      }
+
+      .theme-img-wrapper:hover::after {
+          content: attr(data-label);
+          display: block;
+          position: absolute;
+          bottom: 6px;
+          right: 1px;
+          background-color: var(--man-color);
+          color: var(--fg-color);
+          padding: 2px 4px;
+          border-radius: 2px;
+          white-space: nowrap;
+          z-index: 1;
+          font-size: 14px;
+      }
+
+      img.theme-showcase {
+          max-width: 200px;
+          width: 16vw;
+          border: 1px solid var(--fg-color);
+          border-radius: 3px;
+          position: relative;
+          cursor: pointer;
+          user-select: none;
+          -webkit-user-select: none;
+          filter: var(--card-1);
+      }
+
+      img.theme-showcase:hover {
+          filter: var(--card-2);
+      }
+
+      img.theme-showcase:active {
+          filter: var(--card-3);
+      }
+    </style>
+  </head>
+    <body>
+        <img class="exitIcon" src="../../icons/go-up-settings-lvl.svg" id="exitIcon"></img>
+        <div class="master-cont">
+            <div class="section">
+                <div class="title">
+                    More Themes
+                </div>
+                <div class="body">
+                    <div class="theme-img-wrapper" data-label="breeze dark" data-theme_ttl='theme_brz_dark' data-theme_file='brz-dark.js'>
+                        <img class="theme-showcase" src="./theme_imgs/brz-dark.svg" alt="">
+                    </div>
+                    <div class="theme-img-wrapper" data-label="contrast dark" data-theme_ttl='theme_cnt_dark' data-theme_file='cnt-dark.js'>
+                    <img class="theme-showcase" src="./theme_imgs/cnt-dark.svg" alt="">
+                    </div>
+                    <div class="theme-img-wrapper" data-label="breeze light" data-theme_ttl='theme_brz_light' data-theme_file='brz-light.js'>
+                        <img class="theme-showcase" src="./theme_imgs/brz-light.svg" alt="">
+                    </div>
+                    <div class="theme-img-wrapper" data-label="contrast light" data-theme_ttl='theme_cnt_light' data-theme_file='cnt-light.js'>
+                        <img class="theme-showcase" src="./theme_imgs/cnt-light.svg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="../../controlcommands.js"></script>
+        <script src="../../utils/reftheme.js"></script>
+        <script src="../../utils/kbutils.js"></script>
+        <script>
+        // Function to dynamically load theme scripts
+        async function loadThemeScript(themeFile) {
+            return new Promise((resolve, reject) => {
+                // Check if script is already loaded
+                if (document.querySelector(`script[src="./theme_json/${themeFile}"]`)) {
+                    resolve();
+                    return;
+                }
+
+                const script = document.createElement('script');
+                script.src = `./theme_json/${themeFile}`;
+                script.onload = () => resolve();
+                script.onerror = () => reject(new Error(`Failed to load ${themeFile}`));
+                document.head.appendChild(script);
+            });
+        }
+
+        // Function to get theme data by variable name
+        function getThemeData(varName) {
+            if (typeof window[varName] !== 'undefined') {
+                return window[varName];
+            }
+            throw new Error(`Theme variable ${varName} not found`);
+        }
+
+        window.onload = async () => {
+            await fixThemeOverSettable();
+        };
+
+        document.getElementById("exitIcon").addEventListener("click", () => {
+            window.location.href = "./appearance.html";
+        });
+
+        document.querySelectorAll("div.theme-img-wrapper").forEach((element) => {
+            element.addEventListener("click", async () => {
+                try {
+                    const themeFile = element.dataset.theme_file;
+                    const themeVarName = element.dataset.theme_ttl;
+
+                    // Load the theme script
+                    await loadThemeScript(themeFile);
+
+                    // Get the theme data from the loaded variable
+                    const themeData = getThemeData(themeVarName);
+
+                    // Set the theme
+                    let json = await getSettablesAsJson() || {};
+                    json.theme = themeData;
+                    setSettablesByJson(json);
+
+                } catch (error) {
+                    console.error('Error loading theme:', error);
+                    // Fallback: try to set empty theme
+                    try {
+                        let json = await getSettablesAsJson();
+                        json.theme = {};
+                        setSettablesByJson(json);
+                    } catch (fallbackError) {
+                        console.error('Fallback also failed:', fallbackError);
+                    }
+                }
+
+                updateTopLevelTheme();
+                await fixThemeOverSettable(); // correct themedge
+            });
+        });
+
+        document.addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+        });
+        </script>
+    </body>
+</html>

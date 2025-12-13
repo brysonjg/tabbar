@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Keyboard Shortcuts</title>
+
+    <!-- prism -->
+    <link rel="stylesheet" href="../../chungus/prism/prism.css" />
+    <script src="../../chungus/prism/prism.js"></script>
+
+    <style>
+      @font-face {
+        font-family: "font";
+        src: url("../../font.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      :root {
+        --font: "font";
+        --bg-color: #2a2e32;
+        --fg-color: #d4d4d4;
+        --table-waght: #35383c;
+
+        /* Accent Colors */
+        --hl-blue-1: #3daee9;
+        --hl-blue-2: #2f4e60;
+
+        /* Filters */
+        --row-filter: brightness(0) invert(83%);
+        --filt-hover: #fff1;
+        --filt-raw: #fff3;
+
+        --rm-action-defult: brightness(0) invert(83%);
+        --rm-action-hover: brightness(0) saturate(100%) invert(14%) sepia(83%)
+          saturate(2200%) hue-rotate(330deg) brightness(150%) contrast(124%);
+        --rm-action-active: brightness(0) saturate(100%) invert(14%) sepia(83%)
+          saturate(2200%) hue-rotate(330deg) brightness(200%) contrast(124%);
+
+        --src-defult: brightness(0) invert(83%);
+        --src-hover: invert(62%) sepia(92%) saturate(1934%) hue-rotate(171deg)
+          brightness(99%) contrast(84%);
+
+        --icon-1: brightness(0) invert(100%) sepia(0%) saturate(3019%)
+          hue-rotate(53deg) brightness(76%) contrast(126%);
+        --icon-2: brightness(0) invert(66%) sepia(68%) saturate(450%)
+          hue-rotate(171deg) brightness(88%) contrast(82%);
+        --icon-3: brightness(0) invert(46%) sepia(52%) saturate(3137%)
+          hue-rotate(176deg) brightness(105%) contrast(108%);
+
+        --btn-active-border: #3daee9;
+        --btn-hover-bg: #1f485e;
+        --btn-active-bg: #3daee9;
+      }
+
+      body, html {
+        padding: 0;
+        margin: 0;
+        color: var(--fg-color);
+        background-color: var(--bg-color);
+        font-family: var(--font);
+        font-size: 16px;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        user-select: none;
+        -webkit-user-select: none;
+        position: relative;
+        display: flex;
+        justify-content: center;
+      }
+
+      div.section {
+        height: fit-content;
+        width: calc(100vw - 20.5px);
+        padding-left: 10px;
+        margin-right: 10px;
+      }
+
+      div.section div.title {
+        width: calc(100% - 5px);
+        border-bottom: 1px solid var(--fg-color);
+        font-size: 25px;
+        z-index: 999;
+        background-color: var(--bg-color);
+      }
+
+      div.section div.body {
+        width: calc(100vw - 20.5px);
+        font-size: 20px;
+        padding-top: 0.25em;
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      div.master-cont {
+        width: 100%;
+        padding-top: 2.5px;
+        padding-left: 2.5px;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      div.master-cont::-webkit-scrollbar {
+        width: 15px;
+      }
+
+      div.master-cont::-webkit-scrollbar-track {
+        background: transparent;
+        border-left: 1px solid #8884;
+        border-bottom: 1px solid #8884;
+        border-top: 1px solid #8884;
+      }
+
+      div.master-cont::-webkit-scrollbar-track:hover {
+        border-left: 1px solid #8889;
+        border-bottom: 1px solid #8889;
+        border-top: 1px solid #8889;
+      }
+
+      div.master-cont::-webkit-scrollbar-track:active {
+        border-left: 1px solid #888;
+        border-bottom: 1px solid #888;
+        border-top: 1px solid #888;
+      }
+
+      div.master-cont::-webkit-scrollbar-thumb {
+        background: #8884;
+      }
+
+      div.master-cont::-webkit-scrollbar-thumb:hover {
+        background: #8889;
+      }
+
+      div.master-cont::-webkit-scrollbar-thumb:active {
+        background: #888;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: calc(100% - 5px);
+      }
+
+      table tr td {
+        border: 1px solid transparent;
+        padding: 5px;
+        text-align: left;
+        transition: border 0.15s;
+      }
+
+      table tr:first-child {
+        position: sticky;
+        top: -1px;
+        z-index: 999;
+        background-color: var(--table-waght);
+        box-shadow:
+          -1.5px 0 0 var(--table-waght),
+          1.5px 0 0 var(--table-waght);
+      }
+
+      table tr:first-child td {
+        border: 1px solid var(--table-waght);
+        z-index: 9999;
+      }
+
+      table:hover tr:not(:hover) td {
+        border-right: 1px solid var(--hl-blue-1);
+        z-index: 1;
+      }
+
+      table:hover tr:first-child td {
+        border-left: 1px solid var(--table-waght);
+        border-right: 1px solid var(--table-waght);
+        border-bottom: 1.25px solid var(--hl-blue-1);
+      }
+
+      table:hover tr td:last-child {
+        border-right: 1px solid transparent;
+      }
+
+      tr:nth-child(odd) td {
+        background-color: var(--table-waght);
+      }
+
+      body:not(.mov) tr:nth-child(odd):not(:first-child):hover {
+        background-color: var(--bg-color);
+      }
+
+      body:not(.mov) tr:nth-child(odd):not(:first-child):hover td {
+        background-color: var(--hl-blue-2);
+      }
+
+      body:not(.mov) table:hover tr:not(:first-child):hover {
+        background-color: var(--hl-blue-2);
+        box-shadow:
+          0 1px 0 var(--hl-blue-1),
+          0 -1px 0 var(--hl-blue-1),
+          1px 0 0 var(--hl-blue-1),
+          -1px 0 0 var(--hl-blue-1);
+      }
+
+      body:not(.mov) table:hover tr:not(:first-child):nth-child(even):hover {
+        background-color: var(--hl-blue-2);
+        box-shadow:
+          inset 0 -1px 0 var(--hl-blue-1),
+          0 -1px 0 var(--hl-blue-1),
+          1px 0 0 var(--hl-blue-1),
+          -1px 0 0 var(--hl-blue-1);
+      }
+
+      table tr td:first-child {
+        width: 5.5em;
+        padding-right: 0.5em;
+        color: var(--fg-color);
+      }
+
+      table tr:not(:first-child) td:first-child {
+        text-align: right;
+        color: transparent;
+        position: relative;
+      }
+
+      table tr:not(:first-child) td:first-child img.del {
+        height: 30px;
+        width: 30px;
+        position: absolute;
+        right: 30px;
+        top: 2px;
+        filter: opacity(0);
+      }
+
+      table tr:not(:first-child) td:first-child img.src {
+        height: 30px;
+        width: 30px;
+        position: absolute;
+        right: 0px;
+        top: 2px;
+        filter: opacity(0);
+      }
+
+      img {
+        -webkit-user-drag: none;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+
+      table:hover tr:not(:first-child):hover td:first-child img.del {
+        filter: var(--rm-action-defult);
+      }
+
+      table:hover tr:not(:first-child):hover td:first-child img.del:hover {
+        filter: var(--rm-action-hover);
+      }
+
+      table:hover tr:not(:first-child):hover td:first-child img.del:active {
+        filter: var(--rm-action-active);
+      }
+
+      table:hover tr:not(:first-child):hover td:first-child img.src {
+        filter: var(--src-defult);
+      }
+
+      table:hover tr:not(:first-child):hover td:first-child img.src:hover {
+        filter: var(--src-hover);
+      }
+
+      img.new-row-to-table {
+        background-color: transparent;
+        filter: var(--row-filter);
+        width: 20px;
+        height: 20px;
+        margin-left: 20px;
+        padding: 3px;
+        border-radius: 4px;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      img.new-row-to-table:hover {
+        background-color: var(--filt-hover);
+      }
+
+      img.new-row-to-table:active {
+        background-color: var(--filt-raw);
+      }
+
+      td[contenteditable]:focus,
+      td[contenteditable]:active {
+        outline: none;
+      }
+
+      @keyframes blackout {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      body div.blackout {
+        position: absolute;
+        left: 0;
+        right: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #0008;
+        animation: 0.25s blackout ease-in-out;
+        z-index: 99999;
+        display: flex;
+      }
+
+      .save-btn {
+        position: fixed;
+        bottom: 10px;
+        right: 15px;
+        padding: 0 7px;
+        border-radius: 3px;
+        font-size: 20px;
+
+        user-select: none;
+        -webkit-user-select: none;
+
+        background-color: transparent;
+        border: 1px solid var(--fg-color);
+      }
+
+      .save-btn:hover {
+        background-color: var(--btn-hover-bg);
+        border: 1px solid var(--btn-active-border);
+      }
+
+      .save-btn:active {
+        background-color: var(--btn-active-bg);
+        border: 1px solid var(--btn-active-border);
+        color: var(--bg-color);
+      }
+
+      img.exitIcon {
+        width: 20px;
+        height: 20px;
+        position: fixed;
+        bottom: 10px;
+        left: 15px;
+        filter: var(--icon-1);
+        cursor: pointer;
+
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      img.exitIcon:hover {
+        filter: var(--icon-2);
+      }
+
+      img.exitIcon:active {
+        filter: var(--icon-3);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="master-cont">
+      <div class="section">
+        <div class="title">Keyboard Shortcuts</div>
+        <div class="body">
+          <table>
+            <tr>
+              <td data-editable="false">Actions</td>
+              <td data-editable="false">Keyboard Shortcut</td>
+              <td data-editable="false">Comment</td>
+            </tr>
+            <tr data-script='if (window.location.href.endsWith("chungus.html")) {
+  reTitleTab();
+}'>
+              <td data-editable="false">
+                <img src="../../icons/removetablerow.svg" class="del" />
+                <img src="../../icons/dialog-scripts.svg" class="src" />
+              </td>
+              <td data-editable="true">F2</td>
+              <td data-editable="true">Renames Chat Pages</td>
+            </tr>
+            <tr data-script='closeSelf();'>
+              <td data-editable="false">
+                <img src="../../icons/removetablerow.svg" class="del" />
+                <img src="../../icons/dialog-scripts.svg" class="src" />
+              </td>
+              <td data-editable="true">F4</td>
+              <td data-editable="true">Closes the Current Tab</td>
+            </tr>
+            <tr data-script='window.parent.postMessage({ type: "IndxSWPEvent" }, "*");'>
+              <td data-editable="false">
+                <img src="../../icons/removetablerow.svg" class="del" />
+                <img src="../../icons/dialog-scripts.svg" class="src" />
+              </td>
+              <td data-editable="true">F10</td>
+              <td data-editable="true">Opens the Index Page</td>
+            </tr>
+            <tr data-script='window.parent.postMessage({ type: "newTabEvent" }, "*");'>
+              <td data-editable="false">
+                <img src="../../icons/removetablerow.svg" class="del" />
+                <img src="../../icons/dialog-scripts.svg" class="src" />
+              </td>
+              <td data-editable="true">Tab</td>
+              <td data-editable="true">Opens New Tab</td>
+            </tr>
+          </table>
+
+          <img class="new-row-to-table" src="../../icons/add-table-row.svg" />
+        </div>
+      </div>
+    </div>
+
+    <script src="../../controlcommands.js"></script>
+    <script src="../../utils/reftheme.js"></script>
+    <script src="../../utils/kbutils.js"></script>
+    <script>
+      const tableBody = document.querySelector("div.body table tbody");
+      let isEditing = false;
+      let currentEditCell = null;
+
+      // Detect OS
+      const OS = (() => {
+        const platform = navigator.platform.toLowerCase();
+        if (platform.includes("mac")) return "mac";
+        if (platform.includes("win")) return "win";
+        return "linux";
+      })();
+
+      // Modifier mapping for OS display
+      const OSModifierMap = {
+        mac: {
+          Meta: "Cmd",
+          Alt: "Opt",
+          Shift: "Shift",
+          Control: "Ctrl",
+          Fn: "Fn",
+        },
+        win: {
+          Meta: "Win",
+          Alt: "Alt",
+          Shift: "Shift",
+          Control: "Ctrl",
+          Fn: "Fn",
+        },
+        linux: {
+          Meta: "Meta",
+          Alt: "Alt",
+          Shift: "Shift",
+          Control: "Ctrl",
+          Fn: "Fn",
+        },
+      };
+
+      // Normalize modifiers
+      const MODIFIER_ALIASES = {
+        ctrl: "Control",
+        control: "Control",
+        shift: "Shift",
+        alt: "Alt",
+        option: "Alt",
+        opt: "Alt",
+        meta: "Meta",
+        cmd: "Meta",
+        command: "Meta",
+        win: "Meta",
+        super: "Meta",
+        fn: "Fn",
+      };
+
+      // Convert a shortcut string (like "Meta+Shift+L") to canonical JSON
+      function parseShortcutString(shortcutStr) {
+        const parts = shortcutStr.split("+").map((p) => p.trim());
+        let mods = [];
+        let key = null;
+        for (const p of parts) {
+          const lower = p.toLowerCase();
+          if (MODIFIER_ALIASES[lower]) mods.push(MODIFIER_ALIASES[lower]);
+          else if (!key && /^[A-Za-z]$/.test(p)) key = p.toUpperCase();
+          else if (!key)
+            key = p; // non-alphabetic key
+          else throw new Error("Invalid shortcut: multiple keys detected");
+        }
+        if (!key) throw new Error("Shortcut must have exactly one key");
+        return { mods: [...new Set(mods)], key };
+      }
+
+      // Render shortcut for current OS
+      function renderShortcutForOS(shortcut) {
+        const mapped = shortcut.mods.map((m) => OSModifierMap[OS][m] || m);
+        return [...mapped, shortcut.key].join(" ");
+      }
+
+      // Validate no shortcut is a subset of another
+      function validateNoSubset(shortcuts) {
+        for (let i = 0; i < shortcuts.length; i++) {
+          for (let j = 0; j < shortcuts.length; j++) {
+            if (i === j) continue;
+            const si = shortcuts[i],
+              sj = shortcuts[j];
+            const modsSubset = si.mods.every((m) => sj.mods.includes(m));
+            if (modsSubset && si.key === sj.key) {
+              throw new Error(
+                `Shortcut ${renderShortcutForOS(si)} is a subset of ${renderShortcutForOS(sj)}`,
+              );
+            }
+          }
+        }
+      }
+
+      // Syntax highlighting helper (from customthemes.html)
+      function highlightEditable(el) {
+        const pos = saveSelection(el);
+        Prism.highlightElement(el);
+        restoreSelection(el, pos);
+      }
+
+      // Selection helpers (from customthemes.html)
+      function saveSelection(containerEl) {
+        const sel = window.getSelection();
+        if (sel.rangeCount === 0) return { start: 0, end: 0 };
+        const range = sel.getRangeAt(0);
+        const preRange = range.cloneRange();
+        preRange.selectNodeContents(containerEl);
+        preRange.setEnd(range.startContainer, range.startOffset);
+        const start = preRange.toString().length;
+        return { start, end: start + range.toString().length };
+      }
+
+      function restoreSelection(containerEl, savedSel) {
+        let charIndex = 0,
+          range = document.createRange();
+        range.setStart(containerEl, 0);
+        range.collapse(true);
+
+        const nodeStack = [containerEl];
+        let node,
+          foundStart = false,
+          stop = false;
+
+        while (!stop && (node = nodeStack.pop())) {
+          if (node.nodeType === 3) {
+            const nextCharIndex = charIndex + node.length;
+            if (
+              !foundStart &&
+              savedSel.start >= charIndex &&
+              savedSel.start <= nextCharIndex
+            ) {
+              range.setStart(node, savedSel.start - charIndex);
+              foundStart = true;
+            }
+            if (
+              foundStart &&
+              savedSel.end >= charIndex &&
+              savedSel.end <= nextCharIndex
+            ) {
+              range.setEnd(node, savedSel.end - charIndex);
+              stop = true;
+            }
+            charIndex = nextCharIndex;
+          } else {
+            let i = node.childNodes.length;
+            while (i--) nodeStack.push(node.childNodes[i]);
+          }
+        }
+
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+
+      // Setup editor with proper key handling
+      function setupScriptEditor(editor) {
+        editor.addEventListener("keydown", (e) => {
+          const TAB = "  ";
+
+          if (e.key === "Tab") {
+            e.preventDefault();
+            e.stopPropagation(); // Add this to prevent event bubbling
+
+            if (!e.shiftKey) {
+              // Use Range API for more reliable insertion
+              const selection = window.getSelection();
+              if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                range.deleteContents();
+                const tabNode = document.createTextNode(TAB);
+                range.insertNode(tabNode);
+
+                // Move cursor after the inserted tab
+                range.setStartAfter(tabNode);
+                range.setEndAfter(tabNode);
+                selection.removeAllRanges();
+                selection.addRange(range);
+              }
+              highlightEditable(editor);
+            }
+          } else if (e.key === "Enter") {
+            e.preventDefault();
+            e.stopPropagation(); // Add this
+
+            if (e.ctrlKey || e.metaKey || e.altKey) {
+              const row = editor.closest('tr');
+              row.dataset.script = editor.textContent;
+              commitKeybindingsJSON();
+              document.body.querySelector(".blackout").remove();
+              return;
+            }
+
+            // Use Range API for reliable newline insertion
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+              const range = selection.getRangeAt(0);
+              const newline = document.createTextNode("\n");
+              range.deleteContents();
+              range.insertNode(newline);
+              range.setStartAfter(newline);
+              range.setEndAfter(newline);
+              selection.removeAllRanges();
+              selection.addRange(range);
+            }
+            highlightEditable(editor);
+          } else if (e.key === "Backspace") {
+            const sel = window.getSelection();
+            if (sel.rangeCount) {
+              const range = sel.getRangeAt(0);
+              if (range.collapsed) {
+                const pos = saveSelection(editor);
+                const text = editor.textContent;
+                const before = text.slice(0, pos.start);
+                if (before.endsWith(TAB)) {
+                  e.preventDefault();
+                  e.stopPropagation(); // Add this
+                  const newText = before.slice(0, -TAB.length) + text.slice(pos.start);
+                  editor.textContent = newText;
+                  highlightEditable(editor);
+                  restoreSelection(editor, {
+                    start: pos.start - TAB.length,
+                    end: pos.start - TAB.length,
+                  });
+                }
+              }
+            }
+          } else if (e.key === "Escape") {
+            document.body.querySelector(".blackout").remove();
+          }
+
+          // Stop propagation to prevent table cell handlers from catching these events
+          e.stopPropagation();
+        });
+
+        editor.addEventListener("input", (e) => {
+          highlightEditable(editor);
+          e.stopPropagation();
+        });
+
+        // Also add click handler to stop propagation
+        editor.addEventListener("click", (e) => {
+          e.stopPropagation();
+        });
+
+        // Add focus handler to ensure editor is properly focused
+        editor.addEventListener("focus", (e) => {
+          e.stopPropagation();
+        });
+      }
+
+      // Load table from JSON
+      async function loadAndSetTable() {
+        await fixThemeOverSettable();
+        const settingsJSON = await getSettablesAsJson();
+
+        const keybindings = settingsJSON?.keybindings;
+        if (!keybindings) {
+          attachCellEditing();
+          return;
+        }
+
+        const tbody = tableBody;
+        tbody
+          .querySelectorAll("tr:not(:first-child)")
+          .forEach((r) => r.remove());
+
+        for (const binding of keybindings) {
+          const tr = document.createElement("tr");
+          tr.dataset.script = binding.user_script || ""; // Store script in row data
+
+          const tdDel = document.createElement("td");
+          tdDel.dataset.editable = "false";
+          tdDel.innerHTML =
+            '<img src="../../icons/removetablerow.svg" class="del"><img src="../../icons/dialog-scripts.svg" class="src">';
+          tr.appendChild(tdDel);
+
+          const tdShortcut = document.createElement("td");
+          tdShortcut.textContent = renderShortcutForOS(binding);
+          tdShortcut.dataset.editable = "true";
+          tr.appendChild(tdShortcut);
+
+          const tdComment = document.createElement("td");
+          tdComment.textContent = binding.user_comment || "User Comment";
+          tdComment.dataset.editable = "true";
+          tr.appendChild(tdComment);
+
+          tbody.appendChild(tr);
+        }
+        attachCellEditing();
+      }
+
+      // Extract JSON from table
+      function getKeybindingsJSON() {
+        const rows = Array.from(tableBody.querySelectorAll("tr")).slice(1);
+        const result = [];
+        for (const row of rows) {
+          const cells = row.querySelectorAll("td");
+          try {
+            const parsed = parseShortcutString(cells[1].textContent.trim());
+            result.push({
+              ...parsed,
+              user_comment: cells[2].textContent.trim(),
+              user_script: row.dataset.script || "", // Add script storage
+            });
+          } catch (err) {
+            console.warn("Skipping invalid shortcut:", err.message);
+          }
+        }
+        validateNoSubset(result);
+        return result;
+      }
+
+      // Commit to storage
+      async function commitKeybindingsJSON() {
+        const keybindingsData = getKeybindingsJSON();
+        const settings = (await getSettablesAsJson()) || {};
+        settings.keybindings = keybindingsData;
+        setSettablesByJson(settings);
+      }
+
+      // Capture multiple shortcuts in one input session
+      function captureShortcut(callbackCancel, callbackCommit) {
+        const blackout = document.createElement("div");
+        blackout.classList.add("blackout");
+        blackout.innerHTML = `<div style="margin:auto;background:#333;padding:20px 40px;font-size:24px;border-radius:4px;border:1px solid #555;user-select:none;" id="keyrecorder">${"&nbsp;".repeat(20)}</div>`;
+        document.body.appendChild(blackout);
+
+        let currentShortcut = { mods: [], key: null };
+        const shortcutsArray = [];
+
+        function commitCurrentShortcut() {
+          if (currentShortcut.key) {
+            shortcutsArray.push({
+              mods: [...new Set(currentShortcut.mods)],
+              key: currentShortcut.key,
+            });
+            currentShortcut = { mods: [], key: null }; // reset both key and modifiers
+          }
+        }
+
+        function keydown(e) {
+          // !! add some more checks
+          e.preventDefault();
+          e.stopPropagation();
+
+          const k = e.key.length === 1 ? e.key.toUpperCase() : e.key;
+          const lower = k.toLowerCase();
+
+          if (k === "Escape") {
+            cleanup();
+            callbackCancel();
+            return;
+          }
+          if (k === "Enter") {
+            commitCurrentShortcut();
+            cleanup();
+            callbackCommit(shortcutsArray);
+            return;
+          }
+
+          if (MODIFIER_ALIASES[lower]) {
+            if (!currentShortcut.mods.includes(MODIFIER_ALIASES[lower]))
+              currentShortcut.mods.push(MODIFIER_ALIASES[lower]);
+          } else {
+            // Non-modifier key ends current shortcut
+            currentShortcut.key = /^[A-Za-z]$/.test(k) ? k.toUpperCase() : k;
+            commitCurrentShortcut(); // push immediately and reset mods
+          }
+
+          const displayArray = [...shortcutsArray];
+          if (currentShortcut.key || currentShortcut.mods.length)
+            displayArray.push(currentShortcut);
+          document.getElementById("keyrecorder").innerHTML = displayArray
+            .map((s) => renderShortcutForOS(s))
+            .join(", ");
+        }
+
+        function keyup(e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        function cleanup() {
+          document.removeEventListener("keydown", keydown, true);
+          document.removeEventListener("keyup", keyup, true);
+          blackout.remove();
+        }
+
+        document.addEventListener("keydown", keydown, true);
+        document.addEventListener("keyup", keyup, true);
+      }
+
+      // --- attach editing, click, row management ---
+      function attachCellEditing() {
+        const cells = tableBody.querySelectorAll("td[data-editable='true']");
+        cells.forEach((cell) => {
+          if (cell.dataset.listenerAttached === "true") return;
+          cell.dataset.listenerAttached = "true";
+
+          const toggleEdit = () => {
+            if (isEditing && currentEditCell === cell) return;
+            if (isEditing && currentEditCell) finishEdit(currentEditCell);
+
+            cells.forEach((c) => {
+              c.contentEditable = false;
+              c.classList.remove("editing");
+              c.dataset.editing = "false";
+              c.dataset.originalValue = c.textContent;
+            });
+
+            setTimeout(() => {
+              cell.dataset.originalValue = cell.textContent;
+              cell.contentEditable = "true";
+              cell.spellcheck = false;
+              cell.autocapitalize = "off";
+              cell.autocomplete = "off";
+              cell.classList.add("editing");
+              cell.focus();
+              const range = document.createRange();
+              const textNode =
+                cell.childNodes[0]?.nodeType === 3 ? cell.childNodes[0] : cell;
+              range.selectNodeContents(textNode);
+              const sel = window.getSelection();
+              sel.removeAllRanges();
+              sel.addRange(range);
+              cell.dataset.editing = "true";
+              isEditing = true;
+              currentEditCell = cell;
+            }, 5);
+          };
+
+          cell.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const row = cell.parentElement;
+            const cellsArray = Array.from(row.querySelectorAll("td"));
+            if (cellsArray.indexOf(cell) === 1) {
+              const original = cell.textContent.trim();
+              captureShortcut(
+                () => {
+                  cell.textContent = original;
+                },
+                (shortcuts) => {
+                  if (shortcuts.length)
+                    cell.textContent = shortcuts
+                      .map((s) => renderShortcutForOS(s))
+                      .join(", ");
+                  commitKeybindingsJSON();
+                },
+              );
+              return;
+            }
+            toggleEdit();
+          });
+
+          cell.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              finishEdit(cell);
+            }
+            if (e.key === "Escape") {
+              e.preventDefault();
+              cell.textContent = cell.dataset.originalValue;
+              finishEdit(cell);
+            }
+            if (e.key === "Tab") {
+              e.preventDefault();
+              finishEdit(cell);
+              const allEditable = Array.from(
+                tableBody.querySelectorAll("td[data-editable='true']"),
+              );
+              const idx = allEditable.indexOf(cell);
+              const next = e.shiftKey ? idx - 1 : idx + 1;
+              if (allEditable[next])
+                setTimeout(() => allEditable[next].click(), 10);
+            }
+          });
+
+          cell.addEventListener("blur", () => {
+            if (cell.dataset.editing === "true")
+              setTimeout(() => {
+                if (!cell.contains(document.activeElement)) finishEdit(cell);
+              }, 10);
+          });
+        });
+
+        // Add/remove row images
+        tableBody
+          .querySelectorAll("td[data-editable='false'] img.del")
+          .forEach((img) => {
+            img.addEventListener("click", async () => {
+              const row = img.closest("tr");
+              if (!row || row.parentElement.children.length <= 2) return;
+              row.style.opacity = "0.5";
+              setTimeout(async () => {
+                row.remove();
+                await commitKeybindingsJSON();
+              }, 150);
+            });
+          });
+
+        tableBody
+          .querySelectorAll("td[data-editable='false'] img.src")
+          .forEach((img) => {
+            img.addEventListener("click", () => {
+              const row = img.closest("tr");
+              const currentScript = row.dataset.script || "";
+
+              // Create modal
+              const blackout = document.createElement("div");
+              blackout.classList.add("blackout");
+              blackout.style.display = "flex";
+              blackout.style.alignItems = "center";
+              blackout.style.justifyContent = "center";
+
+              blackout.innerHTML = `
+                            <img class="exitIcon" src="../../icons/go-up-settings-lvl.svg" id="exitIcon" />
+                            <div style="background: var(--bg-color); border: 1px solid var(--fg-color); border-radius: 3px; width: 80vw; height: 80vh; display: flex; flex-direction: column;">
+                                <pre id="scriptEditor"
+                                    class="editor language-javascript"
+                                    contenteditable="true"
+                                    autocorrect="off"
+                                    autocapitalize="off"
+                                    spellcheck="false"
+                                    style="flex: 1; margin: 0; padding: 10px; overflow: auto; white-space: pre; background: transparent; outline: none; border: none; font-family: monospace;">
+                                </pre>
+                            </div>
+                            <div class="save-btn">Commit</div>
+                        `;
+
+              document.body.appendChild(blackout);
+
+              const editor = blackout.querySelector("#scriptEditor");
+              editor.textContent = currentScript;
+
+              // Initialize syntax highlighting
+              highlightEditable(editor);
+
+              // Add editor event handlers (similar to customthemes.html)
+              setupScriptEditor(editor);
+
+              // Fix the event listeners - use the correct IDs
+              blackout
+                .querySelector("#exitIcon")
+                .addEventListener("click", () => {
+                  blackout.remove();
+                });
+
+              blackout
+                .querySelector(".save-btn")
+                .addEventListener("click", () => {
+                  row.dataset.script = editor.textContent;
+                  commitKeybindingsJSON();
+                  blackout.remove();
+                });
+
+              // Add Enter key handler for the modal to save on Ctrl+Enter
+              editor.addEventListener("keydown", (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+                  e.preventDefault();
+                  row.dataset.script = editor.textContent;
+                  commitKeybindingsJSON();
+                  blackout.remove();
+                }
+              });
+            });
+          });
+
+        document.addEventListener("click", (e) => {
+          if (
+            isEditing &&
+            currentEditCell &&
+            !currentEditCell.contains(e.target)
+          )
+            finishEdit(currentEditCell);
+        });
+      }
+
+      function finishEdit(cell) {
+        cell.contentEditable = false;
+        cell.classList.remove("editing");
+        cell.dataset.editing = "false";
+        isEditing = false;
+        currentEditCell = null;
+        commitKeybindingsJSON();
+      }
+
+      document
+        .querySelector("img.new-row-to-table")
+        ?.addEventListener("click", async () => {
+          const tr = document.createElement("tr");
+          tr.dataset.script = ""; // Initialize empty script
+
+          const tdDel = document.createElement("td");
+          tdDel.dataset.editable = "false";
+          tdDel.innerHTML =
+            '<img src="../../icons/removetablerow.svg" class="del"><img src="../../icons/dialog-scripts.svg" class="src">';
+          tr.appendChild(tdDel);
+          const tdShortcut = document.createElement("td");
+          tdShortcut.textContent = "No Keybinding";
+          tdShortcut.dataset.editable = "true";
+          tr.appendChild(tdShortcut);
+          const tdComment = document.createElement("td");
+          tdComment.textContent = "Description";
+          tdComment.dataset.editable = "true";
+          tr.appendChild(tdComment);
+          tableBody.appendChild(tr);
+          attachCellEditing();
+          setTimeout(() => {
+            tdShortcut.click();
+          }, 50);
+          await commitKeybindingsJSON();
+        });
+
+      document.addEventListener("keydown", (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+          e.preventDefault();
+          document.querySelector("img.new-row-to-table").click();
+        }
+        if (e.key === "Escape" && isEditing) {
+          if (currentEditCell)
+            currentEditCell.textContent = currentEditCell.dataset.originalValue;
+          finishEdit(currentEditCell);
+        }
+      });
+
+      window.addEventListener("DOMContentLoaded", loadAndSetTable);
+
+      document.addEventListener("contextmenu", (event) => {
+        event.preventDefault();
+      });
+    </script>
+  </body>
+</html>

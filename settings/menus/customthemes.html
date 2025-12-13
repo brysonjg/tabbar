@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Custom Themes JSON Editor</title>
+
+    <link rel="stylesheet" href="../../chungus/prism/prism.css">
+    <script src="../../chungus/prism/prism.js"></script>
+
+    <style>
+      :root {
+        --font: 'font';
+        --bg-color: #2a2e32;
+        --fg-color: #d4d4d4;
+
+        --icon-1: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%);
+        --icon-2: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4);
+        --icon-3: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2);
+
+        --btn-active-border: #3daee9;
+        --btn-hover-bg: #1f485e;
+        --btn-active-bg: #3daee9;
+      }
+
+      @font-face {
+        font-family: 'font';
+        src: url('../../font.ttf') format('truetype');
+      }
+
+      html, body {
+        margin: 0;
+        padding: 0;
+        color: var(--fg-color);
+        background: var(--bg-color);
+        font-family: var(--font);
+        font-size: 14px;
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+      }
+
+      img.exitIcon {
+        width: 20px;
+        height: 20px;
+        position: fixed;
+        top: 10px;
+        left: 5px;
+        filter: var(--icon-1);
+        cursor: pointer;
+
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      img.exitIcon:hover { filter: var(--icon-2); }
+      img.exitIcon:active { filter: var(--icon-3); }
+
+      .master-cont {
+        width: 100%;
+        height: 100%;
+        padding: 35px 30px;
+        display: flex;
+        box-sizing: border-box;
+      }
+
+      .editor {
+        flex-grow: 1;
+        border: 1px solid var(--fg-color);
+        border-radius: 3px;
+        overflow: auto;
+        padding: 10px;
+        white-space: pre;
+        background: transparent;
+        outline: none;
+      }
+
+
+      .editor::-webkit-scrollbar {
+          width: 15px;
+      }
+
+      .editor::-webkit-scrollbar-track {
+          background: transparent;
+          border-left: 1px solid #8884;
+          border-bottom: 1px solid #8884;
+          border-top: 1px solid #8884;
+      }
+
+      .editor::-webkit-scrollbar-track:hover {
+          border-left: 1px solid #8889;
+          border-bottom: 1px solid #8889;
+          border-top: 1px solid #8889;
+      }
+
+      .editor::-webkit-scrollbar-track:active {
+          border-left: 1px solid #888;
+          border-bottom: 1px solid #888;
+          border-top: 1px solid #888;
+      }
+
+      .editor::-webkit-scrollbar-thumb {
+          background: #8884;
+      }
+
+      .editor::-webkit-scrollbar-thumb:hover {
+          background: #8889;
+      }
+
+      .editor::-webkit-scrollbar-thumb:active {
+          background: #888;
+      }
+
+      .save-btn {
+        position: fixed;
+        bottom: 10px;
+        right: 15px;
+        padding: 0 7px;
+        border-radius: 3px;
+        font-size: 20px;
+
+        user-select: none;
+        -webkit-user-select: none;
+
+        background-color: transparent;
+        border: 1px solid var(--fg-color);
+      }
+
+      .save-btn:hover {
+        background-color: var(--btn-hover-bg);
+        border: 1px solid var(--btn-active-border);
+      }
+
+      .save-btn:active {
+        background-color: var(--btn-active-bg);
+        border: 1px solid var(--btn-active-border);
+        color: var(--bg-color);
+      }
+    </style>
+  </head>
+
+  <body>
+    <img class="exitIcon" src="../../icons/go-up-settings-lvl.svg" id="exitIcon" />
+    <div class="master-cont">
+      <pre class="editor language-json" id="editor" contenteditable="true" autocorrect="off" autocapitalize="off" spellcheck="false"></pre>
+    </div>
+    <div class="save-btn" id="saveBtn">Commit</div>
+
+    <script src="../../controlcommands.js"></script>
+    <script src="../../utils/reftheme.js"></script>
+    <script src="../../utils/kbutils.js"></script>
+    <script src="./theme_json/tamplate.js"></script>
+    <script>
+      window.onload = async () => {
+          await fixThemeOverSettable(); // correct themedge
+          editor.textContent = window.theme_temp;
+          highlightEditable(editor);
+      };
+
+      const editor = document.getElementById("editor");
+      const exitIcon = document.getElementById("exitIcon");
+
+      exitIcon.addEventListener("click", () => {
+        window.location.href = "./appearance.html";
+      });
+
+      // --- Prism rehighlight helper ---
+      function highlightEditable(el) {
+        const pos = saveSelection(el);
+        Prism.highlightElement(el);
+        restoreSelection(el, pos);
+      }
+
+      // --- Selection helpers ---
+      function saveSelection(containerEl) {
+        const sel = window.getSelection();
+        if (sel.rangeCount === 0) return { start: 0, end: 0 };
+        const range = sel.getRangeAt(0);
+        const preRange = range.cloneRange();
+        preRange.selectNodeContents(containerEl);
+        preRange.setEnd(range.startContainer, range.startOffset);
+        const start = preRange.toString().length;
+        return { start, end: start + range.toString().length };
+      }
+
+      function restoreSelection(containerEl, savedSel) {
+        let charIndex = 0, range = document.createRange();
+        range.setStart(containerEl, 0);
+        range.collapse(true);
+
+        const nodeStack = [containerEl];
+        let node, foundStart = false, stop = false;
+
+        while (!stop && (node = nodeStack.pop())) {
+          if (node.nodeType === 3) {
+            const nextCharIndex = charIndex + node.length;
+            if (!foundStart && savedSel.start >= charIndex && savedSel.start <= nextCharIndex) {
+              range.setStart(node, savedSel.start - charIndex);
+              foundStart = true;
+            }
+            if (foundStart && savedSel.end >= charIndex && savedSel.end <= nextCharIndex) {
+              range.setEnd(node, savedSel.end - charIndex);
+              stop = true;
+            }
+            charIndex = nextCharIndex;
+          } else {
+            let i = node.childNodes.length;
+            while (i--) nodeStack.push(node.childNodes[i]);
+          }
+        }
+
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+
+      // --- Editing logic ---
+      editor.addEventListener('keydown', e => {
+        const TAB = '  ';
+
+        if (e.key === 'Tab') {
+          e.preventDefault();
+          if (!e.shiftKey) {
+            document.execCommand('insertText', false, TAB);
+            highlightEditable(editor);
+          }
+        }
+
+        else if (e.key === 'Enter') {
+            e.preventDefault();
+
+            // Use Range API for reliable newline insertion
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                const newline = document.createTextNode('\n');
+                range.deleteContents();
+                range.insertNode(newline);
+                range.setStartAfter(newline);
+                range.setEndAfter(newline);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+            highlightEditable(editor);
+        }
+
+        else if (e.key === 'Backspace') {
+          const sel = window.getSelection();
+          if (sel.rangeCount) {
+            const range = sel.getRangeAt(0);
+            if (range.collapsed) {
+              const pos = saveSelection(editor);
+              const text = editor.textContent;
+              const before = text.slice(0, pos.start);
+              if (before.endsWith(TAB)) {
+                e.preventDefault();
+                const newText = before.slice(0, -TAB.length) + text.slice(pos.start);
+                editor.textContent = newText;
+                highlightEditable(editor);
+                restoreSelection(editor, {
+                  start: pos.start - TAB.length,
+                  end: pos.start - TAB.length
+                });
+              }
+            }
+          }
+        }
+      });
+
+      editor.addEventListener("input", () => highlightEditable(editor));
+
+      document.getElementById("saveBtn").addEventListener("click", async () => {
+        console.log("commited theme");
+        let themeJson = JSON.parse(editor.textContent);
+        console.log(themeJson);
+
+        let json = await getSettablesAsJson() || {};
+        json.theme = themeJson;
+
+        setSettablesByJson(json);
+
+        updateTopLevelTheme();
+        await fixThemeOverSettable(); // correct themedge
+      });
+
+      document.addEventListener("contextmenu", (event) => {
+        event.preventDefault();
+      });
+    </script>
+  </body>
+</html>

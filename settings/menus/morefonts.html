@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>More Font Customisations</title>
+    <style>
+      @font-face {
+          font-family: 'font';
+          src: url('../../font.ttf') format('truetype');
+          font-weight: normal;
+          font-style: normal;
+      }
+
+      :root {
+          --font: 'font';
+          --bg-color: #2a2e32;
+          --fg-color: #d4d4d4;
+
+          /* Accent Colors */
+          --hl-blue-1: #3daee9;
+          --hl-blue-2: #3daee922;
+          --hl-blue-3: #2eb7ff;
+          --hl-blue-4: #2eb7ff40;
+
+          --icon-1: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%);
+          --icon-2: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4);
+          --icon-3: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2);
+      }
+
+      body, html {
+          padding: 0;
+          margin: 0;
+          color: var(--fg-color);
+          background-color: var(--bg-color);
+          font-family: var(--font);
+          font-size: 16px;
+          width: 100vw;
+          height: 100vh;
+          overflow: hidden;
+          user-select: none;
+          -webkit-user-select: none;
+          position: relative;
+          display: flex;
+          justify-content: center;
+      }
+
+      div.section {
+          height: fit-content;
+          width: calc(100vw - 35px);
+          padding-left: 10px;
+          margin-right: 10px;
+      }
+
+      div.section div.title {
+          position: sticky;
+          top: -25px;
+          width: calc(100% - 32px);
+          border-bottom: 1px solid var(--fg-color);
+          font-size: 25px;
+          z-index: 999;
+          background-color: var(--bg-color);
+      }
+
+      div.section div.body {
+          width: 100%;
+          font-size: 20px;
+          padding-top: 1em;
+          display: flex;
+          flex-wrap: wrap;
+      }
+
+      img.exitIcon {
+          width: 20px;
+          height: 20px;
+          position: fixed;
+          top: 10px;
+          left: 5px;
+          filter: var(--icon-1);
+      }
+
+      img.exitIcon:hover {
+          filter: var(--icon-2);
+      }
+
+      img.exitIcon:active {
+          filter: var(--icon-3);
+      }
+
+      div.master-cont {
+          width: 100%;
+          padding-top: 25px;
+          padding-left: 32.5px;
+          overflow-y: auto;
+          overflow-x: hidden;
+      }
+
+      div.master-cont::-webkit-scrollbar {
+          width: 15px;
+      }
+
+      div.master-cont::-webkit-scrollbar-track {
+          background: transparent;
+          border-left: 1px solid #8884;
+          border-bottom: 1px solid #8884;
+          border-top: 1px solid #8884;
+      }
+
+      div.master-cont::-webkit-scrollbar-track:hover {
+          border-left: 1px solid #8889;
+          border-bottom: 1px solid #8889;
+          border-top: 1px solid #8889;
+      }
+
+      div.master-cont::-webkit-scrollbar-track:active {
+          border-left: 1px solid #888;
+          border-bottom: 1px solid #888;
+          border-top: 1px solid #888;
+      }
+
+      div.master-cont::-webkit-scrollbar-thumb {
+          background: #8884;
+      }
+
+      div.master-cont::-webkit-scrollbar-thumb:hover {
+          background: #8889;
+      }
+
+      div.master-cont::-webkit-scrollbar-thumb:active {
+          background: #888;
+      }
+
+      div.body > div {
+          display: flex;
+          align-items: center;
+          height: 1lh;
+          width: calc(100% - 83px);
+          margin-left: 40px;
+          padding-left: 10px;
+          padding-top: 0.10em;
+          padding-bottom: 0.20em;
+          border: 1px solid transparent;
+          border-radius: 3px;
+      }
+
+      div.body > div:hover {
+          background-color: var(--hl-blue-2);
+          border: 1px solid var(--hl-blue-1);
+      }
+
+      div.body > div:active {
+          background-color: var(--hl-blue-4);
+          border: 1px solid var(--hl-blue-3);
+      }
+
+      .body div > .main {
+          min-width: 400px;
+          border-right: 1px solid var(--fg-color);
+          padding: 0.5rem 1rem;
+          flex-shrink: 0;
+      }
+
+      .body div > .font {
+          flex-grow: 1;
+          padding: 0.5rem 1rem;
+      }
+
+    </style>
+  </head>
+  <body>
+    <img class="exitIcon" src="../../icons/go-up-settings-lvl.svg" id="exitIcon"></img>
+    <div class="master-cont">
+      <div class="section">
+        <div class="title">
+          More Fonts
+        </div>
+        <div class="body"></div>
+      </div>
+    </div>
+
+    <script src="../../controlcommands.js"></script>
+    <script src="../../utils/reftheme.js"></script>
+    <script src="../../utils/kbutils.js"></script>
+    <script>
+      document.getElementById("exitIcon").addEventListener("click", () => {
+          window.location.href = "./appearance.html";
+      });
+
+      document.addEventListener("DOMContentLoaded", async () => {
+          try { await fixThemeOverSettable(); } catch {}
+
+          try {
+              const res = await fetch(
+                  "https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyDASQyd_8GW17EeUTuapGHCpvmN4rAWf0Q"
+              );
+              if (!res.ok) throw new Error(`API error: ${res.status}`);
+
+              const data = await res.json();
+              const bodyDiv = document.querySelector("div.body");
+
+              // Insert placeholder preview blocks
+              data.items.forEach(font => {
+                  const container = document.createElement("div");
+                  container.innerHTML = `
+                      <div class="main">${font.family}</div>
+                      <div class="font" data-font="${font.files.regular}" data-name="${font.family}">
+                          The Quick Brown Fox jumps over the Lazy Dog
+                      </div>
+                  `;
+                  bodyDiv.appendChild(container);
+              });
+
+              // Lazy-load fonts with observer + buffer margins
+              const fontObserver = new IntersectionObserver((entries, observer) => {
+                  entries.forEach(entry => {
+                      if (!entry.isIntersecting) return;
+
+                      const fontDiv = entry.target;
+                      const fontURL = fontDiv.dataset.font;
+                      const fontName = fontDiv.dataset.name;
+
+                      // Inject font
+                      const style = document.createElement('style');
+                      style.textContent = `
+                          @font-face {
+                              font-family: "${fontName}";
+                              src: url("${fontURL}") format('truetype');
+                              font-weight: normal;
+                              font-style: normal;
+                          }
+                      `;
+                      document.head.appendChild(style);
+
+                      fontDiv.style.fontFamily = `"${fontName}", var(--font)`;
+
+                    
+                      observer.unobserve(fontDiv);
+                  });
+              }, {
+                  root: document.querySelector('.master-cont'),
+                  rootMargin: '1000px 0px 1000px 0px',
+                  threshold: 0.1,
+              });
+
+              document.querySelectorAll('.font').forEach(fontDiv => {
+                  fontObserver.observe(fontDiv);
+              });
+
+              document.querySelectorAll('div.body > div').forEach(container => {
+                  container.addEventListener("click", async () => {
+                      let json = await getSettablesAsJson() || {};
+                      json.font = { font: container.querySelector(".font").dataset.name };
+
+                      setSettablesByJson(json);
+                      updateTopLevelTheme();
+
+                      try { await fixThemeOverSettable(); } catch {};
+                  });
+              });
+
+          } catch (err) {
+              console.error("Failed to fetch fonts:", err);
+          }
+      });
+
+      document.addEventListener("contextmenu", (event) => {
+          event.preventDefault();
+      });
+
+    </script>
+  </body>
+</html>
