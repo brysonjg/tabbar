@@ -1,13 +1,8 @@
 // TODO:
-//      D: the "window is foocused issue"
-//      scedualed themes
-//      icon packs
+//      the "window is foocused issue"
 //      assistent account editing
 //      fix the implamentation on kbindings
-
-// LONGTERM:
-//      extentions
-//      extention/theme/font/icon store
+//      add ways to eddit and resend messages
 //      fix the open key issue (in chungus) (with key settings menu)
 //      add good documentation
 //      add usage stats
