@@ -23,7 +23,6 @@ window.addEventListener("message", (event) => {
     }
 });
 
-
 window.onload = async () => {
     await fixThemeOverSettable();
 }

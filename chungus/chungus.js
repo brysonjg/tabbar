@@ -1,48 +1,48 @@
 window.onload = async () => {
-    await fixThemeOverSettable(); // correct themedge
+    await fixThemeOverSettable();
     await fixModelMenu();
 
-    // Load account data
     let accountData;
-
     try {
-        accountData = await getSettablesAsJson();
-        accountData = accountData.account;
-        window.account = accountData;
-    } catch {
-        accountData = {"account": {"displayname": "User"}};
-        accountData = accountData.account;
-        window.account = accountData;
+        const settables = await getSettablesAsJson();
+        accountData = (settables && settables.account) || {
+            displayname: "User",
+            avatar: "../icons/defualt-user.svg",
+            username: "User"
+        };
+    } catch (err) {
+        console.warn("Failed to load account, using default:", err);
+        accountData = {
+            displayname: "User",
+            avatar: "../icons/defualt-user.svg",
+            username: "User"
+        };
     }
+    window.account = accountData;
 
     const json = await getLocalJson();
-    if (!json) return;
-
-    if (json.chat && Array.isArray(json.chat)) {
+    if (json?.chat && Array.isArray(json.chat)) {
         json.chat.forEach(message => {
             if (message.role !== "system") {
-                // Use account data if available
-                let username = "user";
+                let username = "User";
                 let icon = "../icons/defualt-user.svg";
 
-                if (accountData && message.role === "user") {
+                if (message.role === "user") {
                     username = accountData.displayname || accountData.username || "User";
                     icon = accountData.avatar || "../icons/defualt-user.svg";
                 } else if (message.role === "assistant") {
-                    icon = "../icons/ai-defult.svg";
                     username = "assistant";
+                    icon = "../icons/ai-defult.svg";
                 }
 
                 renderMD(message.content, username, "", message.files, false, true, icon);
             }
         });
-
     }
 
     let lastTitle = document.title;
-
     setInterval(async () => {
-        let json = await getLocalJson();
+        const json = await getLocalJson();
         if (json?.metadata?.title && json.metadata.title !== lastTitle) {
             setTabTitle(json.metadata.title);
             lastTitle = json.metadata.title;
@@ -396,7 +396,6 @@ let submisionModel = "openai/gpt-oss-20b:free"; // default fallback
         console.warn("Failed to load active model, using default:", err);
     }
 })();
-
 
 async function handleSubmision() {
     const key = "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"; // dev key, remove before shiping !!
