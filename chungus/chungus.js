@@ -1,48 +1,48 @@
 window.onload = async () => {
-    await fixThemeOverSettable();
+    await fixThemeOverSettable(); // correct themedge
     await fixModelMenu();
 
+    // Load account data
     let accountData;
+
     try {
-        const settables = await getSettablesAsJson();
-        accountData = (settables && settables.account) || {
-            displayname: "User",
-            avatar: "../icons/defualt-user.svg",
-            username: "User"
-        };
-    } catch (err) {
-        console.warn("Failed to load account, using default:", err);
-        accountData = {
-            displayname: "User",
-            avatar: "../icons/defualt-user.svg",
-            username: "User"
-        };
+        accountData = await getSettablesAsJson();
+        accountData = accountData.account;
+        window.account = accountData;
+    } catch {
+        accountData = {"account": {"displayname": "User"}};
+        accountData = accountData.account;
+        window.account = accountData;
     }
-    window.account = accountData;
 
     const json = await getLocalJson();
-    if (json?.chat && Array.isArray(json.chat)) {
+    if (!json) return;
+
+    if (json.chat && Array.isArray(json.chat)) {
         json.chat.forEach(message => {
             if (message.role !== "system") {
-                let username = "User";
+                // Use account data if available
+                let username = "user";
                 let icon = "../icons/defualt-user.svg";
 
-                if (message.role === "user") {
+                if (accountData && message.role === "user") {
                     username = accountData.displayname || accountData.username || "User";
                     icon = accountData.avatar || "../icons/defualt-user.svg";
                 } else if (message.role === "assistant") {
-                    username = "assistant";
                     icon = "../icons/ai-defult.svg";
+                    username = "assistant";
                 }
 
                 renderMD(message.content, username, "", message.files, false, true, icon);
             }
         });
+
     }
 
     let lastTitle = document.title;
+
     setInterval(async () => {
-        const json = await getLocalJson();
+        let json = await getLocalJson();
         if (json?.metadata?.title && json.metadata.title !== lastTitle) {
             setTabTitle(json.metadata.title);
             lastTitle = json.metadata.title;
@@ -219,10 +219,10 @@ function translateMDtoHTML(md) {
 
     const escapeHTML = str =>
         str.replace(/&/g, "&amp;")
-           .replace(/</g, "&lt;")
-           .replace(/>/g, match => (match.startsWith(">") ? match : "&gt;"))
-           .replace(/"/g, "&quot;")
-           .replace(/'/g, "&#39;");
+        .replace(/</g, "&lt;")
+        .replace(/\n.*>/g, match => (match.startsWith("\n>") ? match : "&gt;"))
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
 
     // Escape HTML first
     md = escapeHTML(md);
@@ -253,12 +253,20 @@ function translateMDtoHTML(md) {
     md = md.replace(/^###(.+)$/gm, "<h3>$1</h3>");
     md = md.replace(/^##(.+)$/gm, "<h2>$1</h2>");
     md = md.replace(/^#(.+)$/gm, "<h1>$1</h1>");
+    
 
-    // Blockquotes
-    md = md.replace(/^>(.*?)$/gm, (match) => {
-        const content = match.replace(/^> /gm, '').trim();
+    // Blockquotes (group consecutive > lines into one blockquote)
+    md = md.replace(
+    /((?:^>.*(?:\n|$))+)/gm,
+    block => {
+        const content = block
+        .replace(/^>\s?/gm, "")   // remove leading >
+        .trim()
+        .replace(/\n/g, "<br>");  // preserve line breaks inside quote
+
         return `<blockquote>${content}</blockquote>`;
-    });
+    }
+    );
 
     // Horizontal rules
     md = md.replace(/^(?:-{3,}|\*{3,}|_{3,})$/gm, "<hr>");
@@ -396,6 +404,7 @@ let submisionModel = "openai/gpt-oss-20b:free"; // default fallback
         console.warn("Failed to load active model, using default:", err);
     }
 })();
+
 
 async function handleSubmision() {
     const key = "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"; // dev key, remove before shiping !!
