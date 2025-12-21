@@ -190,7 +190,6 @@ window.theme_brz_dark = {
                                 "mv-filter": "invert(62%) sepia(92%) saturate(1934%) hue-rotate(171deg) brightness(99%) contrast(84%)",
 
                                 "act-defult": "brightness(0) invert(83%)",
-                                "act-active": "invert(44%) sepia(89%) saturate(375%) hue-rotate(92deg) brightness(94%) contrast(91%)",
                                 "act-active": "invert(60%) sepia(70%) saturate(358%) hue-rotate(97deg) brightness(94%) contrast(88%)",
                             },
                             keybindings: {

@@ -1,2 +1,3 @@
-# exclude the file tabbar.zip and otherwisew any other zips as those are used as backups for google drive
+
 *.zip
+*.kate-swp
