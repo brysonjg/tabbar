@@ -1,8 +1,8 @@
 // TODO:
-//      the "window is foocused issue"
-//      assistent account editing
-//      fix the implamentation on kbindings
-//      add ways to eddit and resend messages
-//      fix the open key issue (in chungus) (with key settings menu)
+//      the "window is focused issue"
+//      assistant account editing
+//      fix the implementation on keybindings
+//      add ways to edit and resend messages
+//      fix the open api key issue (in chungus) (with key settings menu)
 //      add good documentation
-//      add usage stats
+//      add a usage stats page

@@ -183,7 +183,7 @@
     <script src="../../utils/kbutils.js"></script>
     <script>
       document.getElementById("exitIcon").addEventListener("click", () => {
-          window.location.href = "./appearance.html";
+          window.parent.postMessage({ type: "naviiframe", url: "./menus/appearance.html" }, "*");
       });
 
       document.addEventListener("DOMContentLoaded", async () => {

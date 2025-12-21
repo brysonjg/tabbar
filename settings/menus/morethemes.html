@@ -230,7 +230,7 @@
         };
 
         document.getElementById("exitIcon").addEventListener("click", () => {
-            window.location.href = "./appearance.html";
+            window.parent.postMessage({ type: "naviiframe", url: "./menus/appearance.html" }, "*");
         });
 
         document.querySelectorAll("div.theme-img-wrapper").forEach((element) => {

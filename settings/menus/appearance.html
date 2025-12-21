@@ -246,11 +246,11 @@
         });
 
         document.getElementById("morethemes").addEventListener("click", () => {
-            window.location.href = "./morethemes.html";
+            window.parent.postMessage({ type: "naviiframe", url: "./menus/morethemes.html" }, "*");
         });
 
         document.getElementById("customthemes").addEventListener("click", () => {
-            window.location.href = "./customthemes.html";
+            window.parent.postMessage({ type: "naviiframe", url: "./menus/customthemes.html" }, "*");
         });
 
         document.querySelectorAll("h1.font").forEach( (element) => {
@@ -276,7 +276,7 @@
         });
 
         document.getElementById("morefonts").addEventListener("click", () => {
-            window.location.href = "./morefonts.html";
+            window.parent.postMessage({ type: "naviiframe", url: "./menus/morefonts.html" }, "*");
         });
     </script>
   </body>

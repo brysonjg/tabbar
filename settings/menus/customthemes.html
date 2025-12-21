@@ -163,7 +163,7 @@
       const exitIcon = document.getElementById("exitIcon");
 
       exitIcon.addEventListener("click", () => {
-        window.location.href = "./appearance.html";
+        window.parent.postMessage({ type: "naviiframe", url: "./menus/appearance.html" }, "*");
       });
 
       // --- Prism rehighlight helper ---

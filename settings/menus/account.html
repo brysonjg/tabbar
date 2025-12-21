@@ -450,41 +450,68 @@
         // Account state
         let currentAccountData = {
             avatar: null, // Will store data URL or null for default
-            username: "User Name",
-            displayname: "Display Name"
+            username: "user",
+            displayname: "User"
         };
 
         // Load account data from settables
         async function loadAccountSettings() {
-            try {
-                const settables = await getSettablesAsJson();
+            let callStackSize = 0;
 
-                if (settables && settables.account) {
-                    currentAccountData = {
-                        ...currentAccountData,
-                        ...settables.account
-                    };
+            let main =
+            async () => {
+                try {
+                    let settables = await getSettablesAsJson();
 
-                    // Update UI with loaded data
-                    const displayNameInput = document.querySelector('.account-shown-name');
-                    const userNameInput = document.querySelector('.account-user-name');
-                    const avatarImg = document.querySelector('.user-account-icon');
+                    if (settables && settables.account) {
+                        currentAccountData = {
+                            ...currentAccountData,
+                            ...settables.account
+                        };
 
-                    if (currentAccountData.displayname && currentAccountData.displayname !== "Display Name") {
-                        displayNameInput.value = currentAccountData.displayname;
+                        // Update UI with loaded data
+                        const displayNameInput = document.querySelector('.account-shown-name');
+                        const userNameInput = document.querySelector('.account-user-name');
+                        const avatarImg = document.querySelector('.user-account-icon');
+
+                        if (currentAccountData.displayname && currentAccountData.displayname !== "Display Name") {
+                            displayNameInput.value = currentAccountData.displayname;
+                        }
+
+                        if (currentAccountData.username && currentAccountData.username !== "User Name") {
+                            userNameInput.value = currentAccountData.username;
+                        }
+
+                        if (currentAccountData.avatar) {
+                            avatarImg.src = currentAccountData.avatar;
+                        }
                     }
+                    else {
+                        if (settables && (typeof settables == "object")) {
+                            settables.account = currentAccountData;
+                            setSettablesAsJson(settables);
+                        }
+                        else {
+                            settables = {};
+                            settables.account = currentAccountData;
+                            setSettablesAsJson(settables);
+                        }
 
-                    if (currentAccountData.username && currentAccountData.username !== "User Name") {
-                        userNameInput.value = currentAccountData.username;
+                        callStackSize++;
+                        if (callStackSize <= 50) {
+                            await main();
+                        }
+                        else {
+                            console.warn("In loadAccountSettings, the call stack for main exeeded 50 calls, and thus the function loadAccountSettings was called off.");
+                            return;
+                        }
                     }
-
-                    if (currentAccountData.avatar) {
-                        avatarImg.src = currentAccountData.avatar;
-                    }
+                } catch (error) {
+                    console.error('Failed to load account settings:', error);
                 }
-            } catch (error) {
-                console.error('Failed to load account settings:', error);
-            }
+            };
+
+            await main()
         }
 
         // Save account data to settables
