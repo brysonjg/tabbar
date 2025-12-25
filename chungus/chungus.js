@@ -52,6 +52,10 @@ window.onload = async () => {
     updateTitleButtonPosition();
 };
 
+window.addEventListener("load", () => {
+    setTimeout(updateTitleButtonPosition, 200);
+});
+
 window.addEventListener("message", (event) => {
     if (!event.data || event.data.type !== "saveQuit") return;
     closeSelf();
@@ -82,11 +86,19 @@ async function reTitleTab() {
     if (chatOuterer.querySelector('.top-bar-flash-for-rename')) return;
 
     chatOuterer.insertAdjacentHTML("afterbegin", `
-        <div class="top-bar-flash-for-rename">
+        <div class="top-bar-flash-for-rename ${hasVerticalScrollbar(chatOuterer) ? "rightborder" : ""}">
             <img src="../icons/submittitle.svg" class="submit-title-btn" title="submit title">
             <input class="title-input">
         </div>
     `);
+
+    setInterval(() => {
+        if (hasVerticalScrollbar(chatOuterer)) {
+            document.querySelector("div.top-bar-flash-for-rename").classList.add("rightborder");
+        } else {
+            document.querySelector("div.top-bar-flash-for-rename").classList.remove("rightborder");
+        }
+    }, 200);
 
     const renameBar = chatOuterer.querySelector('.top-bar-flash-for-rename');
     const submitBtn = renameBar.querySelector('.submit-title-btn');
@@ -101,7 +113,7 @@ async function reTitleTab() {
         if (desiredTitle !== "") {
             setTabTitle(desiredTitle);
 
-            // Update JSON metadata and auto-sync
+            // Update JSON metadata and auto-syncs
             let json = await getLocalJson() || {};
             if (!json.metadata) json.metadata = {};
             json.metadata.title = desiredTitle;
@@ -253,7 +265,7 @@ function translateMDtoHTML(md) {
     md = md.replace(/^###(.+)$/gm, "<h3>$1</h3>");
     md = md.replace(/^##(.+)$/gm, "<h2>$1</h2>");
     md = md.replace(/^#(.+)$/gm, "<h1>$1</h1>");
-    
+
 
     // Blockquotes (group consecutive > lines into one blockquote)
     md = md.replace(
@@ -606,10 +618,6 @@ document.getElementById("submitionIcon").addEventListener("click", async (event)
 });
 
 window.addEventListener("resize", updateTitleButtonPosition);
-
-window.addEventListener("load", () => {
-    setTimeout(updateTitleButtonPosition, 200);
-});
 
 let menuToggled = false;
 const menus = document.querySelectorAll(".menu");

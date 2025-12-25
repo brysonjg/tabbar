@@ -621,6 +621,12 @@ div.top-bar-flash-for-rename {
     z-index: 3;
 }
 
+div.top-bar-flash-for-rename.rightborder {
+    margin-right: 15px;
+    width: calc(100vw - 15px);
+    border-right: 1px solid var(--hard-outline-color);
+}
+
 @keyframes topBarDisapperes {
     from {
         transform: translateY(0);
