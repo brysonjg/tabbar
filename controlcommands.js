@@ -228,3 +228,7 @@ async function getSettablesAsJson() {
 function updateTopLevelTheme() {
     window.parent.postMessage({ type: 'updtTheme' }, '*');
 }
+
+function toggleBlueDote() {
+    window.parent.postMessage({ type: 'toggleAcctiveDot' }, '*');
+}

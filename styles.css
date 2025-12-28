@@ -208,3 +208,19 @@ img.actionBtn:hover {
 img.actionBtn:active {
     filter: var(--action-btn-3);
 }
+
+.active-dot {
+    display: inline-block;
+    margin-right: 9px;
+    font-size: 30px;
+    transform: translate(0px, -1px);
+    color: var(--lighter-blue-hl);
+    vertical-align: middle;
+    line-height: 1;
+}
+
+
+
+body.window-inactive .active-dot {
+    color: var(--tab-inactive-blue);
+}

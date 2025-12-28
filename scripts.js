@@ -16,12 +16,16 @@ let hasMovedEnough = false;
 let isWindowActive = true;
 let isIFrameActive = false;
 
-// Add registry for key callbacks (callKey -> { listener, keybinding, source })
+// Registry for key callbacks
 const keyCallbackRegistry = new Map();
+
+// Registry for lowZ frames - maps tabid to frame element
+const lowZFrames = new Map();
+// Priority queue for lowZ frames (sorted by semantic order)
+const lowZPriorityQueue = [];
 
 // Helper: normalize an event key to comparable form
 function normalizeEventKey(e) {
-    // single-character keys -> uppercase, others use e.key as-is
     return e.key && e.key.length === 1 ? e.key.toUpperCase() : e.key;
 }
 
@@ -30,8 +34,7 @@ function normalizeBindingKey(key) {
     return key && key.length === 1 ? key.toUpperCase() : key;
 }
 
-// Helper: check exact modifier match (required mods pressed, no extra modifier pressed)
-// mods in keybinding expected to be strings like "Control","Shift","Alt","Meta"
+// Helper: check exact modifier match
 function modifiersExactlyMatch(e, requiredMods = []) {
     const modsPressed = {
         Control: !!e.ctrlKey,
@@ -41,16 +44,114 @@ function modifiersExactlyMatch(e, requiredMods = []) {
         Fn: false
     };
 
-    // Required mods must all be true
     const allRequired = requiredMods.every(m => modsPressed[m]);
-
-    // No extra mods allowed (ignore Fn)
     const noExtras = Object.keys(modsPressed).every(mod => {
         if (mod === 'Fn') return true;
         return requiredMods.includes(mod) === modsPressed[mod];
     });
 
     return allRequired && noExtras;
+}
+
+// Add lowZ frame to registry with semantic ordering
+function addLowZFrame(tabid, frame) {
+    // Remove existing frame for this tabid if it exists
+    removeLowZFrame(tabid);
+
+    // Add to registry
+    lowZFrames.set(tabid, frame);
+
+    // Add to priority queue (sorted by tabid as semantic ordering)
+    lowZPriorityQueue.push({
+        tabid,
+        frame,
+        addedAt: Date.now(),
+        priority: getTabPriority(tabid)
+    });
+
+    // Sort queue by priority then by addition time
+    lowZPriorityQueue.sort((a, b) => {
+        if (a.priority !== b.priority) {
+            return b.priority - a.priority; // Higher priority first
+        }
+        return a.addedAt - b.addedAt; // Older first if same priority
+    });
+
+    // Update DOM order to match priority
+    updateLowZFramesDOMOrder();
+}
+
+// Remove lowZ frame from registry
+function removeLowZFrame(tabid) {
+    const frame = lowZFrames.get(tabid);
+    if (frame) {
+        // Remove from DOM
+        if (frame.parentNode) {
+            frame.remove();
+        }
+
+        // Remove from registry
+        lowZFrames.delete(tabid);
+
+        // Remove from priority queue
+        const index = lowZPriorityQueue.findIndex(item => item.tabid === tabid);
+        if (index !== -1) {
+            lowZPriorityQueue.splice(index, 1);
+        }
+    }
+}
+
+// Get priority for a tabid (higher number = higher priority)
+function getTabPriority(tabid) {
+    // Special tabs get higher priority
+    if (tabid === "0") return 100; // Index tab
+    if (tabid === "7") return 90;  // Settings tab
+    if (tabid === "4") return 80;  // Documentation tab
+
+    // Regular tabs get priority based on their numeric value
+    const num = parseInt(tabid); // note: this will alway
+    return isNaN(num) ? 50 : Math.min(num, 70); // Cap at 70 for regular tabs
+}
+
+// Update DOM order to match priority queue
+function updateLowZFramesDOMOrder() {
+    // Remove all frames from DOM
+    lowZPriorityQueue.forEach(item => {
+        if (item.frame.parentNode) {
+            item.frame.parentNode.removeChild(item.frame);
+        }
+    });
+
+    // Re-add in priority order (highest priority last = highest z-index in stacking context)
+    lowZPriorityQueue.forEach(item => {
+        document.body.appendChild(item.frame);
+    });
+}
+
+// Get lowZ frame by tabid
+function getLowZFrame(tabid) {
+    return lowZFrames.get(tabid);
+}
+
+// Get lowZ frame by source window
+function getLowZFrameBySource(sourceWindow) {
+    for (const [tabid, frame] of lowZFrames.entries()) {
+        if (frame.contentWindow === sourceWindow) {
+            return { tabid, frame };
+        }
+    }
+    return null;
+}
+
+// Clean up all lowZ frames
+function cleanupLowZFrames() {
+    lowZFrames.forEach((frame, tabid) => {
+        if (frame.parentNode) {
+            frame.remove();
+        }
+    });
+    lowZFrames.clear();
+    lowZPriorityQueue.length = 0;
 }
 
 (() => {
@@ -210,13 +311,12 @@ function onMouseUp() {
 function makeNewTabID() {
     let result = '';
     result += Math.floor(Math.random() * 9) + 1;
-    for (let i = 0; i < 63; i++) {
+    for (let i = 0; i < 999; i++) {
         result += Math.floor(Math.random() * 10);
     }
     return result;
 }
 
-// Get tab's stored URL or fallback to default
 function getTabURLFromID(tabid) {
     const tab = document.querySelector(`.tab[tabid="${tabid}"]`);
     return tab ? tab.getAttribute("data-url") || "./chungus/chungus.html" : "./chungus/chungus.html";
@@ -229,16 +329,31 @@ function handleCloseClick(tabid) {
         // Active tab -> just send saveQuit
         chungus.contentWindow.postMessage({ type: "saveQuit" }, "*");
     } else {
-        // Inactive tab -> load real chungus.html hidden, let it quit gracefully
-        const lowZFrame = document.createElement("iframe");
-        lowZFrame.classList.add("lowZFrame");
-        lowZFrame.setAttribute("data-tabid", tabid);
-        lowZFrame.src = `./chungus/chungus.html?tabid=${tabid}`;
-        document.body.appendChild(lowZFrame);
+        // Inactive tab -> create or reuse lowZFrame for this tabid
+        let lowZFrame = getLowZFrame(tabid);
 
-        lowZFrame.addEventListener("load", () => {
+        if (!lowZFrame) {
+            lowZFrame = document.createElement("iframe");
+            lowZFrame.classList.add("lowZFrame");
+            lowZFrame.setAttribute("data-tabid", tabid);
+            lowZFrame.src = `./chungus/chungus.html?tabid=${tabid}`;
+            document.body.appendChild(lowZFrame);
+
+            // Add to registry with semantic ordering
+            addLowZFrame(tabid, lowZFrame);
+
+            lowZFrame.addEventListener("load", () => {
+                lowZFrame.contentWindow.postMessage({ type: "saveQuit" }, "*");
+            });
+
+            // Cleanup on error
+            lowZFrame.addEventListener("error", () => {
+                removeLowZFrame(tabid);
+            });
+        } else {
+            // Frame already exists, trigger saveQuit
             lowZFrame.contentWindow.postMessage({ type: "saveQuit" }, "*");
-        });
+        }
     }
 }
 
@@ -300,37 +415,65 @@ window.addEventListener("message", (event) => {
     if (!event.data) return;
 
     if (event.data.type === "fetchTabID") {
-        const activeTab = document.querySelector('.tab.active');
-        let tabid = activeTab ? activeTab.getAttribute("tabid") : null;
+        let tabid = null;
 
-        // Special case: respond with lowZFrame's own tabid if it asks
-        const lowZFrame = document.querySelector("iframe.lowZFrame");
-        if (lowZFrame && event.source === lowZFrame.contentWindow) {
-            tabid = lowZFrame.getAttribute("data-tabid");
+        // Check if message comes from a lowZFrame
+        const lowZFrameInfo = getLowZFrameBySource(event.source);
+        if (lowZFrameInfo) {
+            tabid = lowZFrameInfo.tabid;
+        } else if (event.source === chungus.contentWindow) {
+            // Message from main iframe
+            const activeTab = document.querySelector('.tab.active');
+            tabid = activeTab ? activeTab.getAttribute("tabid") : null;
         }
 
         event.source.postMessage({ type: "fetchTabIDResponse", result: tabid }, "*");
     }
 
     if (event.data.type === "exitCurent") {
-        const lowZFrame = document.querySelector("iframe.lowZFrame");
-        if (lowZFrame) {
-            const tabid = lowZFrame.getAttribute("data-tabid");
+        // Find which frame sent this message
+        const lowZFrameInfo = getLowZFrameBySource(event.source);
+
+        if (lowZFrameInfo) {
+            // Message from lowZFrame
+            const { tabid, frame } = lowZFrameInfo;
             const tabToRemove = document.querySelector(`.tab[tabid="${tabid}"]`);
-            if (tabToRemove) tabToRemove.remove();
-            lowZFrame.remove();
-        } else {
+
+            if (tabToRemove) {
+                const wasActive = tabToRemove.classList.contains("active");
+                tabToRemove.remove();
+
+                if (wasActive) {
+                    // Switch to another tab if available
+                    const remainingTabs = Array.from(document.querySelectorAll('.tab'));
+                    if (remainingTabs.length > 0) {
+                        setActiveTab(remainingTabs[0]);
+                    } else {
+                        chungus.src = "about:blank";
+                    }
+                }
+            }
+
+            // Remove the lowZFrame
+            removeLowZFrame(tabid);
+        } else if (event.source === chungus.contentWindow) {
+            // Message from main iframe (active tab closing)
             const activeTab = document.querySelector('.tab.active');
             const indexOfActiveTab = tabs.indexOf(activeTab);
-            if (tabs[indexOfActiveTab + 1]) {
-                setActiveTab(tabs[indexOfActiveTab + 1]);
-            } else if (tabs[indexOfActiveTab - 1]) {
-                setActiveTab(tabs[indexOfActiveTab - 1]);
-            } else {
-                chungus.src = "about:blank";
+
+            if (activeTab) {
+                activeTab.remove();
+
+                if (tabs[indexOfActiveTab + 1]) {
+                    setActiveTab(tabs[indexOfActiveTab + 1]);
+                } else if (tabs[indexOfActiveTab - 1]) {
+                    setActiveTab(tabs[indexOfActiveTab - 1]);
+                } else {
+                    chungus.src = "about:blank";
+                }
             }
-            activeTab.remove();
         }
+
         tabs = Array.from(document.querySelectorAll('.tab'));
     }
 
@@ -420,7 +563,6 @@ window.addEventListener("message", (event) => {
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#39;");
 
-        // Update only the text node (assumes firstChild is text)
         activeTab.firstChild.textContent = escapeHTML(event.data.title);
     }
 
@@ -429,6 +571,9 @@ window.addEventListener("message", (event) => {
 
         const targetTabID = event.data.tabid;
         if (!targetTabID) return;
+
+        // Remove lowZFrame if it exists
+        removeLowZFrame(targetTabID);
 
         let json = localStorage.getItem("ChatJson");
         if (!json) return;
@@ -469,7 +614,6 @@ window.addEventListener("message", (event) => {
         const tabInQuestion = document.querySelector(`.tab[tabid="${tabid}"]`);
         if (!tabInQuestion) return;
 
-        // Escape HTML safely
         const escapeHTML = str =>
             str.replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
@@ -481,7 +625,6 @@ window.addEventListener("message", (event) => {
             tabInQuestion.firstChild.textContent = escapeHTML(title);
         }
 
-        // Update local storage JSON
         let json = localStorage.getItem("ChatJson");
         if (!json) return;
 
@@ -494,7 +637,7 @@ window.addEventListener("message", (event) => {
         localStorage.setItem("ChatJson", JSON.stringify(json));
     }
 
-    // New: register a key callback in a removable/managed way
+    // Key callback registration
     if (event.data.type === "addKeyCallbackStruct") {
         const keybinding = event.data.keybinding;
         const call = event.data.callKey;
@@ -502,24 +645,19 @@ window.addEventListener("message", (event) => {
 
         if (!keybinding || !call) return;
 
-        // Normalize stored key for comparison
         const targetKey = normalizeBindingKey(keybinding.key);
 
-        // Build listener
         const listener = function(e) {
             try {
-                // Normalize and compare key
                 const evKey = normalizeEventKey(e);
                 if (evKey !== targetKey) return;
 
-                // Verify modifiers exactly match required set
                 const requiredMods = Array.isArray(keybinding.mods) ? keybinding.mods : [];
                 if (!modifiersExactlyMatch(e, requiredMods)) return;
 
-                // Matched: forward the callback trigger back to the source frame that registered it
                 e.preventDefault();
                 e.stopPropagation();
-                // Ensure source is still available
+
                 if (source && typeof source.postMessage === "function") {
                     source.postMessage({ type: "callbackingKey", calling: call }, "*");
                 }
@@ -528,13 +666,11 @@ window.addEventListener("message", (event) => {
             }
         };
 
-        // Attach and store so we can remove later
         document.addEventListener("keydown", listener, true);
         keyCallbackRegistry.set(call, { listener, keybinding, source });
         return;
     }
 
-    // Remove a single registered callback
     if (event.data.type === "removeKeyCallbackStruct") {
         const call = event.data.callKey;
         const entry = keyCallbackRegistry.get(call);
@@ -545,7 +681,6 @@ window.addEventListener("message", (event) => {
         return;
     }
 
-    // Clear all registered callbacks (used when a frame reloads to avoid duplicates)
     if (event.data.type === "clearKeyBindings") {
         for (const [call, entry] of keyCallbackRegistry) {
             document.removeEventListener("keydown", entry.listener, true);
@@ -635,6 +770,130 @@ window.addEventListener("message", (event) => {
             fixTabCloseEventListeners();
         }
     }
+
+    if (type == "toggleAcctiveDot") {
+        function getTabIDFromSource(sourceWindow) {
+            // Check if it's a lowZFrame
+            const lowZFrameInfo = getLowZFrameBySource(sourceWindow);
+            if (lowZFrameInfo) {
+                return lowZFrameInfo.tabid;
+            }
+
+            // Check if it's the main iframe (chungus)
+            if (sourceWindow === chungus.contentWindow) {
+                const activeTab = document.querySelector('.tab.active');
+                return activeTab ? activeTab.getAttribute("tabid") : null;
+            }
+
+            // Not from a known source
+            return null;
+        }
+
+        let tabid = getTabIDFromSource(event.source);
+        let tabdiv = document.querySelector(`div.tab[tabid="${tabid}"]`);
+
+        if (!tabdiv) return;
+
+        // Check if the dot already exists
+        let existingDot = tabdiv.querySelector('.active-dot');
+
+        if (existingDot) {
+            // If dot exists, remove it
+            existingDot.remove();
+        } else {
+            // Create new dot element
+            let dot = document.createElement('div');
+            dot.className = 'active-dot';
+            dot.textContent = '●';
+
+            if (tabdiv.firstChild && tabdiv.firstChild.nodeType === Node.TEXT_NODE) {
+                tabdiv.insertBefore(dot, tabdiv.firstChild);
+            } else {
+                // Otherwise insert at the beginning
+                tabdiv.insertBefore(dot, tabdiv.firstElementChild || tabdiv.firstChild);
+            }
+        }
+    }
+
+    if (type == "setAcctiveDot") {
+        function getTabIDFromSource(sourceWindow) {
+            // Check if it's a lowZFrame
+            const lowZFrameInfo = getLowZFrameBySource(sourceWindow);
+            if (lowZFrameInfo) {
+                return lowZFrameInfo.tabid;
+            }
+
+            // Check if it's the main iframe (chungus)
+            if (sourceWindow === chungus.contentWindow) {
+                const activeTab = document.querySelector('.tab.active');
+                return activeTab ? activeTab.getAttribute("tabid") : null;
+            }
+
+            // Not from a known source
+            return null;
+        }
+
+        let tabid = getTabIDFromSource(event.source);
+        let tabdiv = document.querySelector(`div.tab[tabid="${tabid}"]`);
+
+        if (!tabdiv) return;
+
+        let wantsBlueDot = event.data.do;
+
+        if (!(typeof wantsBlueDot == "boolean")) return;
+
+        // Check if the dot already exists
+        let existingDot = tabdiv.querySelector('.active-dot');
+
+        if (!wantsBlueDot) {
+            if (existingDot) {
+                existingDot.remove();
+            }
+        } else {
+            if (!existingDot) {
+                // Create new dot element
+                let dot = document.createElement('div');
+                dot.className = 'active-dot';
+                dot.textContent = '●';
+
+                if (tabdiv.firstChild && tabdiv.firstChild.nodeType === Node.TEXT_NODE) {
+                    tabdiv.insertBefore(dot, tabdiv.firstChild);
+                } else {
+                    // Otherwise insert at the beginning
+                    tabdiv.insertBefore(dot, tabdiv.firstElementChild || tabdiv.firstChild);
+                }
+            }
+        }
+    }
+
+    if (type == "getAcctiveDot") {
+        function getTabIDFromSource(sourceWindow) {
+            // Check if it's a lowZFrame
+            const lowZFrameInfo = getLowZFrameBySource(sourceWindow);
+            if (lowZFrameInfo) {
+                return lowZFrameInfo.tabid;
+            }
+
+            // Check if it's the main iframe (chungus)
+            if (sourceWindow === chungus.contentWindow) {
+                const activeTab = document.querySelector('.tab.active');
+                return activeTab ? activeTab.getAttribute("tabid") : null;
+            }
+
+            // Not from a known source
+            return null;
+        }
+
+        let tabid = getTabIDFromSource(event.source);
+        let tabdiv = document.querySelector(`div.tab[tabid="${tabid}"]`);
+
+        if (!tabdiv) return;
+
+        // Check if the dot already exists
+        let existingDot = tabdiv.querySelector('.active-dot');
+
+        event.source.postMessage({type: "", content: String(!!existingDot)}, "*");
+    }
 });
 
 document.getElementById("newTabBtn").addEventListener("click", (event) => {
@@ -643,18 +902,14 @@ document.getElementById("newTabBtn").addEventListener("click", (event) => {
 });
 
 document.getElementById("indexSw").addEventListener("click", () => {
-    // Look for a tab with tabid "0"
     let indexTab = document.querySelector('.tab[tabid="0"]');
 
     if (indexTab) {
-        // If tab exists but text isn't "index", rename it
         if (!indexTab.textContent.includes("Index")) {
             indexTab.firstChild.textContent = "Index";
         }
-        // Switch to the existing tab
         setActiveTab(indexTab);
     } else {
-        // Create new "index" tab at the start
         let newTab = document.createElement("div");
         newTab.classList.add("tab");
         newTab.innerHTML = `
@@ -664,7 +919,6 @@ document.getElementById("indexSw").addEventListener("click", () => {
         newTab.setAttribute('tabid', "0");
         newTab.setAttribute('data-url', "./chungus/chungus.html");
 
-        // Insert at the start of tab bar
         if (tabbar.firstChild) {
             tabbar.insertBefore(newTab, tabbar.firstChild);
         } else {
@@ -740,6 +994,8 @@ document.getElementById("rmTabBtn").addEventListener("click", () => {
 
 window.addEventListener('beforeunload', (e) => {
     localStorage.setItem("tabArray", tabbar.innerHTML);
+    // Clean up all lowZ frames before unloading
+    cleanupLowZFrames();
 });
 
 window.addEventListener('blur', () => {
