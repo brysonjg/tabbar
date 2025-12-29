@@ -71,7 +71,6 @@ div.tab {
     z-index: 1;
 }
 
-
 div.tab:not(.active):hover {
     background-color: var(--dark-blue-hl);
     border-bottom: var(--hard-outline-width) solid var(--blue-outline);
@@ -218,8 +217,6 @@ img.actionBtn:active {
     vertical-align: middle;
     line-height: 1;
 }
-
-
 
 body.window-inactive .active-dot {
     color: var(--tab-inactive-blue);

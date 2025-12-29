@@ -322,6 +322,49 @@ function getTabURLFromID(tabid) {
     return tab ? tab.getAttribute("data-url") || "./chungus/chungus.html" : "./chungus/chungus.html";
 }
 
+// Helper function to set tab title, skipping the active dot if present
+function setTabTitle(tab, title) {
+    if (!tab) return;
+    
+    const escapeHTML = str =>
+        str.replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/\>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    
+    const escapedTitle = escapeHTML(title);
+    
+    // Find the title text node, skipping the active dot if present
+    let titleNode = tab.firstChild;
+    
+    // Skip the active dot if it's the first child
+    if (titleNode && titleNode.classList && titleNode.classList.contains('active-dot')) {
+        titleNode = titleNode.nextSibling;
+    }
+    
+    // If we found a text node, update it directly
+    if (titleNode && titleNode.nodeType === Node.TEXT_NODE) {
+        titleNode.textContent = escapedTitle;
+    } else if (titleNode && titleNode.nodeType === Node.ELEMENT_NODE) {
+        // If it's an element, update its textContent
+        titleNode.textContent = escapedTitle;
+    } else {
+        // Fallback: find first non-dot, non-close child
+        for (let child = tab.firstChild; child; child = child.nextSibling) {
+            if (child.nodeType === Node.TEXT_NODE) {
+                child.textContent = escapedTitle;
+                break;
+            } else if (child.nodeType === Node.ELEMENT_NODE && 
+                      !child.classList.contains('active-dot') && 
+                      !child.classList.contains('close')) {
+                child.textContent = escapedTitle;
+                break;
+            }
+        }
+    }
+}
+
 function handleCloseClick(tabid) {
     const activeTab = document.querySelector('.tab.active');
 
@@ -555,15 +598,7 @@ window.addEventListener("message", (event) => {
     if (type === "setTitle") {
         const activeTab = document.querySelector('.tab.active');
         if (!activeTab) return;
-
-        const escapeHTML = str =>
-            str.replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/\>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#39;");
-
-        activeTab.firstChild.textContent = escapeHTML(event.data.title);
+        setTabTitle(activeTab, event.data.title);
     }
 
     if (type === "purge") {
@@ -614,16 +649,7 @@ window.addEventListener("message", (event) => {
         const tabInQuestion = document.querySelector(`.tab[tabid="${tabid}"]`);
         if (!tabInQuestion) return;
 
-        const escapeHTML = str =>
-            str.replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/\>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#39;");
-
-        if (tabInQuestion.firstChild) {
-            tabInQuestion.firstChild.textContent = escapeHTML(title);
-        }
+        setTabTitle(tabInQuestion, title);
 
         let json = localStorage.getItem("ChatJson");
         if (!json) return;
@@ -750,7 +776,7 @@ window.addEventListener("message", (event) => {
         let indexTab = document.querySelector('.tab[tabid="0"]');
         if (indexTab) {
             if (!indexTab.textContent.includes("Index")) {
-                indexTab.firstChild.textContent = "Index";
+                setTabTitle(indexTab, "Index");
             }
             setActiveTab(indexTab);
         } else {
@@ -838,7 +864,7 @@ window.addEventListener("message", (event) => {
 
         if (!tabdiv) return;
 
-        let wantsBlueDot = event.data.do;
+        let wantsBlueDot = (event.data.do == "true");
 
         if (!(typeof wantsBlueDot == "boolean")) return;
 
@@ -892,7 +918,7 @@ window.addEventListener("message", (event) => {
         // Check if the dot already exists
         let existingDot = tabdiv.querySelector('.active-dot');
 
-        event.source.postMessage({type: "", content: String(!!existingDot)}, "*");
+        event.source.postMessage({type: "getBlueDotReturn", result: String(!!existingDot)}, "*");
     }
 });
 
@@ -937,7 +963,7 @@ document.getElementById("settings").addEventListener("click", () => {
 
     if (settingsTab) {
         if (!settingsTab.textContent.includes("Settings")) {
-            settingsTab.firstChild.textContent = "Settings";
+            setTabTitle(settingsTab, "Settings");
         }
         setActiveTab(settingsTab);
         return;
@@ -965,7 +991,7 @@ document.getElementById("documentation").addEventListener("click", () => {
 
     if (settingsTab) {
         if (!settingsTab.textContent.includes("Documentation")) {
-            settingsTab.firstChild.textContent = "Documentation";
+            setTabTitle(settingsTab, "Documentation");
         }
         setActiveTab(settingsTab);
         return;

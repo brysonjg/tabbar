@@ -232,3 +232,21 @@ function updateTopLevelTheme() {
 function toggleBlueDote() {
     window.parent.postMessage({ type: 'toggleAcctiveDot' }, '*');
 }
+
+function setBlueDote(type) {
+    window.parent.postMessage({ type: 'setAcctiveDot', do: String(type) }, '*');
+}
+
+async function getBlueDote(type) {
+    return new Promise((resolve) => {
+        function handleBlueDoteMessage(event) {
+            if (event.data && event.data.type === 'fetchTabIDResponse') {
+                window.removeEventListener('message', handleBlueDoteMessage);
+                resolve(event.data.result);
+            }
+        }
+
+        window.addEventListener('message', handleBlueDoteMessage);
+        window.parent.postMessage({ type: 'getAcctiveDot' }, '*');
+    });
+}
