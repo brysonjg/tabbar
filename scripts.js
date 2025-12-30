@@ -355,8 +355,8 @@ function setTabTitle(tab, title) {
             if (child.nodeType === Node.TEXT_NODE) {
                 child.textContent = escapedTitle;
                 break;
-            } else if (child.nodeType === Node.ELEMENT_NODE && 
-                      !child.classList.contains('active-dot') && 
+            } else if (child.nodeType === Node.ELEMENT_NODE &&
+                      !child.classList.contains('active-dot') &&
                       !child.classList.contains('close')) {
                 child.textContent = escapedTitle;
                 break;

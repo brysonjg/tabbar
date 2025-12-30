@@ -230,7 +230,7 @@ function translateMDtoHTML(md) {
     const escapeHTML = str =>
         str.replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
-        .replace(/\n.*>/g, match => (match.startsWith("\n>") ? match : "&gt;"))
+        .replace(/\n.*>/g, match => (match.startsWith("\n>") ? match : "&gt;")) // dose not escape things that will be converter into blockquotes
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#39;");
 
@@ -399,7 +399,7 @@ function collectFiles() {
     return fileStruct;
 }
 
-let submisionModel = "openai/gpt-oss-20b:free"; // default fallback
+let submisionModel = "meta-llama/llama-3.2-3b-instruct:free"; // default fallback
 
 (async () => {
     try {
