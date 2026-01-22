@@ -41,13 +41,13 @@ window.onload = async () => {
 
     let lastTitle = document.title;
 
-    setInterval(async () => {
+    setTimeout(async () => {
         let json = await getLocalJson();
         if (json?.metadata?.title && json.metadata.title !== lastTitle) {
             setTabTitle(json.metadata.title);
             lastTitle = json.metadata.title;
         }
-    }, 500);
+    }, 0);
 
     updateTitleButtonPosition();
 };
@@ -519,7 +519,7 @@ async function handleSubmision() {
         await setLocalJson(json);
         updateRules();
 
-        // determine whether the AI should rename the chat
+        // detertype whether the AI should rename the chat
         let letAIRenameChat = false;
         let hasPassedAssistant = false;
 
@@ -561,7 +561,8 @@ A bad title:
     - Uses complex punctuation, emojis, or symbols
     - Includes irrelevant details
     - Describes or implies details never mentioned
-    - Is overly long or difficult to scan quickly`
+    - Is overly long or difficult to scan quickly
+    - Uses markdown or other formating that is not plaintext (e.g. "**Bad Tittle**" or "# Uncool Tittle")`
             };
 
             json.chat.push(titleRequest);
@@ -718,9 +719,30 @@ document.querySelector(".context#add-context").addEventListener("mousedown", () 
                         div.classList.add("context");
                         div.textContent = file.name; // safe text content
                         div.dataset.content = e.target.result; // store file content safely
+
+                        div.innerHTML = `
+                    <img
+                        src="../icons/type-icons/icons/${getFileIconFileName(file.name, file.type)}"
+                        class="fname-icon">
+                    </img>`
+                    + div.innerHTML;
+
                         fileFeild.appendChild(div);
+
                         div.addEventListener("click", () => {
                             div.remove();
+                        });
+
+                        div.addEventListener("mouseover", () => {
+                            div.classList.add("hovring");
+                            div.querySelector("img.fname-icon").src = "../icons/close-file.svg";
+                        });
+
+                        div.addEventListener("mouseleave", () => {
+                            div.classList.remove("hovring");
+                            div.querySelector("img.fname-icon").src =
+                    "../icons/type-icons/icons/"
+                    + getFileIconFileName(file.name, file.type);
                         });
                     };
 
@@ -734,5 +756,5 @@ document.querySelector(".context#add-context").addEventListener("mousedown", () 
         { once: true }
     );
 },{
-                                                                once: false
+    once: false
 });

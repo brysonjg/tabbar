@@ -6,6 +6,10 @@ window.theme_brz_dark = {
 
                                 "input-bg-color": "#254455",
                                 "input-fg-color": "#0da9f5",
+
+                                "grey-40": "#585b5e40",
+                                "grey-99": "#585b5e99",
+                                "--grey-ff": "#585b5eff",
                             },
                             chungus:
                             {

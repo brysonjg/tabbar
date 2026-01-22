@@ -193,14 +193,6 @@ function setKeyBindingFromStruct(keybindingStruct, callback) {
     return callbackKey;
 }
 
-window.addEventListener('blur', () => {
-    window.parent.postMessage({ type: 'chMod', modulis: false}, '*');
-});
-
-window.addEventListener('focus', () => {
-    window.parent.postMessage({ type: 'chMod', modulis: true}, '*');
-});
-
 function setSettablesByJson(json) {
     // reserved to tab of id 7
     window.parent.postMessage({ type: 'setSETTABLES', json: json }, '*');

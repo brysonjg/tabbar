@@ -102,10 +102,6 @@ div.tab.active::before {
     border-top-right-radius: inherit;
 }
 
-body.window-inactive div.tab.active::before {
-    background: var(--tab-inactive-blue);
-}
-
 div.tab.dragged {
     z-index: 1000;
     pointer-events: none;
@@ -198,6 +194,8 @@ img.actionBtn {
     margin-right: calc(var(--tab-horz-padding) / 2);
     user-select: none;
     filter: var(--action-btn-1);
+    user-drag: none;
+    -webkit-user-drag: none;
 }
 
 img.actionBtn:hover {
@@ -216,8 +214,4 @@ img.actionBtn:active {
     color: var(--lighter-blue-hl);
     vertical-align: middle;
     line-height: 1;
-}
-
-body.window-inactive .active-dot {
-    color: var(--tab-inactive-blue);
 }

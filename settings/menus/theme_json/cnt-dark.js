@@ -5,6 +5,10 @@ window.theme_cnt_dark = {
 
                                 "input-bg-color": "#181a1d",
                                 "input-fg-color": "#00baff",
+
+                                "grey-40": "#5555",
+                                "grey-99": "#7f8c8d99",
+                                "--grey-ff": "#555",
                             },
                             chungus: {
                                 "bg-color": "#111214",

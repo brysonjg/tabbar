@@ -111,3 +111,23 @@ async function fixThemeSchemaAtTopLeval() {
         console.warn("Top-level font error:", e);
     }
 }
+
+function makeIconsAcordingToIconPack(ipack = {}) {
+  let observer = new MutationObserver( async () => {
+    document.querySelectorAll("img").forEach(
+      (element) => {
+        element.scr = ipack[element.scr] || element.scr;
+        console.log(element)
+      }
+    );
+  });
+
+  observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+  });
+}
+
+// document.addEventListener("DOMContentLoaded", () => {
+//   makeIconsAcordingToIconPack(ipack);
+// })

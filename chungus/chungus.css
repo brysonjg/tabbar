@@ -414,6 +414,7 @@ div.context {
     display: flex;
     align-items: center;
     min-width: fit-content;
+    height: 1lh;
     border-radius: 3px;
     padding: 0 5px;
     margin-left: 5px;
@@ -432,6 +433,19 @@ div.context:active {
     border: 1px solid var(--light-blue-hl);
     background-color: var(--context-active-bg);
     color: var(--light-blue-hl);
+}
+
+div.context img.fname-icon {
+    height: 100%;
+    width: auto;
+    margin-right: 5px;
+    padding: 2px;
+}
+
+div.context.hovring img.fname-icon {
+    height: 65%;
+    aspect-ratio: 1 / 1;
+    margin: 0 calc(0.175lh + 5px) 0 0.175lh;
 }
 
 input#hidden-file-input {
@@ -570,6 +584,8 @@ div.dropdown div.menu-item:hover {
 
 img:not(.user-icon):hover {
     filter: var(--icon-hover);
+    user-drag: none;
+    -webkit-user-drag: none;
 }
 
 img:not(.user-icon):active {
@@ -610,12 +626,14 @@ img.change-title-btn {
 div.top-bar-flash-for-rename {
     animation: topBarApperes 0.15s ease forwards;
     height: 30px;
-    width: 100vw;
+    width: calc(100vw - 2px);
     position: fixed;
     top: 0;
     right: 0;
     background-color: var(--bg-color);
     border-bottom: 1px solid var(--hard-outline-color);
+    border-left: 1px solid var(--hard-outline-color);
+    border-right: 1px solid var(--hard-outline-color);
     display: flex;
     align-items: center;
     z-index: 3;
@@ -624,7 +642,6 @@ div.top-bar-flash-for-rename {
 div.top-bar-flash-for-rename.rightborder {
     margin-right: 15px;
     width: calc(100vw - 15px);
-    border-right: 1px solid var(--hard-outline-color);
 }
 
 @keyframes topBarDisapperes {

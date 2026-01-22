@@ -326,15 +326,6 @@ function getTabURLFromID(tabid) {
 function setTabTitle(tab, title) {
     if (!tab) return;
     
-    const escapeHTML = str =>
-        str.replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/\>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
-    
-    const escapedTitle = escapeHTML(title);
-    
     // Find the title text node, skipping the active dot if present
     let titleNode = tab.firstChild;
     
@@ -345,20 +336,20 @@ function setTabTitle(tab, title) {
     
     // If we found a text node, update it directly
     if (titleNode && titleNode.nodeType === Node.TEXT_NODE) {
-        titleNode.textContent = escapedTitle;
+        titleNode.textContent = title;
     } else if (titleNode && titleNode.nodeType === Node.ELEMENT_NODE) {
         // If it's an element, update its textContent
-        titleNode.textContent = escapedTitle;
+        titleNode.textContent = title;
     } else {
         // Fallback: find first non-dot, non-close child
         for (let child = tab.firstChild; child; child = child.nextSibling) {
             if (child.nodeType === Node.TEXT_NODE) {
-                child.textContent = escapedTitle;
+                child.textContent = title;
                 break;
             } else if (child.nodeType === Node.ELEMENT_NODE &&
                       !child.classList.contains('active-dot') &&
                       !child.classList.contains('close')) {
-                child.textContent = escapedTitle;
+                child.textContent = title;
                 break;
             }
         }
@@ -713,28 +704,6 @@ window.addEventListener("message", (event) => {
         }
         keyCallbackRegistry.clear();
         return;
-    }
-
-    if (type == "chMod") {
-        const modulis = event.data.modulis;
-        const activeTab = document.querySelector('.tab.active');
-
-        if (activeTab && activeTab === document.querySelector(`.tab[tabid="${activeTabID}"]`)) {
-            if (modulis) {
-                document.body.classList.remove('window-inactive');
-                isIFrameActive = true;
-            } else {
-                isIFrameActive = false;
-                setTimeout(
-                    () => {
-                        if (!isWindowActive) {
-                            document.body.classList.add('window-inactive');
-                        }
-                    },
-                    10
-                );
-            }
-        }
     }
 
     if (type == "setSETTABLES") {

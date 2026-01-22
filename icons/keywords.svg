@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="22mm"
+   height="22mm"
+   viewBox="0 0 22 22"
+   version="1.1"
+   id="svg9575"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="keywords.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview9577"
+     pagecolor="#e4e4e4"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#12151c"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="8.3352097"
+     inkscape:cx="23.514705"
+     inkscape:cy="41.450667"
+     inkscape:window-width="1920"
+     inkscape:window-height="1008"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs9572" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <circle
+       style="fill:#696c6e;stroke:#696c6e;stroke-width:1.2"
+       id="path10178"
+       cx="3.9202425"
+       cy="16.172983"
+       r="2.4283283" />
+    <rect
+       style="fill:#696c6e;stroke:#696c6e;stroke-width:1.35533"
+       id="rect10232"
+       width="1.4450735"
+       height="16.103779"
+       x="13.644018"
+       y="-8.1182384"
+       transform="matrix(0.7213493,0.69257143,-0.7213493,0.69257143,0,0)" />
+    <rect
+       style="fill:#696c6e;stroke:#696c6e;stroke-width:1.68024"
+       id="rect10234"
+       width="6.1780462"
+       height="1.3778378"
+       x="14.031143"
+       y="-5.9212751"
+       transform="matrix(0.7213493,0.69257143,-0.7213493,0.69257143,0,0)" />
+    <rect
+       style="fill:#696c6e;stroke:#696c6e;stroke-width:1.68024"
+       id="rect10236"
+       width="6.1780462"
+       height="1.3778378"
+       x="14.898053"
+       y="-1.2515622"
+       transform="matrix(0.7213493,0.69257143,-0.7213493,0.69257143,0,0)" />
+  </g>
+</svg>

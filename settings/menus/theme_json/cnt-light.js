@@ -4,7 +4,11 @@ window.theme_cnt_light = {
                                 "fg-color": "#000000",
 
                                 "input-bg-color": "#f9f9f9",
-                                "input-fg-color": "#0057d8"
+                                "input-fg-color": "#0057d8",
+
+                                "grey-40": "#585b5e40",
+                                "grey-99": "#585b5e99",
+                                "--grey-ff": "#585b5eff",
                             },
                             chungus: {
                                 "bg-color": "#ffffff",

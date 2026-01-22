@@ -4,7 +4,11 @@ window.theme_brz_light = {
                                 "fg-color": "#232629",
 
                                 "input-bg-color": "#fcfcfc",
-                                "input-fg-color": "#0068c0"
+                                "input-fg-color": "#0068c0",
+
+                                "grey-40": "#7f8c8d40",
+                                "grey-99": "#7f8c8d99",
+                                "grey-ff": "#7f8c8dff"
                             },
                             chungus: {
                                 "bg-color": "#eff0f1",
