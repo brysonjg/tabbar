@@ -16,42 +16,8 @@ let hasMovedEnough = false;
 let isWindowActive = true;
 let isIFrameActive = false;
 
-// Registry for key callbacks
-const keyCallbackRegistry = new Map();
-
-// Registry for lowZ frames - maps tabid to frame element
 const lowZFrames = new Map();
-// Priority queue for lowZ frames (sorted by semantic order)
 const lowZPriorityQueue = [];
-
-// Helper: normalize an event key to comparable form
-function normalizeEventKey(e) {
-    return e.key && e.key.length === 1 ? e.key.toUpperCase() : e.key;
-}
-
-// Helper: normalize registered binding key for comparison
-function normalizeBindingKey(key) {
-    return key && key.length === 1 ? key.toUpperCase() : key;
-}
-
-// Helper: check exact modifier match
-function modifiersExactlyMatch(e, requiredMods = []) {
-    const modsPressed = {
-        Control: !!e.ctrlKey,
-        Shift: !!e.shiftKey,
-        Alt: !!e.altKey,
-        Meta: !!e.metaKey,
-        Fn: false
-    };
-
-    const allRequired = requiredMods.every(m => modsPressed[m]);
-    const noExtras = Object.keys(modsPressed).every(mod => {
-        if (mod === 'Fn') return true;
-        return requiredMods.includes(mod) === modsPressed[mod];
-    });
-
-    return allRequired && noExtras;
-}
 
 // Add lowZ frame to registry with semantic ordering
 function addLowZFrame(tabid, frame) {
@@ -652,58 +618,6 @@ window.addEventListener("message", (event) => {
 
         json[tabid].metadata.title = title;
         localStorage.setItem("ChatJson", JSON.stringify(json));
-    }
-
-    // Key callback registration
-    if (event.data.type === "addKeyCallbackStruct") {
-        const keybinding = event.data.keybinding;
-        const call = event.data.callKey;
-        const source = event.source;
-
-        if (!keybinding || !call) return;
-
-        const targetKey = normalizeBindingKey(keybinding.key);
-
-        const listener = function(e) {
-            try {
-                const evKey = normalizeEventKey(e);
-                if (evKey !== targetKey) return;
-
-                const requiredMods = Array.isArray(keybinding.mods) ? keybinding.mods : [];
-                if (!modifiersExactlyMatch(e, requiredMods)) return;
-
-                e.preventDefault();
-                e.stopPropagation();
-
-                if (source && typeof source.postMessage === "function") {
-                    source.postMessage({ type: "callbackingKey", calling: call }, "*");
-                }
-            } catch (err) {
-                console.error('Key callback error', err);
-            }
-        };
-
-        document.addEventListener("keydown", listener, true);
-        keyCallbackRegistry.set(call, { listener, keybinding, source });
-        return;
-    }
-
-    if (event.data.type === "removeKeyCallbackStruct") {
-        const call = event.data.callKey;
-        const entry = keyCallbackRegistry.get(call);
-        if (entry) {
-            document.removeEventListener("keydown", entry.listener, true);
-            keyCallbackRegistry.delete(call);
-        }
-        return;
-    }
-
-    if (event.data.type === "clearKeyBindings") {
-        for (const [call, entry] of keyCallbackRegistry) {
-            document.removeEventListener("keydown", entry.listener, true);
-        }
-        keyCallbackRegistry.clear();
-        return;
     }
 
     if (type == "setSETTABLES") {

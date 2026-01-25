@@ -2,10 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*
- * Replace all occurrences of `old` with `new` in `src`.
- * Returns a newly allocated string that must be freed by the caller.
- */
 static char *replace_all(const char *src, const char *old, const char *new)
 {
     size_t src_len = strlen(src);

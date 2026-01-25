@@ -87,8 +87,9 @@ async function reTitleTab() {
 
     chatOuterer.insertAdjacentHTML("afterbegin", `
         <div class="top-bar-flash-for-rename ${hasVerticalScrollbar(chatOuterer) ? "rightborder" : ""}">
-            <img src="../icons/submittitle.svg" class="submit-title-btn" title="submit title">
+            <img src="../icons/close-file.svg" class="submit-title-btn exit" title="exit">
             <input class="title-input">
+            <img src="../icons/submittitle.svg" class="submit-title-btn" title="submit title">
         </div>
     `);
 
@@ -103,7 +104,8 @@ async function reTitleTab() {
     }, 200);
 
     const renameBar = chatOuterer.querySelector('.top-bar-flash-for-rename');
-    const submitBtn = renameBar.querySelector('.submit-title-btn');
+    const submitBtn = renameBar.querySelector('.submit-title-btn:not(.exit)');
+    const exitBtn = renameBar.querySelector('.submit-title-btn.exit');
     const titleInput = renameBar.querySelector('.title-input');
 
     titleInput.focus();
@@ -133,6 +135,7 @@ async function reTitleTab() {
     };
 
     submitBtn.addEventListener("click", closeBar);
+    exitBtn.addEventListener("click", cancelRename);
     titleInput.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
             event.preventDefault();

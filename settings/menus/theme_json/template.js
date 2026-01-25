@@ -193,26 +193,6 @@ window.theme_temp =
         "act-active": "",
         "act-active": ""
     },
-    "keybindings":
-    {
-        "bg-color": "",
-        "fg-color": "",
-        "table-waght": "",
-
-        "hl-blue-1": "",
-        "hl-blue-2": "",
-
-        "row-filter": "",
-        "filt-hover": "",
-        "filt-raw": "",
-
-        "rm-action-defult": "",
-        "rm-action-hover": "",
-        "rm-action-active": "",
-
-        "mv-defult": "",
-        "mv-filter": ""
-    },
     "master":
     {
         "bg-color": "",

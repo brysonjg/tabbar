@@ -59,13 +59,13 @@ function renederJson(
             return;
         }
 
-        // Get the title from the JSON structure
-        const title = json[id]?.metadata?.title || "Untitled";
+        // Get the highlighted title (from search) or the normal title from the JSON structure
+        const title = json[id]?.metadata?.highlightedTitle || json[id]?.metadata?.title || "Untitled";
 
         // Append the item
         container.innerHTML += `
             <div class="op-container">
-                <img class="actionBtn" src="../icons/purgeTFM.svg" data-id="${id}">
+                <img class="actionBtn red" src="../icons/purgeTFM.svg" data-id="${id}">
                 <img class="actionBtn" src="../icons/document-edit.svg" data-id="${id}">
                 <div class="openAble" data-id="${id}">${title}</div>
             </div>
@@ -162,18 +162,15 @@ function setResetEventListeners(json, container) {
 }
 
 function addToolbarListeners() {
-    if (document.querySelector("body > div.margin-bar")) return;
-
     document.querySelector("img.tool-bar-action#searchInit")
         .addEventListener("click", () => {
+            if (document.querySelector("body > div.margin-bar")) return;
+
             const bar = document.createElement("div");
             bar.classList.add("margin-bar");
             bar.innerHTML = `
-                <img src="../icons/close-file.svg" id="exit-bar" title="close search">
+                <img src="../icons/close-file.svg" title="close search">
                 <input class="search" value="">
-                <img src="../icons/regular-expession.svg">
-                <img src="../icons/case-sensitive.svg">
-                <img src="../icons/keywords.svg">
             `;
             document.body.appendChild(bar);
 
@@ -184,7 +181,7 @@ function addToolbarListeners() {
             `;
             document.body.appendChild(body);
 
-            document.querySelector("body > div.margin-bar > img#exit-bar")
+            document.querySelector("body > div.margin-bar > img")
                 .addEventListener("click", () => {
                     document.querySelector("body > div.margin-bar")
                         .classList.add("exiting");
@@ -250,14 +247,20 @@ function updateSearchResualts(query) {
     const outputJson = {};
     for (const r of results) {
         outputJson[r.obj.id] = r.obj.ref;
+        outputJson[r.obj.id].metadata = outputJson[r.obj.id].metadata || {};
+        try {
+            // Use fuzzysort's highlight helper to wrap matched characters in <b> tags
+            outputJson[r.obj.id].metadata.highlightedTitle = r.highlight('<b>','</b>');
+        } catch (e) {
+            // Fallback to normal title if highlight is unavailable
+            outputJson[r.obj.id].metadata.highlightedTitle = outputJson[r.obj.id].metadata.title || '';
+        }
     }
 
     if (Object.keys(outputJson).length == 0) {
         searchResalts.innerHTML = "<i>(no resualts)</i>";
         return;
     }
-
-    console.log(outputJson)
 
     searchResalts.innerHTML = "";
     renederJson(outputJson, searchResalts);

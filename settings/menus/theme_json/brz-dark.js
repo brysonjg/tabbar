@@ -196,25 +196,6 @@ window.theme_brz_dark = {
                                 "act-defult": "brightness(0) invert(83%)",
                                 "act-active": "invert(60%) sepia(70%) saturate(358%) hue-rotate(97deg) brightness(94%) contrast(88%)",
                             },
-                            keybindings: {
-                                "bg-color": "#2a2e32",
-                                "fg-color": "#d4d4d4",
-                                "table-waght": "#35383c",
-
-                                "hl-blue-1": "#3daee9",
-                                "hl-blue-2": "#2f4e60",
-
-                                "row-filter": "brightness(0) invert(83%)",
-                                "filt-hover": "#fff1",
-                                "filt-raw": "#fff3",
-
-                                "rm-action-defult": "brightness(0) invert(83%)",
-                                "rm-action-hover": "brightness(0) saturate(100%) invert(14%) sepia(83%) saturate(2200%) hue-rotate(330deg) brightness(150%) contrast(124%)",
-                                "rm-action-active": "brightness(0) saturate(100%) invert(14%) sepia(83%) saturate(2200%) hue-rotate(330deg) brightness(200%) contrast(124%)",
-
-                                "mv-defult": "brightness(0) invert(83%)",
-                                "mv-filter": "invert(62%) sepia(92%) saturate(1934%) hue-rotate(171deg) brightness(99%) contrast(84%)",
-                            },
                             master:
                             {
                                 "bg-color": "#232629",

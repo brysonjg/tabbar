@@ -593,11 +593,11 @@ img:not(.user-icon):active {
 }
 
 img.submit-title-btn:hover, img.change-title-btn:hover {
-    filter: var(--action-btn-2);
+    filter: var(--action-btn-2) !important;
 }
 
 img.submit-title-btn:active, img.change-title-btn:active {
-    filter: var(--action-btn-3);
+    filter: var(--action-btn-3) !important;
 }
 
 img.change-title-btn {
@@ -668,15 +668,24 @@ div.top-bar-flash-for-rename.on-close {
     align-items: center;
 }
 
-img.submit-title-btn {
+img.submit-title-btn:not(.exit) {
     height: 20px;
     width: 20px;
     user-select: none;
-    position: fixed;
-    top: 5px;
-    right: 5px;
     z-index: 4;
     filter: var(--action-btn-1);
+    margin-right: 5px;
+}
+
+
+img.submit-title-btn.exit {
+    height: 19px;
+    width: 19px;
+    user-select: none;
+    z-index: 4;
+    filter: var(--action-btn-1);
+    margin-left: 5px;
+    margin-right: 2px;
 }
 
 div.top-bar-flash-for-rename > input.title-input {

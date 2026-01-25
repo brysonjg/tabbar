@@ -23,8 +23,8 @@
      showgrid="false"
      inkscape:zoom="36.548582"
      inkscape:rotation="1"
-     inkscape:cx="2.9001395"
-     inkscape:cy="7.0232331"
+     inkscape:cx="2.915"
+     inkscape:cy="7.05"
      inkscape:window-width="1920"
      inkscape:window-height="1008"
      inkscape:window-x="0"
@@ -46,7 +46,7 @@
       </style>
   </defs>
   <rect
-     style="fill:#9e1d2f;stroke:#767676;stroke-width:1.20214;stroke-opacity:0"
+     style="fill:#696c6e;stroke:#767676;stroke-width:1.20214;stroke-opacity:0;fill-opacity:1"
      id="rect990"
      width="1.3169689"
      height="13.957006"
@@ -54,7 +54,7 @@
      y="-17.938192"
      transform="matrix(-0.6944273,0.71956287,-0.70917667,-0.70503081,0,0)" />
   <rect
-     style="fill:#9e1d2f;stroke:#767676;stroke-width:1.20214;stroke-opacity:0"
+     style="fill:#696c6e;stroke:#767676;stroke-width:1.20214;stroke-opacity:0;fill-opacity:1"
      id="rect1282"
      width="1.3169689"
      height="13.957006"
