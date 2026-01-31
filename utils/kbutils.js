@@ -10,6 +10,24 @@ function getKeybindingStringOfEvent(event) {
     return stdstr;
 }
 
+async function registerRunKeyboardShortcutFunction(kbs) {
+    const AsyncFunction =
+        Object.getPrototypeOf(async function () {}).constructor;
+
+    const asyncronus = (String(kbs.asyncfn) == "true") || false;
+
+    if (asyncronus) {
+        const fun = new AsyncFunction(kbs.callback);
+        await fun();
+    }
+    else {
+        const fun = new Function(kbs.callback);
+        fun();
+    }
+
+    return;
+}
+
 async function registerKeybindings() {
     if (
         window.self !== window.top &&
@@ -19,24 +37,22 @@ async function registerKeybindings() {
         const keybindings = settables.kbshortcuts;
 
         keybindings.forEach((kbs) => {
-            document.addEventListener("keydown", (event) => {
+            document.addEventListener("keydown", async (event) => {
                 if (
-                    getKeybindingStringOfEvent(event) == kbs.shortcut
+                    getKeybindingStringOfEvent(event).trim().toLowerCase() === String(kbs.shortcut).trim().toLowerCase()
                 ) {
-                    const runningf = new Function(kbs.callback);
-                    runningf();
+                    await registerRunKeyboardShortcutFunction(kbs);
                 }
             });
         });
 
-        window.addEventListener("message", (event) => {
+        window.addEventListener("message", async (event) => {
             if (event.data.type !== "keyboardShortcutEvent") return;
 
             const kbs = event.data.kbs
             if (!kbs) return;
 
-            const runningf = new Function(kbs.callback);
-            runningf();
+            await registerRunKeyboardShortcutFunction(kbs);
         });
     }
 
@@ -59,7 +75,7 @@ async function registerKeybindings() {
         keybindings.forEach((kbs) => {
             document.addEventListener("keydown", (event) => {
                 if (
-                    getKeybindingStringOfEvent(event) == kbs.shortcut
+                    getKeybindingStringOfEvent(event).trim().toLowerCase() === String(kbs.shortcut).trim().toLowerCase()
                 ) {
                     document.getElementById("chungusmain")
                         .contentWindow

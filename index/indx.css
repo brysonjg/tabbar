@@ -80,8 +80,9 @@ body, html, main {
 
 #master-index-content-container {
     padding: 10px;
+    padding-right: 0;
     height: calc(100% - 40px);
-    width: calc(100% - 20px);
+    width: calc(100% - 15px);
     max-width: max(69vw, 1200px);
 }
 
@@ -96,6 +97,9 @@ div.openAble {
     cursor: default;
     width: 100%;
     display: inline;
+    white-space: nowrap;
+    overflow: hidden;
+
 }
 
 input.openAble {
@@ -226,7 +230,7 @@ img.tool-bar-action:active {
 }
 
 body > div.margin-bar {
-    position: absolute;
+    position: fixed;
     height: 30px;
     width: 100%;
     top: 0;
@@ -234,7 +238,7 @@ body > div.margin-bar {
     user-select: none;
     -webkit-user-select: none;
     margin-top: 0px;
-    z-index: 3;
+    z-index: 4;
     background-color: var(--bg-color);
     border-bottom: 1px solid var(--hard-outline-color);
     border-left: 1px solid var(--hard-outline-color);
@@ -279,7 +283,7 @@ body > div.margin-bar > img:active {
 body > div.search-resalts {
     position: absolute;
     height: calc(100% - 32px);
-    width: 100%;
+    width: calc(100% - 32px);
     top: 31px;
     left: 0;
     padding-left: 31px;
@@ -287,6 +291,7 @@ body > div.search-resalts {
     z-index: 3;
     background-color: var(--bg-color);
     animation: searchReasaltsFadeIn 0.15s ease forwards;
+    overflow: auto !important;
 }
 
 body > div.search-resalts.exiting {

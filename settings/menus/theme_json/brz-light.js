@@ -14,6 +14,7 @@ window.theme_brz_light = {
                                 "bg-color": "#eff0f1",
                                 "fg-color": "#232629",
                                 "hard-outline-color": "#7f8c8d",
+                                "asset-acsent-color": "#7f8c8d",
                                 "dark-blue-hl": "#2980b9",
                                 "light-blue-hl": "#3daee9",
                                 "denyal-red": "#ff98a2",

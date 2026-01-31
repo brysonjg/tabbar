@@ -14,6 +14,7 @@ window.theme_cnt_light = {
                                 "bg-color": "#ffffff",
                                 "fg-color": "#000000",
                                 "hard-outline-color": "#333333",
+                                "asset-acsent-color": "#2980b9",
                                 "dark-blue-hl": "#004c97",
                                 "light-blue-hl": "#007bff",
                                 "denyal-red": "#da4453",

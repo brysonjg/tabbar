@@ -14,6 +14,7 @@ window.theme_cnt_dark = {
                                 "bg-color": "#111214",
                                 "fg-color": "#f0f0f0",
                                 "hard-outline-color": "#444",
+                                "asset-acsent-color": "#333",
                                 "dark-blue-hl": "#004e7a",
                                 "light-blue-hl": "#00baff",
                                 "denyal-red": "#da4453",

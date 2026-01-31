@@ -57,7 +57,20 @@ async function fixThemeOverSettable(name = null) {
   }
 
   try {
-    const settables = await getSettablesAsJson();
+    let settables = await getSettablesAsJson();
+    // fall back to reading from localStorage if parent doesn't respond
+    if (!settables) {
+      try {
+        const raw = localStorage.getItem('ChatJson');
+        if (raw) {
+          const json = JSON.parse(raw) || {};
+          settables = json[7] || null;
+        }
+      } catch (e) {
+        console.warn('local fallback parse error', e);
+      }
+    }
+
     if (settables && settables.font) {
       loadGoogleFontForThemingSettables(settables.font.font);
       document.documentElement.style.setProperty(
@@ -86,7 +99,7 @@ async function fixThemeSchemaAtTopLeval() {
     }
 
     try {
-        if (!json[7] && !json[7].theme && !json[7].theme.master) return;
+        if (!json[7] || !json[7].theme || !json[7].theme.master) return;
 
         const vars = json[7].theme.master;
 
@@ -101,7 +114,7 @@ async function fixThemeSchemaAtTopLeval() {
     }
 
     try {
-        if (!json[7] && !json[7].font && !json[7].font.font) return;
+        if (!json[7] || !json[7].font || !json[7].font.font) return;
         const fontName = json[7].font.font;
 
         await loadGoogleFontForThemingSettables(fontName);

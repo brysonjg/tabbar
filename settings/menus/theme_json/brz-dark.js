@@ -16,6 +16,7 @@ window.theme_brz_dark = {
                                 "bg-color": "#2a2e32",
                                 "fg-color": "#d4d4d4",
                                 "hard-outline-color": "#64686b",
+                                "asset-acsent-color": "#64686b",
                                 "dark-blue-hl": "#1f485e",
                                 "light-blue-hl": "#3daee9",
                                 "denyal-red": "#da4453",

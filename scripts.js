@@ -128,6 +128,11 @@ function cleanupLowZFrames() {
 
     tabbar.innerHTML = savedTabs;
 
+    if (savedTabs.trim() == "") {
+        chungus.src = "./emptydesk.html";
+        return;
+    }
+
     tabs = Array.from(document.querySelectorAll('.tab'));
 
     tabs.forEach(addTabListeners);
@@ -396,6 +401,9 @@ tabbar.addEventListener("wheel", (event) => {
     event.preventDefault();
     const activeTab = document.querySelector('.tab.active');
 
+    if (!activeTab) return;
+    if (tabs.length == 1) return;
+
     let currentIndex = tabs.indexOf(activeTab);
     currentIndex += event.deltaY / Math.abs(event.deltaY);
     currentIndex += tabs.length;
@@ -449,7 +457,7 @@ window.addEventListener("message", (event) => {
                     if (remainingTabs.length > 0) {
                         setActiveTab(remainingTabs[0]);
                     } else {
-                        chungus.src = "about:blank";
+                        chungus.src = "./emptydesk.html";
                     }
                 }
             }
@@ -469,7 +477,7 @@ window.addEventListener("message", (event) => {
                 } else if (tabs[indexOfActiveTab - 1]) {
                     setActiveTab(tabs[indexOfActiveTab - 1]);
                 } else {
-                    chungus.src = "about:blank";
+                    chungus.src = "./emptydesk.html";
                 }
             }
         }
@@ -518,16 +526,15 @@ window.addEventListener("message", (event) => {
     }
 
     if (!event.data || typeof event.data.type !== "string") return;
-
     const type = event.data.type;
-
     const activeTab = document.querySelector('.tab.active');
-    if (!activeTab) return;
-
-    const activeTabID = activeTab.getAttribute('tabid');
-    if (!activeTabID) return;
+    const activeTabID = activeTab ? activeTab.getAttribute('tabid') : null;
 
     if (type === "getLJson") {
+        if (!activeTab || !activeTabID) {
+            event.source.postMessage({ type: "LJsonReturn", json: null }, "*");
+            return;
+        }
         let jsonStore = localStorage.getItem("ChatJson");
         if (!jsonStore) {
             jsonStore = "{}";
@@ -541,6 +548,7 @@ window.addEventListener("message", (event) => {
     }
 
     if (type === "setLJson") {
+        if (!activeTab || !activeTabID) return;
         let jsonStore = localStorage.getItem("ChatJson");
         if (!jsonStore) {
             jsonStore = "{}";
