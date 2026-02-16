@@ -3,15 +3,15 @@ window.onload = async () => {
     await fixModelMenu();
 
     // Load account data
-    let accountData;
+    let accountData = {"displayname": "User"};
+    window.account = accountData;
 
     try {
         accountData = await getSettablesAsJson();
         accountData = accountData.account;
         window.account = accountData;
     } catch {
-        accountData = {"account": {"displayname": "User"}};
-        accountData = accountData.account;
+        accountData = accountData;
         window.account = accountData;
     }
 
@@ -67,14 +67,14 @@ function hasVerticalScrollbar(element) {
 
 function updateTitleButtonPosition() {
     const chatOuterer = document.querySelector('.chat-outerer');
-    const titleBtn = document.querySelector('img.change-title-btn');
+    const titleBtn = document.querySelector('div.aciton-groupe-bar');
 
     if (!chatOuterer || !titleBtn) return;
 
     if (hasVerticalScrollbar(chatOuterer)) {
-        titleBtn.style.right = '20px';
+        titleBtn.classList.add("scrollbar");
     } else {
-        titleBtn.style.right = '5px';
+        titleBtn.classList.remove("scrollbar");
     }
 }
 
@@ -92,6 +92,10 @@ async function reTitleTab() {
             <img src="../icons/submittitle.svg" class="submit-title-btn" title="submit title">
         </div>
     `);
+
+    const titleBtn = document.querySelector('div.aciton-groupe-bar');
+
+    titleBtn.style.top = 'calc(5px + 2px)'; // 2 pixels more than its typical
 
     let topBarFlashForeRenameIneterval = setInterval(() => {
         if (document.querySelector("div.top-bar-flash-for-rename")) {
@@ -126,6 +130,8 @@ async function reTitleTab() {
 
         setTimeout(() => renameBar.remove(), 250);
         clearInterval(topBarFlashForeRenameIneterval);
+
+        titleBtn.style.top = '5px';  // set height back to its defualt
     };
 
     const cancelRename = () => {
@@ -146,6 +152,31 @@ async function reTitleTab() {
         }
     });
 }
+
+function toggleVersioningSidePannel() {
+    let chatHistoryButton = document.querySelector("img#action-bar-action.chat-history-btn");
+    chatHistoryButton.classList.toggle("active");
+    // injects to the end of body a <div class="right-sidepanel"> </div> that contains nothing
+
+    let hasRightSidePannel = document.querySelector("body > div.right-sidepanel") !== null;
+
+    if (hasRightSidePannel) {
+        let rightSidePannel = document.querySelector("body > div.right-sidepanel");
+        rightSidePannel.remove();
+        return;
+    }
+
+    else {
+        document.body.insertAdjacentHTML(
+            'beforeend',
+            `<div class="right-sidepanel"></div>`
+        );
+    }
+}
+
+document.querySelector("img#action-bar-action.chat-history-btn")
+    .addEventListener("click", toggleVersioningSidePannel);
+
 
 async function fixModelMenu() {
     try {
@@ -295,6 +326,7 @@ function translateMDtoHTML(md) {
     md = md.replace(/\[(.+?)\]\((.+?)\)/g, "<a href='$2' target='_blank'>$1</a>");
 
     // Newline formating
+    md = md.trim();
     md = md.replace(/\\n/, "<br>");
     md = md.replace(/\n/, "<br>");
 
@@ -325,7 +357,7 @@ function translateMDtoHTML(md) {
         }
     );
 
-    return "<br style=\"user-select: none;\">" + md.trim();
+    return "<br style=\"user-select: none;\">" + md;
 }
 
 function renderMD(md, username = "user", arbs = "", files = {}, doAnimations = true, useIcons=true, iconScript="../icons/defualt-user.svg") {
@@ -359,7 +391,10 @@ function renderMD(md, username = "user", arbs = "", files = {}, doAnimations = t
 
     // Display file names only in UI
     Object.keys(files).forEach((file) => {
-        fileFeild.innerHTML += `<div class="message-file">${file}</div>`;
+        fileFeild.innerHTML += `<div class="message-file">
+                                    <img src="../icons/type-icons/icons/${getFileIconFileName(file,files[file].mimetype)}" class="fname-icon" />
+                                    ${file}
+                                </div>`;
     });
 
     const blame = document.getElementById("blameColumn");
@@ -394,7 +429,8 @@ function collectFiles() {
     fileFeild.querySelectorAll("div.context").forEach(div => {
         const fileName = div.textContent.trim();
         const fileContent = div.dataset.content || "";
-        if (fileName) fileStruct[fileName] = fileContent;
+        const fileMimetype = div.dataset.mimetype || "";
+        if (fileName) fileStruct[fileName] = { content: fileContent, mimetype: fileMimetype };
 
         div.remove();
     });
@@ -434,7 +470,28 @@ async function handleSubmision() {
 
     // Render user message + file names
     const userMessageID = "user_message_" + Date.now() + Math.random();
-    renderMD(message, window.account.displayname || window.account.username || "User", `usermeasage="${userMessageID}"`, fileStruct, true, true, window.account.avatar || "../icons/defualt-user.svg");
+
+    let userName = "User";
+
+    try {
+        userName = window.account.displayname;
+    } catch {
+        try {
+                userName = window.account.username;
+        } catch {
+            userName = "User";
+        }
+    }
+
+    let userIcon = "../icons/defualt-user.svg";
+
+    try {
+        userIcon = window.account.avatar;
+    } catch {
+        userIcon = "../icons/defualt-user.svg";
+    }
+
+    renderMD(message, userName, `usermeasage="${userMessageID}"`, fileStruct, true, true, userIcon);
     textArea.value = "";
     const userMessage = document.querySelector(`[usermeasage="${userMessageID}"]`);
     userMessage.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -454,7 +511,8 @@ async function handleSubmision() {
             // Merge file content for AI only
             let merged = msg.content;
             for (const [fname, fcontent] of Object.entries(msg.files)) {
-                merged += `\n\nFile: ${fname}\n\`\`\`\n${fcontent}\n\`\`\``;
+                const contentStr = (typeof fcontent === "string") ? fcontent : (fcontent?.content || "");
+                merged += `\n\nFile: ${fname}\n\`\`\`\n${contentStr}\n\`\`\``;
             }
             return { ...msg, content: merged };
         }
@@ -548,7 +606,7 @@ async function handleSubmision() {
 
 Please summarize the chat so far into a short, clear, and easily searchable title.
 The interface will take your entire response as the chat title, so make it concise and directly descriptive of the conversation.
-Avoid complex punctuation, unnecessary symbols, or formatting.
+// Avoid complex punctuation, unnecessary symbols, or formatting. The chat title sould sumerise the cat up to but not including this tittle request message.
 
 Follow these guidelines for good titles:
 
@@ -575,7 +633,8 @@ A bad title:
                     // Merge file content for AI only
                     let merged = msg.content;
                     for (const [fname, fcontent] of Object.entries(msg.files)) {
-                        merged += `\n\nFile: ${fname}\n\`\`\`\n${fcontent}\n\`\`\``;
+                        const contentStr = (typeof fcontent === "string") ? fcontent : (fcontent?.content || "");
+                        merged += `\n\nFile: ${fname}\n\`\`\`\n${contentStr}\n\`\`\``;
                     }
                     return { ...msg, content: merged };
                 }
@@ -617,12 +676,14 @@ document.querySelector("textarea").addEventListener("keydown", async (event) => 
     if (event.key === "Enter" && !event.shiftKey) {
         event.preventDefault();
         await handleSubmision();
+        setBlueDote(false);
     }
 });
 
 document.getElementById("submitionIcon").addEventListener("click", async (event) => {
     event.preventDefault();
     await handleSubmision();
+    setBlueDote(false);
 });
 
 window.addEventListener("resize", updateTitleButtonPosition);
@@ -722,6 +783,7 @@ document.querySelector(".context#add-context").addEventListener("mousedown", () 
                         div.classList.add("context");
                         div.textContent = file.name; // safe text content
                         div.dataset.content = e.target.result; // store file content safely
+                        div.dataset.mimetype = file.type || "";
 
                         div.innerHTML = `
                     <img

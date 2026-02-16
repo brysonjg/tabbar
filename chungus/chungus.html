@@ -19,42 +19,50 @@
         </div>
         <div id="chat-container">
         </div>
-        <img class="change-title-btn" src="../icons/document-edit.svg" alt="Change Title" title="change title">
-      </div>
-    </div>
-
-      <div class="usr-input-master-container befor-messages">
-        <div class="initMessage">How can I help you?</div>
-        <div class="usr-input-master">
-          <div class="usr-input-topper">
-            <input type="file" id="hidden-file-input" multiple> </input>
-            <div class="context" id="add-context">Add Context</div>
-            <div id="file-feild"></div>
+        <div class="aciton-groupe-bar">
+          <div class="action-btn-wrapper">
+            <img class="change-title-btn" id="action-bar-action" src="../icons/document-edit.svg" alt="Change Title" title="change title">
           </div>
-          <div class="usr-input-body">
-            <textarea id="text-input"></textarea>
-          </div>
-          <div class="usr-input-bottom">
-            <div class="usr-input-left">
-              <div class="menu">
-                Models
-                <div class="dropdown-nul">
-                  <div class="menu-item" type="setModel" model="meta-llama/llama-3.2-3b-instruct:free">Meta Llamma 3 (free)</div>
-                  <div class="menu-item" type="setModel" model="mistralai/devstral-2512:free">Misteral 2512 (free)</div>
-                  <div class="menu-item" type="setModel" model="google/gemma-3-27b-it:free">Gemma 27B (free)</div>
-                </div>
-              </div>
-            </div>
-            <div class="usr-input-right">
-              <img src="../icons/sendmessage.svg" class="submition-icon" id="submitionIcon">
-            </div>
+          <div class="action-btn-wrapper">
+            <img class="chat-history-btn" id="action-bar-action" src="../icons/vcs-branch.svg" alt="Veiw History" title="veiw history">
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="usr-input-master-container befor-messages">
+      <div class="initMessage">How can I help you?</div>
+      <div class="usr-input-master">
+        <div class="usr-input-topper">
+          <input type="file" id="hidden-file-input" multiple> </input>
+          <div class="context" id="add-context">Add Context</div>
+          <div id="file-feild"></div>
+        </div>
+        <div class="usr-input-body">
+          <textarea id="text-input"></textarea>
+        </div>
+        <div class="usr-input-bottom">
+          <div class="usr-input-left">
+            <div class="menu">
+              Models
+              <div class="dropdown-nul">
+                <div class="menu-item" type="setModel" model="meta-llama/llama-3.2-3b-instruct:free">Meta Llamma 3 (free)</div>
+                <div class="menu-item" type="setModel" model="mistralai/devstral-2512:free">Misteral 2512 (free)</div>
+                <div class="menu-item" type="setModel" model="google/gemma-3-27b-it:free">Gemma 27B (free)</div>
+              </div>
+            </div>
+          </div>
+          <div class="usr-input-right">
+            <img src="../icons/sendmessage.svg" class="submition-icon" id="submitionIcon">
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="../controlcommands.js"></script>
     <script src="../utils/reftheme.js"></script>
     <script src="../utils/kbutils.js"></script>
+    <script src="../utils/historyObject.js"></script>
     <script src="../icons/type-icons/geticon.js"></script>
     <script src="./chungus.js"></script>
 

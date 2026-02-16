@@ -124,7 +124,10 @@ function cleanupLowZFrames() {
     fixThemeSchemaAtTopLeval();
 
     const savedTabs = localStorage.getItem("tabArray");
-    if (!savedTabs) return;
+    if (!savedTabs) {
+        chungus.src = "./index/indx.html";
+        return;
+    }
 
     tabbar.innerHTML = savedTabs;
 
@@ -139,6 +142,21 @@ function cleanupLowZFrames() {
     fixTabCloseEventListeners();
 
     setActiveTab(document.querySelector(".tab.active"));
+
+    let chatObjectText = localStorage.getItem("ChatJson");
+    if (!chatObjectText) return;
+
+    let json = JSON.parse(chatObjectText);
+
+    if (!json[7]) {
+        json[7] = {};
+    }
+
+    if (json[7].theme === undefined) {
+        json[7].theme = window.theme_brz_dark;
+        localStorage.setItem("ChatJson", JSON.stringify(json));
+    }
+    fixThemeSchemaAtTopLeval();
 })();
 
 tabs.forEach(addTabListeners);
