@@ -34,6 +34,7 @@ async function registerKeybindings() {
         !window.location.href.endsWith("index.html")
     ) {
         const settables = await getSettablesAsJson();
+        if (settables === null || !settables.kbshortcuts) return;
         const keybindings = settables.kbshortcuts;
 
         keybindings.forEach((kbs) => {

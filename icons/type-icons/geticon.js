@@ -31,6 +31,7 @@ function getFileIconFileName(fname, fmime) {
 		case 'lock': return 'lock.svg';
 		case 'exe': return 'application-x-ms-dos-executable.svg';
 		case 'jsx': return 'applacation-react-java.svg';
+		case 'js': return 'application-x-javascript.svg';
 		case '':
 			// no extension: fall back to mime-based filename if available
 			return `${(fmime || 'none').replace('/', '-')}.svg`;

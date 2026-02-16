@@ -214,4 +214,5 @@ img.actionBtn:active {
     color: var(--lighter-blue-hl);
     vertical-align: middle;
     line-height: 1;
+    font-family: font;
 }

@@ -2,6 +2,11 @@ async function loadGoogleFontForThemingSettables(fontName) {
     const formatted = fontName.replace(/ /g, "+");
     const url = `https://fonts.googleapis.com/css2?family=${formatted}:wght@400;700&display=swap`;
 
+    if (fontName === "font") {
+        // the font is defualt
+        return true;
+    }
+
     if ([...document.fonts].some(font => font.family === fontName)) {
         return true;
     }
@@ -129,7 +134,7 @@ function makeIconsAcordingToIconPack(ipack = {}) {
   let observer = new MutationObserver( async () => {
     document.querySelectorAll("img").forEach(
       (element) => {
-        element.scr = ipack[element.scr] || element.scr;
+        element.src = ipack[element.src] || element.src;
         console.log(element)
       }
     );
