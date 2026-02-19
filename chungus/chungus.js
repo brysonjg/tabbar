@@ -18,26 +18,51 @@ window.onload = async () => {
     const json = await getLocalJson();
     if (!json) return;
 
-    if (json.chat && Array.isArray(json.chat)) {
-        json.chat.forEach(message => {
-            if (message.role !== "system") {
-                // Use account data if available
-                let username = "user";
-                let icon = "../icons/defualt-user.svg";
-
-                if (accountData && message.role === "user") {
-                    username = accountData.displayname || accountData.username || "User";
-                    icon = accountData.avatar || "../icons/defualt-user.svg";
-                } else if (message.role === "assistant") {
-                    icon = "../icons/ai-defult.svg";
-                    username = "assistant";
-                }
-
-                renderMD(message.content, username, "", message.files, false, true, icon);
+    let messages = [];
+    
+    // Initialize VersionObject from stored data if it exists
+    if (json.chat) {
+        try {
+            if (Array.isArray(json.chat)) {
+                // Legacy array format - convert to VersionObject structure
+                const repo = VersionObject.newRepository();
+                json.chat.forEach(msg => {
+                    repo[Object.keys(repo).filter(k => k !== 'active').length] = {
+                        parent: 0,
+                        content: [msg],
+                        children: []
+                    };
+                });
+                const chatObj = new VersionObject(repo);
+                messages = chatObj.compile() || [];
+            } else {
+                // Stored VersionObject data - initialize the class
+                const chatObj = new VersionObject(json.chat);
+                messages = chatObj.compile() || [];
             }
-        });
-
+        } catch (err) {
+            console.warn("Failed to load chat messages:", err);
+            messages = [];
+        }
     }
+    
+    // Render loaded messages
+    messages.forEach(message => {
+        if (message.role !== "system") {
+            let username = "user";
+            let icon = "../icons/defualt-user.svg";
+
+            if (accountData && message.role === "user") {
+                username = accountData.displayname || accountData.username || "User";
+                icon = accountData.avatar || "../icons/defualt-user.svg";
+            } else if (message.role === "assistant") {
+                icon = "../icons/ai-defult.svg";
+                username = "assistant";
+            }
+
+            renderMD(message.content, username, "", message.files, false, true, icon);
+        }
+    });
 
     let lastTitle = document.title;
 
@@ -153,16 +178,15 @@ async function reTitleTab() {
     });
 }
 
-function toggleVersioningSidePannel() {
+async function toggleVersioningSidePannel() {
     let chatHistoryButton = document.querySelector("img#action-bar-action.chat-history-btn");
     chatHistoryButton.classList.toggle("active");
-    // injects to the end of body a <div class="right-sidepanel"> </div> that contains nothing
 
-    let hasRightSidePannel = document.querySelector("body > div.right-sidepanel") !== null;
+    let hasRightSidePanel = document.querySelector("body > div.right-sidepanel") !== null;
 
-    if (hasRightSidePannel) {
-        let rightSidePannel = document.querySelector("body > div.right-sidepanel");
-        rightSidePannel.remove();
+    if (hasRightSidePanel) {
+        let rightSidePanel = document.querySelector("body > div.right-sidepanel");
+        rightSidePanel.remove();
         return;
     }
 
@@ -172,6 +196,11 @@ function toggleVersioningSidePannel() {
             `<div class="right-sidepanel"></div>`
         );
     }
+
+    const json = await getLocalJson();
+
+    const rightSidePanel = document.querySelector("body > div.right-sidepanel");
+    rightSidePanel.innerHTML = JSON.stringify(json.chat);
 }
 
 document.querySelector("img#action-bar-action.chat-history-btn")
@@ -456,7 +485,7 @@ let submisionModel = "meta-llama/llama-3.2-3b-instruct:free"; // default fallbac
 
 
 async function handleSubmision() {
-    const key = "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"; // dev key, remove before shiping !!
+    const key = "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"; // dev key, remove before shiping !!
 
     const textArea = document.querySelector("textarea");
     const message = textArea.value.trim();
@@ -491,6 +520,10 @@ async function handleSubmision() {
         userIcon = "../icons/defualt-user.svg";
     }
 
+    if (!userIcon) {
+        userIcon = "../icons/defualt-user.svg";
+    }
+
     renderMD(message, userName, `usermeasage="${userMessageID}"`, fileStruct, true, true, userIcon);
     textArea.value = "";
     const userMessage = document.querySelector(`[usermeasage="${userMessageID}"]`);
@@ -498,15 +531,37 @@ async function handleSubmision() {
 
     // Load chat history
     let json = await getLocalJson();
-    if (!json) json = { chat: [] };
-    if (!Array.isArray(json.chat)) json.chat = [];
+    if (!json) json = { chat: VersionObject.newRepository() };
+    
+    // Initialize VersionObject from stored data
+    if (Array.isArray(json.chat)) {
+        // Legacy array format - create empty repo and migrate
+        const repo = VersionObject.newRepository();
+        json.chat.forEach(msg => {
+            repo[Object.keys(repo).filter(k => k !== 'active').length] = {
+                parent: 0,
+                content: [msg],
+                children: []
+            };
+        });
+        json.chat = new VersionObject(repo);
+    } else if (json.chat && typeof json.chat === 'object' && !json.chat.compile) {
+        // Stored VersionObject data - initialize the class
+        try {
+            json.chat = new VersionObject(json.chat);
+        } catch (err) {
+            console.warn("Failed to initialize chat VersionObject:", err);
+            json.chat = new VersionObject(VersionObject.newRepository());
+        }
+    }
 
-    // Store original message + files in history (no duplication)
-    json.chat.push({ role: "user", content: message, files: fileStruct, type: "user", });
-    await setLocalJson(json);
+    // Store original message + files in history
+    json.chat.commit([{ role: "user", content: message, files: fileStruct, type: "user" }]);
+    let chatData = json.chat.json;
+    await setLocalJson({ ...json, chat: chatData });
 
     // Prepare messages array for API submission
-    let apiChat = json.chat.map(msg => {
+    let apiChat = json.chat.compile().map(msg => {
         if (msg.role === "user" && Object.keys(msg.files || {}).length > 0) {
             // Merge file content for AI only
             let merged = msg.content;
@@ -546,6 +601,11 @@ async function handleSubmision() {
         const decoder = new TextDecoder("utf-8");
         let buffer = "";
 
+        const chatOuterer = document.querySelector('.chat-outerer');
+        const actionButtons = document.querySelector('div.aciton-groupe-bar');
+
+        if (!chatOuterer || !actionButtons) return;
+
         while (true) {
             const { value, done } = await reader.read();
             if (done) break;
@@ -566,6 +626,13 @@ async function handleSubmision() {
                         fullReply += delta;
                         streamEl.innerHTML = translateMDtoHTML(fullReply);
                         streamEl.scrollIntoView({ behavior: "smooth", block: "end" });
+
+                        if (hasVerticalScrollbar(chatOuterer)) {
+                            actionButtons.classList.add("scrollbar");
+                            bufferActionPassageFalse = false;
+                        }
+
+                        await new Promise(requestAnimationFrame);
                     }
                 } catch (err) {
                     console.warn("Stream chunk parse error:", err);
@@ -576,15 +643,16 @@ async function handleSubmision() {
         // Finalize assistant message
         streamEl.innerHTML = translateMDtoHTML(fullReply);
         updateRules();
-        json.chat.push({ role: "assistant", content: fullReply, type: null, });
-        await setLocalJson(json);
+        json.chat.commit([{ role: "assistant", content: fullReply, type: null }]);
+        let chatData = json.chat.json;
+        await setLocalJson({ ...json, chat: chatData });
         updateRules();
 
         // detertype whether the AI should rename the chat
         let letAIRenameChat = false;
         let hasPassedAssistant = false;
 
-        json.chat.forEach(msg => {
+        json.chat.compile().forEach(msg => {
             if (msg.role === "assistant") {
                 letAIRenameChat = !hasPassedAssistant; // true only on first assistant message
                 hasPassedAssistant = true;
@@ -626,9 +694,10 @@ A bad title:
     - Uses markdown or other formating that is not plaintext (e.g. "**Bad Tittle**" or "# Uncool Tittle")`
             };
 
-            json.chat.push(titleRequest);
+            json.chat.commit([titleRequest]);
+            chatData = json.chat.json;
 
-            apiChat = json.chat.map(msg => {
+            apiChat = json.chat.compile().map(msg => {
                 if (msg.role === "user" && Object.keys(msg.files || {}).length > 0) {
                     // Merge file content for AI only
                     let merged = msg.content;
