@@ -485,7 +485,8 @@ let submisionModel = "meta-llama/llama-3.2-3b-instruct:free"; // default fallbac
 
 
 async function handleSubmision() {
-    const key = "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"; // dev key, remove before shiping !!
+    // ! Insert API key here
+    const key = "API KEY HERE";
 
     const textArea = document.querySelector("textarea");
     const message = textArea.value.trim();
