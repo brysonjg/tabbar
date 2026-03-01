@@ -197,10 +197,58 @@ async function toggleVersioningSidePannel() {
         );
     }
 
-    const json = await getLocalJson();
+    let json = await getLocalJson();
+
+    if (!json) json = {};
+    if (!json.chat) json.chat = VersionObject.newRepository();
+
+    setLocalJson(json);
 
     const rightSidePanel = document.querySelector("body > div.right-sidepanel");
-    rightSidePanel.innerHTML = JSON.stringify(json.chat);
+
+    const vpanel = new VersionPanel(rightSidePanel, json.chat);
+    vpanel.displayObject();
+
+    vpanel.listenForClick(async (id) => {
+        let json = await getLocalJson();
+        const repo = new VersionObject(json.chat);
+        repo.checkout(id);
+        const messages = repo.compile();
+
+        document.querySelector("div#blameColumn").replaceChildren();
+        document.querySelector("div#chat-container").replaceChildren();
+
+        messages.forEach(message => {
+            if (message.role !== "system") {
+                let username = "user";
+                let icon = "../icons/defualt-user.svg";
+
+                if (window.account && message.role === "user") {
+                    username = window.account.displayname || window.account.username || "User";
+                    icon = window.account.avatar || "../icons/defualt-user.svg";
+                } else if (message.role === "assistant") {
+                    icon = "../icons/ai-defult.svg";
+                    username = "assistant";
+                }
+
+                renderMD(message.content, username, "", message.files, false, true, icon);
+            }
+        });
+
+        json.chat = repo.json;
+
+        setLocalJson(json);
+    });
+
+    window._updateVpanelA = async () => {
+        if (!document.querySelector("body > div.right-sidepanel")) return;
+        const json = await getLocalJson();
+        vpanel.setRenderObject(json.chat);
+    }
+}
+
+async function updateVpanel() {
+    if (window._updateVpanelA) await window._updateVpanelA();
 }
 
 document.querySelector("img#action-bar-action.chat-history-btn")
@@ -287,23 +335,51 @@ function updateRules() {
     updateTitleButtonPosition();
 }
 
+function getRandomPUAChars(count = 255) {
+    const start = 0xE000;
+    const end = 0xF8FF;
+    const chars = [];
+
+    for (let i = 0; i < count; i++) {
+        const codePoint = start + Math.floor(Math.random() * (end - start + 1));
+        chars.push(String.fromCharCode(codePoint));
+    }
+
+    return (chars.sort(() => Math.random() - 0.5)).join("");
+}
+
+function getMarkdownToken(index) {
+    return getRandomPUAChars() + index + getRandomPUAChars();
+}
+
 function translateMDtoHTML(md) {
-    md = md.split("%%%%%__USER_UPLOADED_FILES_AFTER_THIS__%%%%%")[0];
+    md = md.split("\uF8FE\uF8FE%%%%%__USER_UPLOADED_FILES_AFTER_THIS__%%%%%\uF8FE\uF8FE")[0];
 
     const escapeHTML = str =>
         str.replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
-        .replace(/\n.*>/g, match => (match.startsWith("\n>") ? match : "&gt;")) // dose not escape things that will be converter into blockquotes
+        .replace(/\>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#39;");
 
     // Escape HTML first
     md = escapeHTML(md);
 
-    // Code blocks (fenced)
+    // Escape Code blocks (fenced)
+    let fencedCodeBlocks = new Map();
+    let codeBlockIndex = 0;
     md = md.replace(/```(\w+)?\n([\s\S]*?)\n```/gm,
-        (_, lang, code) =>
-            `<pre class="code"><div class='copy-btn'>Copy</div><code class='language-${lang || ""}'>${code}</code></pre>`
+        (_, lang, code) => {
+            const token = getMarkdownToken(codeBlockIndex);
+            codeBlockIndex++;
+
+            fencedCodeBlocks.set(
+                token,
+                `<pre class="code"><div class='copy-btn'>Copy</div><code class='language-${lang || ""}'>${code}</code></pre>`
+            );
+
+            return token;
+        }
     );
 
     // Ordered lists
@@ -329,17 +405,14 @@ function translateMDtoHTML(md) {
 
 
     // Blockquotes (group consecutive > lines into one blockquote)
-    md = md.replace(
-    /((?:^>.*(?:\n|$))+)/gm,
-    block => {
+    md = md.replace(/((?:^&gt;.*(?:\n|$))+)/gm, block => {
         const content = block
-        .replace(/^>\s?/gm, "")   // remove leading >
-        .trim()
-        .replace(/\n/g, "<br>");  // preserve line breaks inside quote
+            .replace(/^&gt;\s?/gm, "")
+            .trim()
+            .replace(/\n/g, "<br>");
 
         return `<blockquote>${content}</blockquote>`;
-    }
-    );
+    });
 
     // Horizontal rules
     md = md.replace(/^(?:-{3,}|\*{3,}|_{3,})$/gm, "<hr>");
@@ -356,8 +429,8 @@ function translateMDtoHTML(md) {
 
     // Newline formating
     md = md.trim();
-    md = md.replace(/\\n/, "<br>");
-    md = md.replace(/\n/, "<br>");
+    md = md.replace(/\\n/g, "<br>");
+    md = md.replace(/\n/g, "<br>");
 
     // Table formatting
     md = md.replace(
@@ -385,6 +458,11 @@ function translateMDtoHTML(md) {
                     </table>`;
         }
     );
+
+    // Insert Code Blocks (fenced)
+    fencedCodeBlocks.forEach((html, token) => {
+        md = md.replaceAll(token, html);
+    });
 
     return "<br style=\"user-select: none;\">" + md;
 }
@@ -467,7 +545,7 @@ function collectFiles() {
     return fileStruct;
 }
 
-let submisionModel = "meta-llama/llama-3.2-3b-instruct:free"; // default fallback
+let submisionModel = "arcee-ai/trinity-large-preview:free"; // default fallback
 
 (async () => {
     try {
@@ -485,8 +563,7 @@ let submisionModel = "meta-llama/llama-3.2-3b-instruct:free"; // default fallbac
 
 
 async function handleSubmision() {
-    // ! Insert API key here
-    const key = "API KEY HERE";
+    const key = "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";
 
     const textArea = document.querySelector("textarea");
     const message = textArea.value.trim();
@@ -671,11 +748,11 @@ async function handleSubmision() {
             const titleRequest = {
                 role: "user",
                 content:
-`(this message is generated by the ai interface, not the user, but is placed here on the behalf of the user)
+`(this message is generated by the ai interface, not the user, but is placed here on the behalf of the user inorder to automaticaly give they're chat a title)
 
 Please summarize the chat so far into a short, clear, and easily searchable title.
 The interface will take your entire response as the chat title, so make it concise and directly descriptive of the conversation.
-// Avoid complex punctuation, unnecessary symbols, or formatting. The chat title sould sumerise the cat up to but not including this tittle request message.
+// Avoid complex punctuation, unnecessary symbols, or formatting. The chat title sould sumerise the chat up to but not including this tittle request message.
 
 Follow these guidelines for good titles:
 
@@ -747,6 +824,7 @@ document.querySelector("textarea").addEventListener("keydown", async (event) => 
         event.preventDefault();
         await handleSubmision();
         setBlueDote(false);
+        await updateVpanel();
     }
 });
 
@@ -754,6 +832,7 @@ document.getElementById("submitionIcon").addEventListener("click", async (event)
     event.preventDefault();
     await handleSubmision();
     setBlueDote(false);
+    await updateVpanel();
 });
 
 window.addEventListener("resize", updateTitleButtonPosition);

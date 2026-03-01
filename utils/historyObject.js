@@ -267,3 +267,207 @@ class VersionObject {
                };
     }
 }
+
+class VersionPanel {
+    constructor(element, object, argument={}) {
+        this.parentElement = element;
+        this.veringObject = object;
+        this.nodeHitRegions = [];
+        this._clickListener = null;
+
+        const canvas = document.createElement("canvas");
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        canvas.style.background = "transparent";
+        canvas.style.display = "block";
+
+        element.replaceChildren(canvas);
+
+        this.canvas = canvas;
+        this.ctx = canvas.getContext("2d");
+
+        this.dpr = window.devicePixelRatio || 1;
+
+        this.arcv = {
+            padding: 7,
+            gridCellSurface: 20,
+            colorPalet: [
+                "#15a0bf",
+                "#0669f7",
+                "#8e00c2",
+                "#c517b6",
+                "#d90171",
+                "#cd0101",
+                "#f25d2e",
+                "#f2ca33",
+                "#7bd938",
+                "#2ece9d",
+            ],
+            ...argument
+        };
+
+        this.resizeObserver = new ResizeObserver(() => {
+            this.autoResizeCanvas();
+        });
+
+        this.resizeObserver.observe(element);
+        this.autoResizeCanvas();
+    }
+
+    listenForClick(callback) {
+        if (typeof callback !== "function") {
+            throw new Error("listenForClick(): callback must be a function.");
+        }
+
+        if (this._clickListener) {
+            document.removeEventListener("click", this._clickListener);
+        }
+
+        this._clickListener = async (event) => {
+            if (event.target !== this.canvas) {
+                return;
+            }
+
+            const rect = this.canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            const hit = this.nodeHitRegions.find((node) => {
+                const dx = x - node.x;
+                const dy = y - node.y;
+                return (dx * dx + dy * dy) <= (node.r * node.r);
+            });
+
+            if (hit) {
+                try {
+                    await callback(hit.id);
+                }
+                catch (error) {
+                    console.error("listenForClick(): callback failed.", error);
+                }
+            }
+        };
+
+        document.addEventListener("click", this._clickListener);
+
+        return () => {
+            if (this._clickListener) {
+                document.removeEventListener("click", this._clickListener);
+                this._clickListener = null;
+            }
+        };
+    }
+
+    autoResizeCanvas() {
+        const rect = this.parentElement.getBoundingClientRect();
+        const canvas = this.canvas;
+
+        canvas.width = rect.width * this.dpr;
+        canvas.height = rect.height * this.dpr;
+
+        canvas.style.width = rect.width + "px";
+        canvas.style.height = rect.height + "px";
+
+        this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+
+        if (this.veringObject) {
+            this.displayObject(this.veringObject);
+        }
+    }
+
+    _canvasCircle(xStart, yStart, xEnd, yEnd) {
+        const centerX = (xStart + xEnd) / 2;
+        const centerY = (yStart + yEnd) / 2;
+        const radiusX = Math.abs(xEnd - xStart) / 2;
+        const radiusY = Math.abs(yEnd - yStart) / 2;
+
+        this.ctx.beginPath();
+        this.ctx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, 2 * Math.PI);
+        this.ctx.fill();
+    }
+
+    _conectNodes(startIndex, endIndex, startY) {
+        const padding = this.arcv.padding;
+        const cellSize = this.arcv.gridCellSurface;
+
+        const x1 = (startIndex + 0.5) * cellSize + (startIndex + 1) * padding;
+        const y1 = startY + cellSize;
+        const x2 = (endIndex + 0.5) * cellSize + (endIndex + 1) * padding;
+        const y2 = startY + padding + cellSize; // connect to bottom of parent circle
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(x1, y1);
+        this.ctx.lineTo(x2, y2);
+        this.ctx.lineWidth = 2;
+        this.ctx.stroke();
+    }
+
+    displayObject() {
+        const padding = this.arcv.padding;
+        const cellSize = this.arcv.gridCellSurface;
+        const colors = this.arcv.colorPalet;
+        const object = this.veringObject
+        const radius = cellSize / 2;
+        this.nodeHitRegions = [];
+
+        // clear the screen
+        this.ctx.clearRect(
+            -100,
+            -100,
+            this.canvas.width / this.dpr + 100,
+            this.canvas.height / this.dpr + 100
+        );
+
+        let pointers = [0];  // nodes in this row
+        let drawY = 0;
+        let positions = []; // x positions of nodes
+
+        while (pointers.length > 0) {
+            let drawX = 0;
+            let newPointers = [];
+            let newPositions = [];
+
+            drawY += padding;
+
+            pointers.forEach((nodeId, i) => {
+                const x = drawX + padding + cellSize / 2;
+                const y = drawY + cellSize / 2;
+                positions[i] = x;
+
+                this.ctx.fillStyle = colors[i % colors.length];
+                this.ctx.strokeStyle = colors[i % colors.length];
+
+                this._canvasCircle(drawX + padding, drawY, drawX + padding + cellSize, drawY + cellSize);
+                this.nodeHitRegions.push({
+                    id: nodeId,
+                    x,
+                    y,
+                    r: radius,
+                });
+
+                const node = object[nodeId];
+                node.children.forEach((child) => {
+                    newPointers.push(child);
+                });
+
+                node.children.forEach((child, j) => {
+                    const childIndex = newPointers.indexOf(child);
+                    if (childIndex !== -1) {
+                        this._conectNodes(i, childIndex, drawY);
+                    }
+                });
+
+                drawX += cellSize + padding;
+            });
+
+            pointers = newPointers;
+            positions = newPositions;
+            drawY += cellSize;
+        }
+    }
+
+    setRenderObject(object) {
+        this.veringObject = object;
+        this.displayObject();
+    }
+}
