@@ -17,7 +17,7 @@ window.theme_cnt_light = {
                                 "asset-acsent-color": "#2980b9",
                                 "dark-blue-hl": "#004c97",
                                 "light-blue-hl": "#007bff",
-                                "transparent-blue": "#007bff55",
+                                "transparent-blue": "#007bff38",
                                 "denyal-red": "#da4453",
                                 "blue-outline": "#0068c0",
 

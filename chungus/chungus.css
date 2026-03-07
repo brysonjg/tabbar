@@ -7,7 +7,7 @@
     --hard-outline-width: 1px;
     --dark-blue-hl: #1f485e;
     --light-blue-hl: #3daee9;
-    --transparent-blue: #3daee945;
+    --transparent-blue: #3daee938;
     --blue-outline: #587180;
     --font: font;
 
@@ -597,7 +597,7 @@ div.dropdown div.menu-item {
     border: 0.75px solid transparent;
     border-radius: 3px;
     padding: 2px 5px;
-    width: calc(100% - 10px);
+    width: calc(100% - 12px);
     white-space: nowrap;
     line-height: 1em;
     height: auto;

@@ -17,7 +17,7 @@ window.theme_brz_light = {
                                 "asset-acsent-color": "#7f8c8d",
                                 "dark-blue-hl": "#2980b9",
                                 "light-blue-hl": "#3daee9",
-                                "transparent-blue": "#3daee945",
+                                "transparent-blue": "#3daee938",
                                 "denyal-red": "#ff98a2",
                                 "blue-outline": "#8ab4c8",
 

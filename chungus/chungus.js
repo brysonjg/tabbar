@@ -80,10 +80,14 @@ window.onload = async () => {
     }, 0);
 
     updateTitleButtonPosition();
+    scheduleBlameSpacerUpdate();
 };
 
 window.addEventListener("load", () => {
     setTimeout(updateTitleButtonPosition, 200);
+
+    startBlameSpacerScheduler();
+    setInterval(updateBlameSpacersFast, 100);
 });
 
 window.addEventListener("message", (event) => {
@@ -93,6 +97,60 @@ window.addEventListener("message", (event) => {
 
 function hasVerticalScrollbar(element) {
     return element.scrollHeight > element.clientHeight;
+}
+
+let blameSpacerRafId = 0;
+
+function scheduleBlameSpacerUpdate() {
+    if (blameSpacerRafId) return;
+    blameSpacerRafId = requestAnimationFrame(() => {
+        blameSpacerRafId = 0;
+        updateBlameSpacersFast();
+    });
+}
+
+function updateBlameSpacersFast() {
+    const messages = document.querySelectorAll("#chat-container > .chat-message");
+    const blameSpacers = document.querySelectorAll("#blameColumn > .blm-spacer");
+    const blameMains = document.querySelectorAll("#blameColumn > blm");
+    const blameColumn = document.getElementById("blameColumn");
+    const pairCount = Math.min(messages.length, blameSpacers.length, blameMains.length);
+    if (!blameColumn || pairCount === 0) return 0;
+
+    const columnTop = blameColumn.getBoundingClientRect().top;
+    const paddingTop = parseFloat(getComputedStyle(blameColumn).paddingTop) || 0;
+    let cursor = paddingTop;
+    let changedCount = 0;
+
+    for (let i = 0; i < pairCount; i++) {
+        const messageTop = messages[i].getBoundingClientRect().top - columnTop;
+        const spacerHeight = Math.max(0, Math.round(messageTop - cursor));
+        const nextHeight = `${spacerHeight}px`;
+
+        if (blameSpacers[i].style.height !== nextHeight) {
+            blameSpacers[i].style.height = nextHeight;
+            changedCount++;
+        }
+
+        cursor += spacerHeight + blameMains[i].getBoundingClientRect().height;
+    }
+
+    return changedCount;
+}
+
+function startBlameSpacerScheduler() {
+    if (window._blameSpacerSchedulerStarted) return;
+    window._blameSpacerSchedulerStarted = true;
+
+    const chatOuterer = document.querySelector(".chat-outerer");
+    if (chatOuterer) {
+        chatOuterer.addEventListener("scroll", scheduleBlameSpacerUpdate, { passive: true });
+    }
+
+    window.addEventListener("resize", scheduleBlameSpacerUpdate);
+    window.addEventListener("click", scheduleBlameSpacerUpdate);
+    window.addEventListener("keydown", scheduleBlameSpacerUpdate);
+    scheduleBlameSpacerUpdate();
 }
 
 function updateTitleButtonPosition() {
@@ -398,16 +456,9 @@ function updateRules() {
 
     Prism.highlightAll();
 
-    document.querySelectorAll(".blm-spacer").forEach((element) => {
-        const height = element.getAttribute("vertical");
-        if (height) {
-            element.style.height = height;
-        }
-        element.removeAttribute("vertical");
-    });
-
     // Update title button position after content changes
     updateTitleButtonPosition();
+    scheduleBlameSpacerUpdate();
 }
 
 function getRandomPUAChars(count = 255) {
@@ -492,6 +543,9 @@ function translateMDtoHTML(md) {
     // Horizontal rules
     md = md.replace(/^(?:-{3,}|\*{3,}|_{3,})$/gm, "<hr>");
 
+    // Images
+    md = md.replace(/!\[(.+?)\]\((.+?)\)/g, "<img alt='$1' src='$2'></img>");
+
     // Inline formatting
     md = md.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
     md = md.replace(/\*(.+?)\*/g, "<i>$1</i>");
@@ -563,7 +617,7 @@ function renderMD(md, username = "user", arbs = "", files = {}, doAnimations = t
 
     const container = document.getElementById("chat-container");
     container.innerHTML += `
-        <div id="message_" ${arbs}>
+        <div id="message_" class="chat-message" ${arbs}>
         ${translateMDtoHTML(md)}
         <div id="__file_feild__" class="message-file-feild"></div>
         </div>
@@ -592,14 +646,10 @@ function renderMD(md, username = "user", arbs = "", files = {}, doAnimations = t
     const blameMain = document.getElementById(`blame_mn_`);
     const message = document.getElementById(`message_`);
 
-    const blameMainBottom = blameMain.getBoundingClientRect().bottom + window.scrollY;
-    const messageTop = message.getBoundingClientRect().top + window.scrollY;
-
-    blameSpacer.setAttribute("vertical", `calc(${messageTop - blameMainBottom}px + 1lh)`);
-
     [blameSpacer, blameMain, message, fileFeild].forEach(el => el.removeAttribute("id"));
 
     updateRules();
+    scheduleBlameSpacerUpdate();
 }
 
 function collectFiles() {
@@ -954,7 +1004,10 @@ document.getElementById("submitionIcon").addEventListener("click", async (event)
     await updateVpanel();
 });
 
-window.addEventListener("resize", updateTitleButtonPosition);
+window.addEventListener("resize", () => {
+    updateTitleButtonPosition();
+    scheduleBlameSpacerUpdate();
+});
 
 let menuToggled = false;
 const menus = document.querySelectorAll(".menu");

@@ -17,7 +17,7 @@ window.theme_cnt_dark = {
                                 "asset-acsent-color": "#333",
                                 "dark-blue-hl": "#004e7a",
                                 "light-blue-hl": "#00baff",
-                                "transparent-blue": "#00baff55",
+                                "transparent-blue": "#00baff38",
                                 "denyal-red": "#da4453",
                                 "blue-outline": "#0070a0",
 

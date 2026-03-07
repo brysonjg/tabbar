@@ -19,7 +19,7 @@ window.theme_brz_dark = {
                                 "asset-acsent-color": "#64686b",
                                 "dark-blue-hl": "#1f485e",
                                 "light-blue-hl": "#3daee9",
-                                "transparent-blue": "#3daee955",
+                                "transparent-blue": "#3daee938",
                                 "denyal-red": "#da4453",
                                 "blue-outline": "#587180",
 
