@@ -288,21 +288,38 @@ class VersionPanel {
 
         this.dpr = window.devicePixelRatio || 1;
 
+        const documentStyles = window.getComputedStyle(document.body);
+        let colorPalet = [];
+        let colorPaletItorator = 0;
+        const charSet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_";
+
+        while (true) {
+            let currentID = "";
+
+            if (colorPaletItorator > 0) {
+                let n = colorPaletItorator;
+
+                while (n > 0) {
+                    const remainder = n % 64;
+                    currentID = charSet[remainder] + currentID;
+                    n = Math.floor(n / 64);
+                }
+            } else currentID = "0";
+
+
+            const variableName = `--versioning-graph-${currentID}`;
+            const value = documentStyles.getPropertyValue(variableName).trim();
+
+            if (!value) break;
+
+            colorPalet.push(value);
+            colorPaletItorator++;
+        }
+
         this.arcv = {
             padding: 7,
             gridCellSurface: 20,
-            colorPalet: [
-                "#15a0bf",
-                "#0669f7",
-                "#8e00c2",
-                "#c517b6",
-                "#d90171",
-                "#cd0101",
-                "#f25d2e",
-                "#f2ca33",
-                "#7bd938",
-                "#2ece9d",
-            ],
+            colorPalet: [...colorPalet],
             ...argument
         };
 
@@ -312,6 +329,23 @@ class VersionPanel {
 
         this.resizeObserver.observe(element);
         this.autoResizeCanvas();
+    }
+
+    _getColorIDOfItorater(iter) {
+        const charSet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_";
+
+        if (iter === 0) return charSet[0];
+
+        let result = "";
+        let n = iter;
+
+        while (n > 0) {
+            const remainder = n % 64;
+            result = charSet[remainder] + result;
+            n = Math.floor(n / 64);
+        }
+
+        return result;
     }
 
     listenForClick(callback) {
@@ -411,12 +445,7 @@ class VersionPanel {
         this.nodeHitRegions = [];
 
         // clear the screen
-        this.ctx.clearRect(
-            -100,
-            -100,
-            this.canvas.width / this.dpr + 100,
-            this.canvas.height / this.dpr + 100
-        );
+        this.ctx.clearRect(0, 0, this.canvas.width / this.dpr, this.canvas.height / this.dpr);
 
         let pointers = [0];  // nodes in this row
         let drawY = 0;

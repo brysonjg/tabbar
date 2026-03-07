@@ -15,6 +15,7 @@ window.theme_temp =
         "hard-outline-color": "",
         "dark-blue-hl": "",
         "light-blue-hl": "",
+        "transparent-blue": "#007bff55",
         "blue-outline": "",
 
         "icon-filter": "",
@@ -24,6 +25,10 @@ window.theme_temp =
         "action-btn-1": "",
         "action-btn-2": "",
         "action-btn-3": "",
+
+        "action-btn-active-1": "",
+        "action-btn-active-2": "",
+        "action-btn-active-3": "",
 
         "grey-40": "",
         "grey-50": "",
@@ -58,8 +63,9 @@ window.theme_temp =
 
         "table-header-bg": "",
         "table-row-alt-bg": "",
-        "table-header-fg": "",
-
+        "table-header-fg": ""
+    },
+    "prism": {
         "prism-block-bg": "",
         "prism-inline-bg": "",
         "prism-text-color": "",
@@ -88,6 +94,23 @@ window.theme_temp =
         "prism-atrule": "",
         "prism-deleted": "",
         "prism-inserted": ""
+    },
+    "gitgraph": {
+        "versioning-graph-bg": "",
+        "versioning-graph-right-border": "",
+
+        "versioning-graph-0": "",
+        "versioning-graph-1": "",
+        "versioning-graph-2": "",
+        "versioning-graph-3": "",
+        "versioning-graph-4": "",
+        "versioning-graph-5": "",
+        "versioning-graph-6": "",
+        "versioning-graph-7": "",
+        "versioning-graph-8": "",
+        "versioning-graph-9": "",
+        "versioning-graph-a": "",
+        "versioning-graph-b": ""
     },
     "settings":
     {
@@ -126,36 +149,7 @@ window.theme_temp =
 
         "icon-1": "",
         "icon-2": "",
-        "icon-3": "",
-
-        "prism-block-bg": "",
-        "prism-inline-bg": "",
-        "prism-text-color": "",
-        "prism-comment": "",
-        "prism-punctuation": "",
-        "prism-tag": "",
-        "prism-attr-name": "",
-        "prism-attr-value": "",
-        "prism-operator": "",
-        "prism-entity": "",
-        "prism-url": "",
-        "prism-symbol": "",
-        "prism-string": "",
-        "prism-char": "",
-        "prism-regex": "",
-        "prism-number": "",
-        "prism-constant": "",
-        "prism-variable": "",
-        "prism-class-name": "",
-        "prism-function": "",
-        "prism-function-name": "",
-        "prism-keyword": "",
-        "prism-selector": "",
-        "prism-builtin": "",
-        "prism-important": "",
-        "prism-atrule": "",
-        "prism-deleted": "",
-        "prism-inserted": ""
+        "icon-3": ""
     },
     "morefonts" : {
         "bg-color": "",

@@ -17,6 +17,7 @@ window.theme_cnt_dark = {
                                 "asset-acsent-color": "#333",
                                 "dark-blue-hl": "#004e7a",
                                 "light-blue-hl": "#00baff",
+                                "transparent-blue": "#00baff55",
                                 "denyal-red": "#da4453",
                                 "blue-outline": "#0070a0",
 
@@ -27,6 +28,10 @@ window.theme_cnt_dark = {
                                 "action-btn-1": "brightness(1000) saturate(40%) hue-rotate(200deg) brightness(60%)",
                                 "action-btn-2": "brightness(1000) saturate(40%) hue-rotate(200deg) brightness(90%)",
                                 "action-btn-3": "brightness(1000) saturate(40%) hue-rotate(200deg) brightness(120%)",
+
+                                "action-btn-active-1": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(140%)",
+                                "action-btn-active-2": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4) brightness(140%)",
+                                "action-btn-active-3": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2) brightness(160%)",
 
                                 "grey-40": "#5555",
                                 "grey-50": "#5558",
@@ -60,7 +65,8 @@ window.theme_cnt_dark = {
                                 "table-header-bg": "#1e1f22",
                                 "table-row-alt-bg": "#16171a",
                                 "table-header-fg": "#f8f8f8",
-
+                            },
+                            prism: {
                                 "prism-block-bg": "#181a1f",
                                 "prism-inline-bg": "#181a1f",
                                 "prism-text-color": "#f0f0f0",
@@ -79,6 +85,23 @@ window.theme_cnt_dark = {
                                 "prism-selector": "#c100ff",
                                 "prism-deleted": "#ff3b3b",
                                 "prism-inserted": "#00ff99",
+                            },
+                            gitgraph: {
+                                "versioning-graph-bg": "#111214",
+                                "versioning-graph-right-border": "#5555",
+
+                                "versioning-graph-0": "#0dc5c5",
+                                "versioning-graph-1": "#107df0",
+                                "versioning-graph-2": "#7f0fbb",
+                                "versioning-graph-3": "#a417e0",
+                                "versioning-graph-4": "#e01490",
+                                "versioning-graph-5": "#ed1414",
+                                "versioning-graph-6": "#f04b10",
+                                "versioning-graph-7": "#f68010",
+                                "versioning-graph-8": "#f6b010",
+                                "versioning-graph-9": "#6bd00b",
+                                "versioning-graph-a": "#10d016",
+                                "versioning-graph-b": "#1abc9c",
                             },
                             settings: {
                                 "bg-color": "#111214",
@@ -114,25 +137,6 @@ window.theme_cnt_dark = {
                                 "icon-1": "brightness(1000) saturate(40%) hue-rotate(200deg) brightness(60%)",
                                 "icon-2": "brightness(1000) saturate(40%) hue-rotate(200deg) brightness(90%)",
                                 "icon-3": "brightness(1000) saturate(40%) hue-rotate(200deg) brightness(120%)",
-
-                                "prism-block-bg": "#181a1f",
-                                "prism-inline-bg": "#181a1f",
-                                "prism-text-color": "#f0f0f0",
-                                "prism-comment": "#888",
-                                "prism-punctuation": "#ccc",
-                                "prism-tag": "#ff3b3b",
-                                "prism-attr-name": "#ff3b3b",
-                                "prism-attr-value": "#00ffcc",
-                                "prism-operator": "#00baff",
-                                "prism-entity": "#00baff",
-                                "prism-symbol": "#c100ff",
-                                "prism-string": "#00ffcc",
-                                "prism-number": "#ff9900",
-                                "prism-function": "#00baff",
-                                "prism-keyword": "#c100ff",
-                                "prism-selector": "#c100ff",
-                                "prism-deleted": "#ff3b3b",
-                                "prism-inserted": "#00ff99",
                             },
                             morefonts: {
                                 "bg-color": "#111214",

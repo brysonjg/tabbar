@@ -7,6 +7,7 @@
     --hard-outline-width: 1px;
     --dark-blue-hl: #1f485e;
     --light-blue-hl: #3daee9;
+    --transparent-blue: #3daee945;
     --blue-outline: #587180;
     --font: font;
 
@@ -14,9 +15,12 @@
     --icon-filter: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%);
     --icon-hover: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(70%);
     --icon-active: brightness(1000);
-    --action-btn-1: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%),
-    --action-btn-2: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4),
-    --action-btn-3: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2),
+    --action-btn-1: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%);
+    --action-btn-2: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4);
+    --action-btn-3: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2);
+    --action-btn-active-1: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(140%);
+    --action-btn-active-2: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4) brightness(140%);
+    --action-btn-active-3: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2) brightness(160%);
 
     /* Greys used for scrollbars, outlines, etc */
     --grey-40: #585b5e40;
@@ -61,6 +65,22 @@
     --table-header-fg: #ffffff;
 
     --right-sidepanel-width: max(225px, 25vw);
+    --versioning-graph-bg: #2a2e32;
+    --versioning-graph-right-border: #585b5e40;
+
+    /* the folowing "--versioning-graph-X" variables are to be accesed by js, the themeing system dosn't need to change for js only theming values */
+    --versioning-graph-0: #0dc5c5;
+    --versioning-graph-1: #107df0;
+    --versioning-graph-2: #7f0fbb;
+    --versioning-graph-3: #a417e0;
+    --versioning-graph-4: #e01490;
+    --versioning-graph-5: #ed1414;
+    --versioning-graph-6: #f04b10;
+    --versioning-graph-7: #f68010;
+    --versioning-graph-8: #f6b010;
+    --versioning-graph-9: #6bd00b;
+    --versioning-graph-a: #10d016;
+    --versioning-graph-b: #1abc9c;
 }
 
 @font-face {
@@ -613,15 +633,15 @@ img.submit-title-btn:active, img#action-bar-action:active {
 }
 
 img#action-bar-action.active {
-    filter: var(--action-btn-1) brightness(140%) !important;
+    filter: var(--action-btn-active-1) !important;
 }
 
 img#action-bar-action.active:hover {
-    filter: var(--action-btn-2) brightness(140%) !important;
+    filter: var(--action-btn-active-2) !important;
 }
 
 img#action-bar-action.active:active {
-    filter: var(--action-btn-3) brightness(160%) !important;
+    filter: var(--action-btn-active-3) !important;
 }
 
 div.aciton-groupe-bar {
@@ -666,7 +686,7 @@ div.action-btn-wrapper:has( img#action-bar-action ) {
 }
 
 div.action-btn-wrapper:has( img#action-bar-action.active ) {
-    background-color: var(--dark-blue-hl);
+    background-color: var(--transparent-blue);
     border-color: var(--light-blue-hl);
 }
 
@@ -770,6 +790,6 @@ div.right-sidepanel {
     width: var(--right-sidepanel-width);
     height: 100vh;
     flex-shrink: 0;
-    background-color: var(--bg-color);
-    border-left: 1px solid var(--grey-40);
+    background-color: var(--versioning-graph-bg);
+    border-left: 1px solid var(--versioning-graph-right-border);
 }

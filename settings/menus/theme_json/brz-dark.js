@@ -19,6 +19,7 @@ window.theme_brz_dark = {
                                 "asset-acsent-color": "#64686b",
                                 "dark-blue-hl": "#1f485e",
                                 "light-blue-hl": "#3daee9",
+                                "transparent-blue": "#3daee955",
                                 "denyal-red": "#da4453",
                                 "blue-outline": "#587180",
 
@@ -29,6 +30,10 @@ window.theme_brz_dark = {
                                 "action-btn-1": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%)",
                                 "action-btn-2": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4)",
                                 "action-btn-3": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2)",
+
+                                "action-btn-active-1": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(140%)",
+                                "action-btn-active-2": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4) brightness(140%)",
+                                "action-btn-active-3": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2) brightness(160%)",
 
                                 "grey-40": "#585b5e40",
                                 "grey-50": "#585b5e50",
@@ -64,35 +69,6 @@ window.theme_brz_dark = {
                                 "table-header-bg": "#585b5e90",
                                 "table-row-alt-bg": "#585b5e40",
                                 "table-header-fg": "#fff",
-
-                                "prism-block-bg": "#31353990",
-                                "prism-inline-bg": "#31353990",
-                                "prism-text-color": "#ccc",
-                                "prism-comment": "#999",
-                                "prism-punctuation": "#ccc",
-                                "prism-tag": "#e2777a",
-                                "prism-attr-name": "#e2777a",
-                                "prism-attr-value": "#7ec699",
-                                "prism-operator": "#67cdcc",
-                                "prism-entity": "#67cdcc",
-                                "prism-url": "#67cdcc",
-                                "prism-symbol": "#f8c555",
-                                "prism-string": "#7ec699",
-                                "prism-char": "#7ec699",
-                                "prism-regex": "#7ec699",
-                                "prism-number": "#f08d49",
-                                "prism-constant": "#f8c555",
-                                "prism-variable": "#7ec699",
-                                "prism-class-name": "#f8c555",
-                                "prism-function": "#f08d49",
-                                "prism-function-name": "#6196cc",
-                                "prism-keyword": "#cc99cd",
-                                "prism-selector": "#cc99cd",
-                                "prism-builtin": "#cc99cd",
-                                "prism-important": "#cc99cd",
-                                "prism-atrule": "#cc99cd",
-                                "prism-deleted": "#e2777a",
-                                "prism-inserted": "#00d000",
                             },
                             settings:
                             {
@@ -125,14 +101,17 @@ window.theme_brz_dark = {
                                 "icon-2": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4)",
                                 "icon-3": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2)",
                             },
-                            customthemes: {
+                            customthemes:
+                            {
                                 "bg-color": "#2a2e32",
                                 "fg-color": "#d4d4d4",
 
                                 "icon-1": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%)",
                                 "icon-2": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4)",
                                 "icon-3": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2)",
-
+                            },
+                            prism:
+                            {
                                 "prism-block-bg": "#31353990",
                                 "prism-inline-bg": "#31353990",
                                 "prism-text-color": "#ccc",
@@ -162,7 +141,26 @@ window.theme_brz_dark = {
                                 "prism-deleted": "#e2777a",
                                 "prism-inserted": "#00d000",
                             },
-                            morefonts: {
+                            gitgraph:
+                            {
+                                "versioning-graph-bg": "#2a2e32",
+                                "versioning-graph-right-border": "#585b5e40",
+
+                                "versioning-graph-0": "#0dc5c5",
+                                "versioning-graph-1": "#107df0",
+                                "versioning-graph-2": "#7f0fbb",
+                                "versioning-graph-3": "#a417e0",
+                                "versioning-graph-4": "#e01490",
+                                "versioning-graph-5": "#ed1414",
+                                "versioning-graph-6": "#f04b10",
+                                "versioning-graph-7": "#f68010",
+                                "versioning-graph-8": "#f6b010",
+                                "versioning-graph-9": "#6bd00b",
+                                "versioning-graph-a": "#10d016",
+                                "versioning-graph-b": "#1abc9c",
+                            },
+                            morefonts:
+                            {
                                 "bg-color": "#2a2e32",
                                 "fg-color": "#d4d4d4",
 
@@ -175,7 +173,8 @@ window.theme_brz_dark = {
                                 "icon-2": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4)",
                                 "icon-3": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2)",
                             },
-                            models: {
+                            models:
+                            {
                                 "bg-color": "#2a2e32",
                                 "fg-color": "#d4d4d4",
                                 "table-waght": "#35383c",

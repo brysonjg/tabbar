@@ -17,6 +17,7 @@ window.theme_cnt_light = {
                                 "asset-acsent-color": "#2980b9",
                                 "dark-blue-hl": "#004c97",
                                 "light-blue-hl": "#007bff",
+                                "transparent-blue": "#007bff55",
                                 "denyal-red": "#da4453",
                                 "blue-outline": "#0068c0",
 
@@ -27,6 +28,10 @@ window.theme_cnt_light = {
                                 "action-btn-1": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(50%)",
                                 "action-btn-2": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(35%)",
                                 "action-btn-3": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(25%)",
+
+                                "action-btn-active-1": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(50%) brightness(85%)",
+                                "action-btn-active-2": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(35%) brightness(70%)",
+                                "action-btn-active-3": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(25%) brightness(60%)",
 
                                 "grey-40": "#66666640",
                                 "grey-50": "#66666650",
@@ -61,7 +66,8 @@ window.theme_cnt_light = {
                                 "table-header-bg": "#dcdcdc",
                                 "table-row-alt-bg": "#f3f3f3",
                                 "table-header-fg": "#000",
-
+                            },
+                            prism: {
                                 "prism-block-bg": "#f0f0f0",
                                 "prism-inline-bg": "#f0f0f0",
                                 "prism-text-color": "#000",
@@ -82,6 +88,23 @@ window.theme_cnt_light = {
                                 "prism-class-name": "#b57200",
                                 "prism-deleted": "#c62828",
                                 "prism-inserted": "#006a00"
+                            },
+                            gitgraph: {
+                                "versioning-graph-bg": "#ffffff",
+                                "versioning-graph-right-border": "#66666640",
+
+                                "versioning-graph-0": "#0dc5c5",
+                                "versioning-graph-1": "#107df0",
+                                "versioning-graph-2": "#7f0fbb",
+                                "versioning-graph-3": "#a417e0",
+                                "versioning-graph-4": "#e01490",
+                                "versioning-graph-5": "#ed1414",
+                                "versioning-graph-6": "#f04b10",
+                                "versioning-graph-7": "#f68010",
+                                "versioning-graph-8": "#f6b010",
+                                "versioning-graph-9": "#6bd00b",
+                                "versioning-graph-a": "#10d016",
+                                "versioning-graph-b": "#1abc9c",
                             },
                             settings: {
                                 "bg-color": "#ffffff",

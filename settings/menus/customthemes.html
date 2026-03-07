@@ -155,6 +155,7 @@
     <script>
       window.onload = async () => {
           await fixThemeOverSettable(); // correct themedge
+          await fixThemeOverSettable("prism"); // import prism theming
           editor.textContent = window.theme_temp;
           highlightEditable(editor);
       };
