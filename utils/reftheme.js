@@ -37,6 +37,21 @@ async function loadGoogleFontForThemingSettables(fontName) {
 
 async function fixThemeOverSettable(name = null) {
   try {
+    const stylesRoot = document.documentElement;
+    const styles = getComputedStyle(stylesRoot);
+    const customProps = Object.keys(styles).filter(key =>
+      typeof styles[key] === 'string' &&
+      styles[key].startsWith('--versioning-graph-')
+    );
+
+    customProps.forEach(prop => {
+      stylesRoot.style.removeProperty(prop);
+    });
+  } catch {
+    console.warn("fixThemeOverSettable gitgraph style removal error:", e);
+  }
+
+  try {
     const settables = await getSettablesAsJson();
     if (settables && settables.theme) {
 

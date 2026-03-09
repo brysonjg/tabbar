@@ -188,15 +188,28 @@ function setActiveTab(tab) {
     tab.classList.add("active");
 
     if (!chungus) return;
+    chungus.src = "about:blank";
+
+    if (!window._skipedTabsTabSwitching) window._skipedTabsTabSwitching = 0;
+
+    if (window._activeTabTimeout) {
+        clearTimeout(window._activeTabTimeout);
+        window._skipedTabsTabSwitching++;
+    }
 
     const tabid = tab.getAttribute("tabid");
     const dataURL = tab.getAttribute("data-url") || "./chungus/chungus.html";
 
-    if (tabid === "0") {
-        chungus.src = "./index/indx.html";
-    } else {
-        chungus.src = dataURL;
-    }
+    window._activeTabTimeout = setTimeout( () => {
+        window._activeTabTimeout = null;
+        window._skipedTabsTabSwitching = null
+
+        if (tabid === "0") {
+            chungus.src = "./index/indx.html";
+        } else {
+            chungus.src = dataURL;
+        }
+    }, 4);
 }
 
 function startDrag() {

@@ -1,81 +1,107 @@
 # Chat Index
 
-Chat Index is a modern, desktop-style AI chat workspace for technical users who want a clean interface without giving up power.
+Chat Index is a tabbed AI workspace for people who want to manage chats like actual work instead of disposable blobs in a sidebar.
 
-The project focuses on integrated workflows: multi-chat tabs, strong retrieval/organization, model + shortcut customization, and local-first state.
+It is built around a simple idea: AI chat tools should support parallel work, fast navigation, clean organization, and bulk management without making you click through five unrelated panels just to find or delete something.
 
-## Design Direction
+The interface takes a lot of inspiration from traditional desktop workflows and KDE-style UI design. The result is a browser-hosted chat client that feels closer to a workspace than a toy.
 
-Chat Index follows a KDE-inspired approach to UI and UX:
+## Why Use It
 
-- Keep the default interface clean and understandable.
-- Expose advanced control when users need it.
-- Favor keyboard and workspace efficiency, not only visual simplicity.
-- Build features as connected tools, not isolated toggles.
+- Real tabs for parallel chats
+- Fast switching between active conversations
+- An index view for browsing and searching saved chats
+- Bulk-style management tools for renaming, reopening, and purging chat history
+- A cleaner, more desktop-like interface than the usual AI web app sludge
+- Theming, fonts, keybindings, model selection, and account settings
+- Chat history branching and version navigation
 
-In short: modern and minimal on the surface, powerful and composable underneath.
+## What Makes It Different
 
-## What Is Implemented
+Most AI chat interfaces treat conversation management like an afterthought.
 
-### Parallel tab workflow
+Chat Index does not. The project is built around the part that usually wastes time:
 
-You can run multiple chats in parallel, switch contexts quickly, and reorder tabs directly in the tab bar.
+- opening multiple conversations at once
+- jumping between them quickly
+- keeping titles readable
+- finding older work again
+- deleting junk without friction
+- keeping the UI predictable and compact
 
-### Index as the operations hub
+If you regularly use AI for coding, writing, research, or troubleshooting, this is meant to reduce the annoying parts around the model itself.
 
-A dedicated Index surface is used to search, reopen, rename, and purge stored conversations. This keeps long-term chat management separate from active composition.
+## Current Stack
 
-### Integrated customization
+This project is intentionally simple:
 
-Themes, fonts, model settings, and keyboard shortcuts are all available in-app and designed to shape both visual comfort and interaction speed.
+- plain HTML, CSS, and JavaScript
+- browser-hosted UI
+- local storage for chat/session state
+- OpenRouter for model access
 
-### Versioned conversation backend
+There is no heavyweight framework requirement just to try it.
 
-Conversation history is stored with a versioned/tree-capable data model. This supports iterative workflows where context may branch over time.
+## Install And Start
 
-### Markdown + technical readability
-
-Chats support markdown rendering, code highlighting, and copy actions for code blocks.
-
-## Current Status (Important)
-
-Chat Index is actively developed.
-
-Current limitations to know before use:
-
-- Some in-app documentation sections are still placeholders.
-- Tree/version history is implemented at the data-model level; rich visual tree navigation is still evolving.
-- Some advanced settings surfaces (for example keybindings) are currently raw/power-user oriented.
-
-The README is written to reflect current behavior rather than final target state.
-
-## Who It Is For
-
-Chat Index is built for technical users who are not necessarily programmers: users who understand tools, workflows, and data organization, and want more control than typical linear chat interfaces.
-
-## Run Locally
-
-1. Clone this repository. (and make a openrouter acc and open the chungus.js file and insert your api key uder the coment `// ! Insert API key here`)
-2. Start a static server from repo root.
+Clone the repo:
 
 ```bash
-python3 -m http.server 8080
+git clone https://github.com/brysonjg/tabbar.git
+cd tabbar/chungus
 ```
 
-3. Open the app.
+Create `./chungus/api-key.js` with your OpenRouter key:
 
-```txt
-http://localhost:8080/index.html
+```javascript
+const gloablAPIKey = "sk-or-...";
 ```
 
-Note: opening via `file://` can work, but a local server is recommended for consistent behavior.
+You can use a free OpenRouter key if that is enough for your use case.
+To get an OpenRouter key go to [openrouter.ai](https://openrouter.ai) and make an accout then
+make a key and copy it into the file.
 
-## Open Source Note
+Then start the app in either of these ways:
 
-A dedicated contributor guide will be added separately. For now, this README is end-user and product-behavior focused.
+1. Open `index.html` directly in the browser.
+2. Serve the folder locally with a small HTTP server.
+
+Using a local HTTP server is the better option.
+
+Example:
+
+```bash
+python3 -m http.server
+```
+
+Then open the local URL shown by Python and start using the app.
+
+## First Run
+
+1. Open a new tab with the plus button or by double-clicking the tab bar.
+2. Type a prompt into the chat input.
+3. Press `Enter` or click the send button.
+4. Use the index page to reopen, search, rename, or purge old chats.
+5. Use settings to configure appearance, models, and keybindings.
+
+If you get an error like `Error: HTTP 123`, check the in-app documentation and your OpenRouter configuration first.
+
+## In-App Documentation
+
+Use the documentation button in the top-right action area to open the built-in docs in a new tab.
+
+## Who This Is For
+
+This project is a good fit if you:
+
+- keep many AI chats open at once
+- want better organization than the default chat sidebar pattern
+- like desktop-inspired interfaces
+- want a local, hackable frontend instead of a sealed platform
 
 ## License
 
 See:
+
 - `.github/LICENSE.md`
 - `.github/lgpl-2.1.md`

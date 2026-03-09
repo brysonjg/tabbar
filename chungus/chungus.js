@@ -688,8 +688,6 @@ let submisionModel = "arcee-ai/trinity-large-preview:free"; // default fallback
 
 
 async function handleSubmision() {
-    const key = "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";
-
     const textArea = document.querySelector("textarea");
     const message = textArea.value.trim();
 
@@ -788,7 +786,7 @@ async function handleSubmision() {
         const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
             method: "POST",
             headers: {
-                Authorization: `Bearer ${key}`,
+                Authorization: `Bearer ${gloablAPIKey}`,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
@@ -917,7 +915,7 @@ A bad title:
             const response4Tittle = await fetch("https://openrouter.ai/api/v1/chat/completions", {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${key}`,
+                    Authorization: `Bearer ${gloablAPIKey}`,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({

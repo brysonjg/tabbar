@@ -23,6 +23,10 @@
     --prism-text-color: #ccc;
 
     --prism-comment: #999;
+    --prism-block-comment: #999;
+    --prism-prolog: #999;
+    --prism-doctype: #999;
+    --prism-cdata: #999;
     --prism-punctuation: #ccc;
 
     --prism-tag: #e2777a;
@@ -32,6 +36,7 @@
     --prism-operator: #67cdcc;
     --prism-entity: #67cdcc;
     --prism-url: #67cdcc;
+    --prism-property: #67cdcc;
     --prism-symbol: #f8c555;
 
     --prism-string: #7ec699;
@@ -56,8 +61,70 @@
     --prism-deleted: #e2777a;
     --prism-inserted: #00d000;
 
-    --prism-bold-weight: 700;
-    --prism-italic-style: italic;
+    --prism-comment-font-style: normal;
+    --prism-comment-font-weight: 400;
+    --prism-block-comment-font-style: normal;
+    --prism-block-comment-font-weight: 400;
+    --prism-prolog-font-style: normal;
+    --prism-prolog-font-weight: 400;
+    --prism-doctype-font-style: normal;
+    --prism-doctype-font-weight: 400;
+    --prism-cdata-font-style: normal;
+    --prism-cdata-font-weight: 400;
+    --prism-punctuation-font-style: normal;
+    --prism-punctuation-font-weight: 400;
+    --prism-tag-font-style: normal;
+    --prism-tag-font-weight: 400;
+    --prism-attr-name-font-style: normal;
+    --prism-attr-name-font-weight: 400;
+    --prism-attr-value-font-style: normal;
+    --prism-attr-value-font-weight: 400;
+    --prism-deleted-font-style: normal;
+    --prism-deleted-font-weight: 400;
+    --prism-entity-font-style: normal;
+    --prism-entity-font-weight: 400;
+    --prism-operator-font-style: normal;
+    --prism-operator-font-weight: 400;
+    --prism-url-font-style: normal;
+    --prism-url-font-weight: 400;
+    --prism-symbol-font-style: normal;
+    --prism-symbol-font-weight: 400;
+    --prism-char-font-style: normal;
+    --prism-char-font-weight: 400;
+    --prism-regex-font-style: normal;
+    --prism-regex-font-weight: 400;
+    --prism-string-font-style: italic;
+    --prism-string-font-weight: 400;
+    --prism-number-font-style: normal;
+    --prism-number-font-weight: 400;
+    --prism-constant-font-style: normal;
+    --prism-constant-font-weight: 400;
+    --prism-variable-font-style: normal;
+    --prism-variable-font-weight: 400;
+    --prism-class-name-font-style: normal;
+    --prism-class-name-font-weight: 400;
+    --prism-function-font-style: normal;
+    --prism-function-font-weight: 400;
+    --prism-function-name-font-style: normal;
+    --prism-function-name-font-weight: 400;
+    --prism-keyword-font-style: normal;
+    --prism-keyword-font-weight: 400;
+    --prism-selector-font-style: normal;
+    --prism-selector-font-weight: 400;
+    --prism-builtin-font-style: normal;
+    --prism-builtin-font-weight: 400;
+    --prism-important-font-style: normal;
+    --prism-important-font-weight: 700;
+    --prism-atrule-font-style: normal;
+    --prism-atrule-font-weight: 400;
+    --prism-inserted-font-style: normal;
+    --prism-inserted-font-weight: 400;
+    --prism-bold-font-style: normal;
+    --prism-bold-font-weight: 700;
+    --prism-italic-font-style: italic;
+    --prism-italic-font-weight: 400;
+    --prism-property-font-style: normal;
+    --prism-property-font-weight: 400;
 }
 
 code[class*=language-],
@@ -86,101 +153,193 @@ pre[class*=language-] {
     white-space: normal;
 }
 
-.token.comment,
-.token.block-comment,
-.token.prolog,
-.token.doctype,
-.token.cdata {
+.token.comment {
     color: var(--prism-comment);
+    font-style: var(--prism-comment-font-style);
+    font-weight: var(--prism-comment-font-weight);
+}
+
+.token.block-comment {
+    color: var(--prism-block-comment);
+    font-style: var(--prism-block-comment-font-style);
+    font-weight: var(--prism-block-comment-font-weight);
+}
+
+.token.prolog {
+    color: var(--prism-prolog);
+    font-style: var(--prism-prolog-font-style);
+    font-weight: var(--prism-prolog-font-weight);
+}
+
+.token.doctype {
+    color: var(--prism-doctype);
+    font-style: var(--prism-doctype-font-style);
+    font-weight: var(--prism-doctype-font-weight);
+}
+
+.token.cdata {
+    color: var(--prism-cdata);
+    font-style: var(--prism-cdata-font-style);
+    font-weight: var(--prism-cdata-font-weight);
 }
 
 .token.punctuation {
     color: var(--prism-punctuation);
+    font-style: var(--prism-punctuation-font-style);
+    font-weight: var(--prism-punctuation-font-weight);
 }
 
 .token.tag {
     color: var(--prism-tag);
+    font-style: var(--prism-tag-font-style);
+    font-weight: var(--prism-tag-font-weight);
 }
 
 .token.attr-name {
     color: var(--prism-attr-name);
+    font-style: var(--prism-attr-name-font-style);
+    font-weight: var(--prism-attr-name-font-weight);
 }
 
 .token.attr-value {
     color: var(--prism-attr-value);
+    font-style: var(--prism-attr-value-font-style);
+    font-weight: var(--prism-attr-value-font-weight);
 }
 
 .token.deleted {
     color: var(--prism-deleted);
+    font-style: var(--prism-deleted-font-style);
+    font-weight: var(--prism-deleted-font-weight);
 }
 
-.token.entity,
-.token.operator,
-.token.url {
+.token.entity {
     color: var(--prism-entity);
+    font-style: var(--prism-entity-font-style);
+    font-weight: var(--prism-entity-font-weight);
+    cursor: help;
+}
+
+.token.operator {
+    color: var(--prism-operator);
+    font-style: var(--prism-operator-font-style);
+    font-weight: var(--prism-operator-font-weight);
+}
+
+.token.url {
+    color: var(--prism-url);
+    font-style: var(--prism-url-font-style);
+    font-weight: var(--prism-url-font-weight);
 }
 
 .token.symbol {
     color: var(--prism-symbol);
+    font-style: var(--prism-symbol-font-style);
+    font-weight: var(--prism-symbol-font-weight);
 }
 
 .token.char {
     color: var(--prism-char);
+    font-style: var(--prism-char-font-style);
+    font-weight: var(--prism-char-font-weight);
 }
 
 .token.regex {
     color: var(--prism-regex);
+    font-style: var(--prism-regex-font-style);
+    font-weight: var(--prism-regex-font-weight);
 }
 
 .token.string {
     color: var(--prism-string);
+    font-style: var(--prism-string-font-style);
+    font-weight: var(--prism-string-font-weight);
 }
 
 .token.number {
     color: var(--prism-number);
+    font-style: var(--prism-number-font-style);
+    font-weight: var(--prism-number-font-weight);
 }
 
 .token.constant {
     color: var(--prism-constant);
+    font-style: var(--prism-constant-font-style);
+    font-weight: var(--prism-constant-font-weight);
 }
 
 .token.variable {
     color: var(--prism-variable);
+    font-style: var(--prism-variable-font-style);
+    font-weight: var(--prism-variable-font-weight);
 }
 
 .token.class-name {
     color: var(--prism-class-name);
+    font-style: var(--prism-class-name-font-style);
+    font-weight: var(--prism-class-name-font-weight);
 }
 
 .token.function {
     color: var(--prism-function);
+    font-style: var(--prism-function-font-style);
+    font-weight: var(--prism-function-font-weight);
 }
 
 .token.function-name {
     color: var(--prism-function-name);
+    font-style: var(--prism-function-name-font-style);
+    font-weight: var(--prism-function-name-font-weight);
 }
 
-.token.keyword,
-.token.selector,
-.token.builtin,
-.token.important,
-.token.atrule {
+.token.keyword {
     color: var(--prism-keyword);
+    font-style: var(--prism-keyword-font-style);
+    font-weight: var(--prism-keyword-font-weight);
 }
 
-.token.bold,
+.token.selector {
+    color: var(--prism-selector);
+    font-style: var(--prism-selector-font-style);
+    font-weight: var(--prism-selector-font-weight);
+}
+
+.token.builtin {
+    color: var(--prism-builtin);
+    font-style: var(--prism-builtin-font-style);
+    font-weight: var(--prism-builtin-font-weight);
+}
+
 .token.important {
-    font-weight: var(--prism-bold-weight);
+    color: var(--prism-important);
+    font-style: var(--prism-important-font-style);
+    font-weight: var(--prism-important-font-weight);
+}
+
+.token.atrule {
+    color: var(--prism-atrule);
+    font-style: var(--prism-atrule-font-style);
+    font-weight: var(--prism-atrule-font-weight);
+}
+
+.token.bold {
+    font-style: var(--prism-bold-font-style);
+    font-weight: var(--prism-bold-font-weight);
 }
 
 .token.italic {
-    font-style: var(--prism-italic-style);
+    font-style: var(--prism-italic-font-style);
+    font-weight: var(--prism-italic-font-weight);
 }
 
 .token.inserted {
     color: var(--prism-inserted);
+    font-style: var(--prism-inserted-font-style);
+    font-weight: var(--prism-inserted-font-weight);
 }
 
-.token.entity {
-    cursor: help;
+.token.property {
+    color: var(--prism-property);
+    font-style: var(--prism-property-font-style);
+    font-weight: var(--prism-property-font-weight);
 }

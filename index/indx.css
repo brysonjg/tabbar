@@ -5,14 +5,15 @@
     --fg-color: #d4d4d4;
     --input-bg-color: #254455;
     --input-fg-color: #0da9f5;
+    --hard-outline-color: #64686b;
 
     --grey-40: #585b5e40;
     --grey-99: #585b5e99;
     --grey-ff: #585b5eff;
 
-    --action-btn-1: brightness(1000) saturate(5%) hue-rotate(206deg) brightness(70%);
-    --action-btn-2: brightness(1000) saturate(5%) hue-rotate(206deg) brightness(50%);
-    --action-btn-3: brightness(1000) saturate(5%) hue-rotate(206deg) brightness(30%);
+    --action-btn-1: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%);
+    --action-btn-2: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4);
+    --action-btn-3: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2);
 
     --a-btn-red-1: brightness(0) invert(17%) sepia(45%) saturate(5302%) hue-rotate(338deg) brightness(77%) contrast(91%);
     --a-btn-red-2: brightness(0) invert(17%) sepia(45%) saturate(5302%) hue-rotate(338deg) brightness(77%) contrast(91%) brightness(120%);
