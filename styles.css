@@ -66,7 +66,7 @@ div.tab {
     padding: 0 var(--tab-horz-padding);
     user-select: none;
     cursor: default;
-    transition: transform 150ms cubic-bezier(.25,.8,.25,1), background-color 0.15s ease;
+    transition: background-color 0.15s ease;
     position: relative;
     z-index: 1;
 }
@@ -109,6 +109,10 @@ div.tab.dragged {
     top: 0;
     transform: none !important;
     transition: none !important;
+}
+
+div.tab.dragMotion {
+    z-index: 2;
 }
 
 .tab-placeholder {

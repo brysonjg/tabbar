@@ -45,8 +45,8 @@ A full copy of the GNU LGPL v2.1 license is provided at:
 
 Other third-party libraries used in this project:
 
-* Prism.js - MIT License
-* Fuzzysort - MIT License
+* Prism.js - MIT License (c) 2012 Lea Verou.
+* Fuzzysort - MIT License (c) 2018 Stephen Kamenar.
 
 -------------------------------------------------------------------------------
 

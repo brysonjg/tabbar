@@ -12,12 +12,82 @@ let grabOffsetX = 0;
 let dragStartX = 0;
 let dragStartY = 0;
 let hasMovedEnough = false;
+let originalDragIndex = 0;
+const dragVerticalTolerancePixels = 60;
+
+function getClosestInsertionIndex(referenceX, tabElements, currentInsertionIndex) {
+    if (!Array.isArray(tabElements) || tabElements.length === 0) return 0;
+
+    const rects = tabElements.map(tabElement => tabElement.getBoundingClientRect());
+    const gapXs = new Array(rects.length + 1);
+    gapXs[0] = rects[0].left;
+    for (let index = 1; index < rects.length; index++) {
+        gapXs[index] = (rects[index - 1].right + rects[index].left) / 2;
+    }
+    gapXs[gapXs.length - 1] = rects[rects.length - 1].right;
+
+    let bestIndex = 0;
+    let bestDistance = Math.abs(referenceX - gapXs[0]);
+    for (let index = 1; index < gapXs.length; index++) {
+        const distance = Math.abs(referenceX - gapXs[index]);
+        if (distance < bestDistance) {
+            bestDistance = distance;
+            bestIndex = index;
+        }
+    }
+
+    if (typeof currentInsertionIndex !== "number" || currentInsertionIndex < 0 || currentInsertionIndex >= gapXs.length) {
+        return bestIndex;
+    }
+
+    const currentDistance = Math.abs(referenceX - gapXs[currentInsertionIndex]);
+    return bestDistance < currentDistance ? bestIndex : currentInsertionIndex;
+}
 
 let isWindowActive = true;
 let isIFrameActive = false;
 
 const lowZFrames = new Map();
 const lowZPriorityQueue = [];
+let loadingTabInSwitching = false;
+
+function getTabElements() {
+    tabs = Array.from(document.querySelectorAll(".tab"));
+    return tabs;
+}
+
+function getActiveTabElement() {
+    return document.querySelector(".tab.active");
+}
+
+function getTabIndexForElement(tabElement) {
+    if (!tabElement) return -1;
+    return getTabElements().indexOf(tabElement);
+}
+
+function getTabElementById(tabIdentifier) {
+    if (!tabIdentifier) return null;
+    return document.querySelector(`.tab[tabid="${tabIdentifier}"]`);
+}
+
+function applyAriaAttributesToTabbar() {
+    if (!tabbar) return;
+    tabbar.setAttribute("role", "tablist");
+}
+
+function applyAriaAttributesToTab(tabElement) {
+    if (!tabElement) return;
+    const tabIdentifier = tabElement.getAttribute("tabid") || "";
+    tabElement.setAttribute("role", "tab");
+    tabElement.setAttribute("aria-selected", tabElement.classList.contains("active") ? "true" : "false");
+}
+
+function applyAriaAttributesToAllTabs() {
+    const tabElements = getTabElements();
+    for (let index = 0; index < tabElements.length; index++) {
+        applyAriaAttributesToTab(tabElements[index]);
+    }
+}
 
 // Add lowZ frame to registry with semantic ordering
 function addLowZFrame(tabid, frame) {
@@ -121,7 +191,7 @@ function cleanupLowZFrames() {
 }
 
 (() => {
-    fixThemeSchemaAtTopLeval();
+    startCorectTabChecksumScedual(100);
 
     const savedTabs = localStorage.getItem("tabArray");
     if (!savedTabs) {
@@ -136,9 +206,10 @@ function cleanupLowZFrames() {
         return;
     }
 
-    tabs = Array.from(document.querySelectorAll('.tab'));
-
+    applyAriaAttributesToTabbar();
+    tabs = getTabElements();
     tabs.forEach(addTabListeners);
+    applyAriaAttributesToAllTabs();
     fixTabCloseEventListeners();
 
     setActiveTab(document.querySelector(".tab.active"));
@@ -159,57 +230,86 @@ function cleanupLowZFrames() {
     fixThemeSchemaAtTopLeval();
 })();
 
+applyAriaAttributesToTabbar();
 tabs.forEach(addTabListeners);
+applyAriaAttributesToAllTabs();
 
 function addTabListeners(tab) {
-    tab.addEventListener("mousedown", (e) => {
-        draggedTab = tab;
-        dragStartX = e.clientX;
-        dragStartY = e.clientY;
-        grabOffsetX = e.clientX - tab.getBoundingClientRect().left;
-        hasMovedEnough = false;
+    tab.addEventListener("mousedown", (mouseEvent) => {
+        if (mouseEvent.button !== 0) return;
 
-        e.preventDefault();
+        draggedTab = tab;
+        dragStartX = mouseEvent.clientX;
+        dragStartY = mouseEvent.clientY;
+        grabOffsetX = mouseEvent.clientX - tab.getBoundingClientRect().left;
+        hasMovedEnough = false;
+        originalDragIndex = getTabIndexForElement(tab);
+
+        mouseEvent.preventDefault();
         document.addEventListener("mousemove", onMouseMove);
         document.addEventListener("mouseup", onMouseUp);
+        document.addEventListener("keydown", onKeyDownDuringDrag);
     });
 
-    tab.addEventListener("click", (e) => {
+    tab.addEventListener("click", (mouseEvent) => {
         if (hasMovedEnough) {
-            e.preventDefault();
+            mouseEvent.preventDefault();
             return;
         }
         setActiveTab(tab);
     });
+
+    tab.addEventListener("auxclick", (mouseEvent) => {
+        if (mouseEvent.button !== 1) return;
+        mouseEvent.preventDefault();
+        mouseEvent.stopPropagation();
+        const tabIdentifier = tab.getAttribute("tabid");
+        if (!tabIdentifier) return;
+        handleCloseClick(tabIdentifier);
+    });
 }
 
 function setActiveTab(tab) {
-    tabs.forEach(t => t.classList.remove("active"));
-    tab.classList.add("active");
-
+    if (!tab) return;
     if (!chungus) return;
-    chungus.src = "about:blank";
 
-    if (!window._skipedTabsTabSwitching) window._skipedTabsTabSwitching = 0;
+    let tabsCopy = [...getTabElements()];
+    tabsCopy = tabsCopy.filter(t => t !== tab);
+    tab.classList.add("active");
+    tabsCopy.forEach(t => t.classList.remove("active"));
 
-    if (window._activeTabTimeout) {
-        clearTimeout(window._activeTabTimeout);
-        window._skipedTabsTabSwitching++;
-    }
+    applyAriaAttributesToAllTabs();
+
+    if (loadingTabInSwitching) return;
+    loadingTabInSwitching = true;
+
+    if (!chungus.src.endsWith("about:blank")) chungus.src = "about:blank";
 
     const tabid = tab.getAttribute("tabid");
     const dataURL = tab.getAttribute("data-url") || "./chungus/chungus.html";
 
-    window._activeTabTimeout = setTimeout( () => {
-        window._activeTabTimeout = null;
-        window._skipedTabsTabSwitching = null
+    chungus.onload = () => {
+        loadingTabInSwitching = false;
+    };
 
-        if (tabid === "0") {
-            chungus.src = "./index/indx.html";
-        } else {
-            chungus.src = dataURL;
+    // Use requestAnimationFrame to schedule next load safely
+    requestAnimationFrame(() => {
+        chungus.src = dataURL;
+    });
+}
+
+function startCorectTabChecksumScedual(interval) {
+    setInterval(() => {
+        const activeTab = document.querySelector(".tab.active");
+        if (!activeTab) return;
+
+        const activeTabURL = new URL(activeTab.dataset.url, document.baseURI).pathname;
+        const currentURL = new URL(chungus.src).pathname;
+
+        if (currentURL !== activeTabURL) {
+            chungus.src = activeTab.dataset.url;
         }
-    }, 4);
+    }, interval);
 }
 
 function startDrag() {
@@ -221,12 +321,12 @@ function startDrag() {
     overlay.id = "overlay";
     document.body.appendChild(overlay);
 
-    tabRects = tabs.map(t => t.getBoundingClientRect());
-    currentIndex = tabs.indexOf(draggedTab);
+    tabRects = getTabElements().map(tabElement => tabElement.getBoundingClientRect());
+    currentIndex = getTabIndexForElement(draggedTab);
 
     placeholder = document.createElement("div");
     placeholder.className = "tab-placeholder";
-    placeholder.style.width = `${draggedTab.offsetWidth}px`;
+    placeholder.style.width = `${draggedTab.offsetWidth + 2}px`; // accounting for the borders as well as the body
     tabbar.insertBefore(placeholder, draggedTab.nextSibling);
 
     let rect = draggedTab.getBoundingClientRect();
@@ -238,42 +338,63 @@ function onMouseMove(e) {
     if (!draggedTab) return;
 
     if (!isDragging) {
-        const dx = e.clientX - dragStartX;
-        const dy = e.clientY - dragStartY;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        const distanceXFromDragStart = e.clientX - dragStartX;
+        const distanceYFromDragStart = e.clientY - dragStartY;
+        const distanceFromDragStart = Math.sqrt(distanceXFromDragStart * distanceXFromDragStart + distanceYFromDragStart * distanceYFromDragStart);
 
-        if (distance > 7) {
+        if (distanceFromDragStart > 7) {
             hasMovedEnough = true;
             startDrag();
-        } else return;
-    }
-
-    let newLeft = e.clientX - grabOffsetX;
-    draggedTab.style.left = `${newLeft}px`;
-
-    let mouseX = e.clientX;
-    let newIndex = 0;
-    for (let i = 0; i < tabRects.length; i++) {
-        let midpoint = tabRects[i].left + tabRects[i].width / 2;
-        if (mouseX > midpoint) newIndex = i + 1;
-    }
-
-    if (newIndex !== currentIndex) {
-        currentIndex = newIndex;
-        placeholder.remove();
-        if (currentIndex >= tabs.length) {
-            tabbar.appendChild(placeholder);
         } else {
-            tabbar.insertBefore(placeholder, tabs[currentIndex]);
+            return;
         }
     }
 
-    tabs.forEach((t, i) => {
-        if (t === draggedTab) return;
-        let shift = 0;
-        if (i >= currentIndex) shift = draggedTab.offsetWidth / 5;
-        t.style.transform = `translateX(${shift}px)`;
-    });
+    const newLeftPosition = e.clientX - grabOffsetX;
+    draggedTab.style.left = `${newLeftPosition}px`;
+
+    const draggedRect = draggedTab.getBoundingClientRect();
+    const referenceX = draggedRect.left + draggedRect.width / 2;
+
+    const tabsBefore = getTabElements();
+    const tabsBeforeExcludingDragged = tabsBefore.filter(tab => tab !== draggedTab);
+
+    const newIndex = getClosestInsertionIndex(referenceX, tabsBeforeExcludingDragged, currentIndex);
+
+    if (newIndex !== currentIndex) {
+        const firstRects = new Map();
+        tabsBeforeExcludingDragged.forEach(tab => {
+            firstRects.set(tab, tab.getBoundingClientRect());
+        });
+
+        currentIndex = newIndex;
+
+        placeholder.remove();
+        if (currentIndex >= tabsBeforeExcludingDragged.length) {
+            tabbar.appendChild(placeholder);
+        } else {
+            tabbar.insertBefore(placeholder, tabsBeforeExcludingDragged[currentIndex]);
+        }
+
+        const tabsAfterExcludingDragged = getTabElements().filter(tab => tab !== draggedTab);
+        tabsAfterExcludingDragged.forEach(tab => {
+            const first = firstRects.get(tab);
+            if (!first) return;
+
+            const last = tab.getBoundingClientRect();
+            const dx = first.left - last.left;
+
+            if (Math.abs(dx) > 0.5) {
+                tab.style.transition = "none";
+                tab.style.transform = `translateX(${dx}px)`;
+
+                requestAnimationFrame(() => {
+                    tab.style.transition = "transform 150ms ease";
+                    tab.style.transform = "";
+                });
+            }
+        });
+    }
 }
 
 function onMouseUp() {
@@ -282,6 +403,7 @@ function onMouseUp() {
 
     document.removeEventListener("mousemove", onMouseMove);
     document.removeEventListener("mouseup", onMouseUp);
+    document.removeEventListener("keydown", onKeyDownDuringDrag);
 
     if (!isDragging || !draggedTab) {
         draggedTab = null;
@@ -291,23 +413,101 @@ function onMouseUp() {
     isDragging = false;
     document.body.classList.remove("dragging-tabs");
 
-    let targetRect = placeholder.getBoundingClientRect();
-    draggedTab.style.transition = "left 150ms cubic-bezier(.25,.8,.25,1)";
-    draggedTab.style.left = `${targetRect.left}px`;
+    const tabsBefore = getTabElements();
+    const firstRects = new Map();
 
-    setTimeout(() => {
-        tabbar.insertBefore(draggedTab, placeholder);
-        placeholder.remove();
-        placeholder = null;
+    tabsBefore.forEach(tab => {
+        firstRects.set(tab, tab.getBoundingClientRect());
+    });
 
-        draggedTab.classList.remove("dragged");
-        draggedTab.style.left = "";
-        draggedTab.style.transition = "";
+    // Move dragged tab into final place
+    tabbar.insertBefore(draggedTab, placeholder);
+    placeholder.remove();
+    placeholder = null;
 
-        tabs.forEach(t => t.style.transform = "");
-        tabs = Array.from(document.querySelectorAll('.tab'));
+    draggedTab.classList.remove("dragged");
+    draggedTab.style.left = "";
+
+    const tabsAfter = getTabElements();
+
+    tabsAfter.forEach(tab => {
+        const first = firstRects.get(tab);
+        const last = tab.getBoundingClientRect();
+
+        const dx = first.left - last.left;
+
+        if (Math.abs(dx) > 0.5) {
+            tab.classList.add("dragMotion");
+            tab.style.transition = "none";
+            tab.style.transform = `translateX(${dx}px)`;
+
+            // force layout so browser commits transform
+            tab.offsetWidth;
+
+            tab.style.transition = "transform 150ms ease-out";
+            tab.style.transform = "";
+        }
+    });
+
+	    setTimeout(() => {
+	        tabsAfter.forEach(tab => {
+	            tab.style.transition = "";
+	            tab.style.transform = "";
+	            tab.classList.remove("dragMotion");
+	        });
+
+	        draggedTab = null;
+	        getTabElements();
+	    }, 150);
+}
+
+function cancelCurrentDragOperation() {
+    const overlay = document.getElementById("overlay");
+    if (overlay) overlay.remove();
+
+    document.removeEventListener("mousemove", onMouseMove);
+    document.removeEventListener("mouseup", onMouseUp);
+    document.removeEventListener("keydown", onKeyDownDuringDrag);
+
+    if (!isDragging || !draggedTab) {
         draggedTab = null;
-    }, 150);
+        return;
+    }
+
+    isDragging = false;
+    document.body.classList.remove("dragging-tabs");
+
+    if (placeholder && placeholder.parentNode) {
+        placeholder.remove();
+    }
+
+    const tabElements = getTabElements();
+    const targetIndex = originalDragIndex >= 0 && originalDragIndex < tabElements.length ? originalDragIndex : tabElements.length - 1;
+    const targetReferenceNode = tabElements[targetIndex] || null;
+    if (targetReferenceNode) {
+        tabbar.insertBefore(draggedTab, targetReferenceNode);
+    } else {
+        tabbar.appendChild(draggedTab);
+    }
+
+    draggedTab.classList.remove("dragged");
+    draggedTab.style.left = "";
+    draggedTab.style.transition = "";
+
+    tabElements.forEach(tabElement => {
+        tabElement.style.transform = "";
+    });
+
+    draggedTab = null;
+    placeholder = null;
+}
+
+function onKeyDownDuringDrag(keyboardEvent) {
+    if (!isDragging) return;
+    if (keyboardEvent.key === "Escape") {
+        keyboardEvent.preventDefault();
+        cancelCurrentDragOperation();
+    }
 }
 
 function makeNewTabID() {
@@ -320,8 +520,22 @@ function makeNewTabID() {
 }
 
 function getTabURLFromID(tabid) {
-    const tab = document.querySelector(`.tab[tabid="${tabid}"]`);
+    const tab = getTabElementById(tabid);
     return tab ? tab.getAttribute("data-url") || "./chungus/chungus.html" : "./chungus/chungus.html";
+}
+
+function getTabIDFromSource(sourceWindow) {
+    const lowZFrameInfo = getLowZFrameBySource(sourceWindow);
+    if (lowZFrameInfo) {
+        return lowZFrameInfo.tabid;
+    }
+
+    if (sourceWindow === chungus.contentWindow) {
+        const activeTab = getActiveTabElement();
+        return activeTab ? activeTab.getAttribute("tabid") : null;
+    }
+
+    return null;
 }
 
 // Helper function to set tab title, skipping the active dot if present
@@ -359,7 +573,7 @@ function setTabTitle(tab, title) {
 }
 
 function handleCloseClick(tabid) {
-    const activeTab = document.querySelector('.tab.active');
+    const activeTab = getActiveTabElement();
 
     if (activeTab && activeTab.getAttribute("tabid") === tabid) {
         // Active tab -> just send saveQuit
@@ -417,8 +631,9 @@ function createNewTab() {
     newTab.setAttribute('tabid', makeNewTabID());
     newTab.setAttribute('data-url', "./chungus/chungus.html");
     tabbar.appendChild(newTab);
+    applyAriaAttributesToTab(newTab);
     addTabListeners(newTab);
-    tabs = Array.from(document.querySelectorAll('.tab'));
+    getTabElements();
     setActiveTab(newTab);
     fixTabCloseEventListeners();
 }
@@ -440,7 +655,10 @@ tabbar.addEventListener("wheel", (event) => {
     currentIndex += tabs.length;
     currentIndex %= tabs.length;
 
-    setActiveTab(tabs[currentIndex]);
+    const nextTab = tabs[currentIndex];
+    if (!nextTab) return;
+
+    setActiveTab(nextTab);
 
 }, { passive: false });
 
@@ -476,7 +694,7 @@ window.addEventListener("message", (event) => {
         if (lowZFrameInfo) {
             // Message from lowZFrame
             const { tabid, frame } = lowZFrameInfo;
-            const tabToRemove = document.querySelector(`.tab[tabid="${tabid}"]`);
+            const tabToRemove = getTabElementById(tabid);
 
             if (tabToRemove) {
                 const wasActive = tabToRemove.classList.contains("active");
@@ -497,30 +715,32 @@ window.addEventListener("message", (event) => {
             removeLowZFrame(tabid);
         } else if (event.source === chungus.contentWindow) {
             // Message from main iframe (active tab closing)
-            const activeTab = document.querySelector('.tab.active');
-            const indexOfActiveTab = tabs.indexOf(activeTab);
+            const activeTab = getActiveTabElement();
+            const indexOfActiveTab = getTabIndexForElement(activeTab);
 
             if (activeTab) {
                 activeTab.remove();
 
-                if (tabs[indexOfActiveTab + 1]) {
-                    setActiveTab(tabs[indexOfActiveTab + 1]);
-                } else if (tabs[indexOfActiveTab - 1]) {
-                    setActiveTab(tabs[indexOfActiveTab - 1]);
+                const currentTabsAfterRemoval = getTabElements();
+
+                if (currentTabsAfterRemoval[indexOfActiveTab]) {
+                    setActiveTab(currentTabsAfterRemoval[indexOfActiveTab]);
+                } else if (currentTabsAfterRemoval[indexOfActiveTab - 1]) {
+                    setActiveTab(currentTabsAfterRemoval[indexOfActiveTab - 1]);
                 } else {
                     chungus.src = "./emptydesk.html";
                 }
             }
         }
 
-        tabs = Array.from(document.querySelectorAll('.tab'));
+        getTabElements();
     }
 
     if (event.data.type === "openTabWithID") {
-        const activeTab = document.querySelector('.tab.active');
+        const activeTab = getActiveTabElement();
         if (!activeTab || activeTab.getAttribute('tabid') !== "0") return;
 
-        let lookingForTab = document.querySelector(`.tab[tabid="${event.data.tabID}"]`);
+        let lookingForTab = getTabElementById(event.data.tabID);
         if (lookingForTab) {
             setActiveTab(lookingForTab);
             return;
@@ -535,14 +755,15 @@ window.addEventListener("message", (event) => {
         newTab.setAttribute('tabid', event.data.tabID);
         newTab.setAttribute('data-url', "./chungus/chungus.html");
         tabbar.appendChild(newTab);
+        applyAriaAttributesToTab(newTab);
         addTabListeners(newTab);
-        tabs = Array.from(document.querySelectorAll('.tab'));
+        getTabElements();
         setActiveTab(newTab);
         fixTabCloseEventListeners();
     }
 
     if (event.data.type === "getGJson") {
-        const activeTab = document.querySelector('.tab.active');
+        const activeTab = getActiveTabElement();
         if (!activeTab || activeTab.getAttribute('tabid') !== "0") {
             event.source.postMessage({ type: "GJsonReturn", json: "Error Low Privlage" }, "*");
             return;
@@ -550,7 +771,9 @@ window.addEventListener("message", (event) => {
 
         if (localStorage.getItem("ChatJson") !== null) {
             const json = JSON.parse(localStorage.getItem("ChatJson"));
-            event.source.postMessage({ type: "GJsonReturn", json: json }, "*");
+            try {
+                event.source.postMessage({ type: "GJsonReturn", json: json }, "*");
+            } catch {}
         } else {
             localStorage.setItem("ChatJson", JSON.stringify({}));
         }
@@ -558,7 +781,7 @@ window.addEventListener("message", (event) => {
 
     if (!event.data || typeof event.data.type !== "string") return;
     const type = event.data.type;
-    const activeTab = document.querySelector('.tab.active');
+    const activeTab = getActiveTabElement();
     const activeTabID = activeTab ? activeTab.getAttribute('tabid') : null;
 
     if (type === "getLJson") {
@@ -575,7 +798,9 @@ window.addEventListener("message", (event) => {
         const json = JSON.parse(jsonStore);
         const response = (activeTabID in json) ? json[activeTabID] : null;
 
-        event.source.postMessage({ type: "LJsonReturn", json: response }, "*");
+        try {
+            event.source.postMessage({ type: "LJsonReturn", json: response }, "*");
+        } catch {}
     }
 
     if (type === "setLJson") {
@@ -621,28 +846,29 @@ window.addEventListener("message", (event) => {
 
         localStorage.setItem("ChatJson", JSON.stringify(json));
 
-        const targetTab = document.querySelector(`.tab[tabid="${targetTabID}"]`);
+        const targetTab = getTabElementById(targetTabID);
         if (!targetTab) return;
         const wasActive = targetTab.classList.contains("active");
 
         if (wasActive) {
-            const index = tabs.indexOf(targetTab);
-            let nextTab = tabs[index + 1] || tabs[index - 1];
+            const currentTabs = getTabElements();
+            const index = currentTabs.indexOf(targetTab);
+            let nextTab = currentTabs[index + 1] || currentTabs[index - 1];
             if (nextTab) setActiveTab(nextTab);
         }
 
         targetTab.remove();
-        tabs = Array.from(document.querySelectorAll(".tab"));
+        getTabElements();
     }
 
     if (type === "chtitle") {
-        const activeTab = document.querySelector('.tab.active');
+        const activeTab = getActiveTabElement();
         if (!activeTab || activeTab.getAttribute("tabid") !== "0") return;
 
         const { tabid, title } = event.data;
         if (!tabid || typeof title !== "string") return;
 
-        const tabInQuestion = document.querySelector(`.tab[tabid="${tabid}"]`);
+        const tabInQuestion = getTabElementById(tabid);
         if (!tabInQuestion) return;
 
         setTabTitle(tabInQuestion, title);
@@ -683,7 +909,9 @@ window.addEventListener("message", (event) => {
         const json = JSON.parse(jsonStore);
         const response = (7 in json) ? json[7] : null;
 
-        event.source.postMessage({ type: "settablesJsonReturn", json: response }, "*");
+        try {
+            event.source.postMessage({ type: "settablesJsonReturn", json: response }, "*");
+        } catch {}
     }
 
     if (type == "updtTheme") {
@@ -695,7 +923,7 @@ window.addEventListener("message", (event) => {
     }
 
     if (type == "IndxSWPEvent") {
-        let indexTab = document.querySelector('.tab[tabid="0"]');
+        let indexTab = getTabElementById("0");
         if (indexTab) {
             if (!indexTab.textContent.includes("Index")) {
                 setTabTitle(indexTab, "Index");
@@ -712,31 +940,15 @@ window.addEventListener("message", (event) => {
             } else {
                 tabbar.appendChild(newTab);
             }
+            applyAriaAttributesToTab(newTab);
             addTabListeners(newTab);
-            tabs = Array.from(document.querySelectorAll('.tab'));
+            getTabElements();
             setActiveTab(newTab);
             fixTabCloseEventListeners();
         }
     }
 
     if (type == "toggleAcctiveDot") {
-        function getTabIDFromSource(sourceWindow) {
-            // Check if it's a lowZFrame
-            const lowZFrameInfo = getLowZFrameBySource(sourceWindow);
-            if (lowZFrameInfo) {
-                return lowZFrameInfo.tabid;
-            }
-
-            // Check if it's the main iframe (chungus)
-            if (sourceWindow === chungus.contentWindow) {
-                const activeTab = document.querySelector('.tab.active');
-                return activeTab ? activeTab.getAttribute("tabid") : null;
-            }
-
-            // Not from a known source
-            return null;
-        }
-
         let tabid = getTabIDFromSource(event.source);
         let tabdiv = document.querySelector(`div.tab[tabid="${tabid}"]`);
 
@@ -764,23 +976,6 @@ window.addEventListener("message", (event) => {
     }
 
     if (type == "setAcctiveDot") {
-        function getTabIDFromSource(sourceWindow) {
-            // Check if it's a lowZFrame
-            const lowZFrameInfo = getLowZFrameBySource(sourceWindow);
-            if (lowZFrameInfo) {
-                return lowZFrameInfo.tabid;
-            }
-
-            // Check if it's the main iframe (chungus)
-            if (sourceWindow === chungus.contentWindow) {
-                const activeTab = document.querySelector('.tab.active');
-                return activeTab ? activeTab.getAttribute("tabid") : null;
-            }
-
-            // Not from a known source
-            return null;
-        }
-
         let tabid = getTabIDFromSource(event.source);
         let tabdiv = document.querySelector(`div.tab[tabid="${tabid}"]`);
 
@@ -815,23 +1010,6 @@ window.addEventListener("message", (event) => {
     }
 
     if (type == "getAcctiveDot") {
-        function getTabIDFromSource(sourceWindow) {
-            // Check if it's a lowZFrame
-            const lowZFrameInfo = getLowZFrameBySource(sourceWindow);
-            if (lowZFrameInfo) {
-                return lowZFrameInfo.tabid;
-            }
-
-            // Check if it's the main iframe (chungus)
-            if (sourceWindow === chungus.contentWindow) {
-                const activeTab = document.querySelector('.tab.active');
-                return activeTab ? activeTab.getAttribute("tabid") : null;
-            }
-
-            // Not from a known source
-            return null;
-        }
-
         let tabid = getTabIDFromSource(event.source);
         let tabdiv = document.querySelector(`div.tab[tabid="${tabid}"]`);
 
@@ -850,7 +1028,7 @@ document.getElementById("newTabBtn").addEventListener("click", (event) => {
 });
 
 document.getElementById("indexSw").addEventListener("click", () => {
-    let indexTab = document.querySelector('.tab[tabid="0"]');
+    let indexTab = getTabElementById("0");
 
     if (indexTab) {
         if (!indexTab.textContent.includes("Index")) {
@@ -865,7 +1043,7 @@ document.getElementById("indexSw").addEventListener("click", () => {
             <div class="close">&nbsp;</div>
         `;
         newTab.setAttribute('tabid', "0");
-        newTab.setAttribute('data-url', "./chungus/chungus.html");
+        newTab.setAttribute('data-url', "./index/indx.html");
 
         if (tabbar.firstChild) {
             tabbar.insertBefore(newTab, tabbar.firstChild);
@@ -873,15 +1051,16 @@ document.getElementById("indexSw").addEventListener("click", () => {
             tabbar.appendChild(newTab);
         }
 
+        applyAriaAttributesToTab(newTab);
         addTabListeners(newTab);
-        tabs = Array.from(document.querySelectorAll('.tab'));
+        getTabElements();
         setActiveTab(newTab);
         fixTabCloseEventListeners();
     }
 });
 
 document.getElementById("settings").addEventListener("click", () => {
-    let settingsTab = document.querySelector('.tab[tabid="7"]');
+    let settingsTab = getTabElementById("7");
 
     if (settingsTab) {
         if (!settingsTab.textContent.includes("Settings")) {
@@ -902,20 +1081,21 @@ document.getElementById("settings").addEventListener("click", () => {
 
     tabbar.appendChild(newTab);
 
+    applyAriaAttributesToTab(newTab);
     addTabListeners(newTab);
-    tabs = Array.from(document.querySelectorAll('.tab'));
+    getTabElements();
     setActiveTab(newTab);
     fixTabCloseEventListeners();
 });
 
 document.getElementById("documentation").addEventListener("click", () => {
-    let settingsTab = document.querySelector('.tab[tabid="4"]');
+    let documentationTab = getTabElementById("4");
 
-    if (settingsTab) {
-        if (!settingsTab.textContent.includes("Documentation")) {
-            setTabTitle(settingsTab, "Documentation");
+    if (documentationTab) {
+        if (!documentationTab.textContent.includes("Documentation")) {
+            setTabTitle(documentationTab, "Documentation");
         }
-        setActiveTab(settingsTab);
+        setActiveTab(documentationTab);
         return;
     }
 
@@ -930,8 +1110,9 @@ document.getElementById("documentation").addEventListener("click", () => {
 
     tabbar.appendChild(newTab);
 
+    applyAriaAttributesToTab(newTab);
     addTabListeners(newTab);
-    tabs = Array.from(document.querySelectorAll('.tab'));
+    getTabElements();
     setActiveTab(newTab);
     fixTabCloseEventListeners();
 });
@@ -940,25 +1121,8 @@ document.getElementById("rmTabBtn").addEventListener("click", () => {
     chungus.contentWindow.postMessage({ type: "saveQuit" }, "*");
 });
 
-window.addEventListener('beforeunload', (e) => {
+window.addEventListener('beforeunload', (event) => {
     localStorage.setItem("tabArray", tabbar.innerHTML);
     // Clean up all lowZ frames before unloading
     cleanupLowZFrames();
-});
-
-window.addEventListener('blur', () => {
-    isWindowActive = false;
-    setTimeout(
-        () => {
-            if (!isIFrameActive) {
-                document.body.classList.add('window-inactive');
-            }
-        },
-        10
-    );
-});
-
-window.addEventListener('focus', () => {
-    document.body.classList.remove('window-inactive');
-    isWindowActive = true;
 });

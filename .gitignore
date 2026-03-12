@@ -1,4 +1,10 @@
-
+# zip formats
 *.zip
+
+# swap formats (ides)
+*.swp
+*.swo
 *.kate-swp
+
+# api key file
 chungus/api-key.js
