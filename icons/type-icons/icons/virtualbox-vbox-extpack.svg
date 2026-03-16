@@ -1,10 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-<svg width="22" version="1.1" xmlns="http://www.w3.org/2000/svg" height="22" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
- <defs id="defs3871"/>
- <metadata id="metadata3874"/>
- <g inkscape:label="Capa 1" inkscape:groupmode="layer" id="layer1" transform="matrix(1 0 0 1 -326 -534.3622)">
-  <path inkscape:connector-curvature="0" style="fill:#7fcc74;stroke-linecap:square;stroke-width:2" id="rect4153" d="m 329,537.3622 0,16 16,0 0,-16 -16,0 z m 1,1 14,0 0,2 -14,0 0,-2 z m 0,3 1,0 0,2 -1,0 0,-2 z m 2,0 1,0 0,2 -1,0 0,-2 z m 2,0 1,0 0,2 -1,0 0,-2 z m 2,0 1,0 0,2 -1,0 0,-2 z m 2,0 1,0 0,2 -1,0 0,-2 z m 2,0 1,0 0,2 -1,0 0,-2 z m 2,0 2,0 0,1 -2,0 0,-1 z m -12,3 14,0 0,2 -14,0 0,-2 z m 0,3 1,0 0,2 -1,0 0,-2 z m 2,0 1,0 0,2 -1,0 0,-2 z m 2,0 1,0 0,2 -1,0 0,-2 z m 2,0 1,0 0,2 -1,0 0,-2 z m 2,0 1,0 0,2 -1,0 0,-2 z m 2,0 1,0 0,2 -1,0 0,-2 z m 2,0 2,0 0,1 -2,0 0,-1 z m -12,3 12,0 2,0 0,2 -14,0 0,-2 z"/>
+<?xml version="1.0" encoding="UTF-8"?><svg width="22" height="22" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <g id="layer1" transform="translate(-326 -534.36)">
+  <path id="rect4153" d="m329 537.36v16h16v-16h-16zm1 1h14v2h-14v-2zm0 3h1v2h-1v-2zm2 0h1v2h-1v-2zm2 0h1v2h-1v-2zm2 0h1v2h-1v-2zm2 0h1v2h-1v-2zm2 0h1v2h-1v-2zm2 0h2v1h-2v-1zm-12 3h14v2h-14v-2zm0 3h1v2h-1v-2zm2 0h1v2h-1v-2zm2 0h1v2h-1v-2zm2 0h1v2h-1v-2zm2 0h1v2h-1v-2zm2 0h1v2h-1v-2zm2 0h2v1h-2v-1zm-12 3h14v2h-14v-2z" fill="#7fcc74" stroke-linecap="square" stroke-width="2"/>
  </g>
 </svg>

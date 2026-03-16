@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="svg1" width="400" height="300" version="1.1" viewBox="0 0 105.83 79.375" xmlns="http://www.w3.org/2000/svg">
+ <g id="layer1">
+  <rect id="rect1" x="1.8623" y=".23279" fill="#823d46" stroke-width=".26458"/>
+  <rect id="rect8" x="8.8818e-16" y=".076407" width="105.83" height="79.375" fill="{bg}" stroke-width=".33552"/>
+  <rect id="rect2" y="6.6146" width="105.83" height="1.2965" fill="{fg}" stroke-width=".054947"/>
+  <rect id="rect3" x="2.7756e-17" width="23.812" height="6.6146" fill="{tabc}" stroke-width=".26296"/>
+  <rect id="rect3-3" x="23.812" y="-5.5511e-17" width="23.812" height="10.302" fill="{bg}" stroke-width=".32816"/>
+  <rect id="rect3-3-5" x="47.625" width="23.812" height="6.6146" fill="{tabc}" stroke-width=".26296"/>
+  <rect id="rect3-3-5-2" transform="matrix(1 0 .1465 -.98921 0 0)" x="24.492" y="-2.0439" width="23.812" height="2.029" fill="{acbarc}" stroke-width=".14564"/>
+  <rect id="rect4" x="23.151" width="1.3229" height="7.9375" fill="{fg}" stroke-width=".073064"/>
+  <rect id="rect4-1" x="47.625" width="1.3229" height="7.9375" fill="{fg}" stroke-width=".073064"/>
+  <rect id="rect5" x="13.229" y="29.104" width="79.375" height="26.458" rx="5" ry="4.1667" fill="{fg}" stroke-width=".22941"/>
+  <rect id="rect5-8" x="14.552" y="30.207" width="76.729" height="24.253" rx="4.8333" ry="3.8194" fill="{bg}" stroke-width=".21595"/>
+  <rect id="rect6" x="26.458" y="22.728" width="52.917" height="4.7625" rx="1" ry="1" fill="{fg}" stroke-width=".43991"/>
+  <rect id="rect7" x="6.391" y="-6.2424" width=".89176" height=".44588" rx="4.8333" ry=".44588" fill="#e5e9eb" stroke-width=".26458"/>
+ </g>
+</svg>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<svg id="svg5" width="22mm" height="22mm" version="1.1" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+ <g id="layer1" fill="#696c6e">
+  <rect id="rect2395" transform="matrix(0,1,1,0,0,0)" x="2.9549" y="5.0601" width="5" height=".87978" rx=".075007" ry=".011895" stroke-width="0"/>
+  <path id="path132" class="ColorScheme-Text" d="m14.198 3-11.198 11.198v4.8021h4.8021l11.198-11.198zm-2.7318 4.6536 2.8802 2.8802-4.2318 4.2344v-0.90104l-1.3516 0.02872h-1.3802v-2.1615l1.9219-1.9193zm-5.4349 5.4323v2.1615h2.7031l0.028624 0.8698-1.4401 1.4427h-1.9219l-0.96094-0.96094v-1.9219z" color="#eff0f1"/>
+  <rect id="rect3499" transform="matrix(.80902 -.58779 -.58779 -.80902 0 0)" x="-1.2567" y="-8.0858" width="5" height=".87978" rx=".075007" ry=".011895" stroke-width="0"/>
+  <rect id="rect3501" transform="matrix(.80902 .58779 .58779 -.80902 0 0)" x="5.1559" y="-1.6202" width="5" height=".87978" rx=".075007" ry=".011895" stroke-width="0"/>
+ </g>
+</svg>

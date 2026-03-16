@@ -449,16 +449,16 @@ function onMouseUp() {
         }
     });
 
-	    setTimeout(() => {
-	        tabsAfter.forEach(tab => {
-	            tab.style.transition = "";
-	            tab.style.transform = "";
-	            tab.classList.remove("dragMotion");
-	        });
+    setTimeout(() => {
+        tabsAfter.forEach(tab => {
+            tab.style.transition = "";
+            tab.style.transform = "";
+            tab.classList.remove("dragMotion");
+        });
 
-	        draggedTab = null;
-	        getTabElements();
-	    }, 150);
+        draggedTab = null;
+        getTabElements();
+    }, 150);
 }
 
 function cancelCurrentDragOperation() {
@@ -541,15 +541,15 @@ function getTabIDFromSource(sourceWindow) {
 // Helper function to set tab title, skipping the active dot if present
 function setTabTitle(tab, title) {
     if (!tab) return;
-    
+
     // Find the title text node, skipping the active dot if present
     let titleNode = tab.firstChild;
-    
+
     // Skip the active dot if it's the first child
     if (titleNode && titleNode.classList && titleNode.classList.contains('active-dot')) {
         titleNode = titleNode.nextSibling;
     }
-    
+
     // If we found a text node, update it directly
     if (titleNode && titleNode.nodeType === Node.TEXT_NODE) {
         titleNode.textContent = title;
@@ -869,9 +869,9 @@ window.addEventListener("message", (event) => {
         if (!tabid || typeof title !== "string") return;
 
         const tabInQuestion = getTabElementById(tabid);
-        if (!tabInQuestion) return;
-
-        setTabTitle(tabInQuestion, title);
+        if (tabInQuestion) {
+            setTabTitle(tabInQuestion, title);
+        }
 
         let json = localStorage.getItem("ChatJson");
         if (!json) return;

@@ -15,11 +15,17 @@
     --action-btn-2: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4);
     --action-btn-3: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2);
 
-    --a-btn-red-1: brightness(0) invert(17%) sepia(45%) saturate(5302%) hue-rotate(338deg) brightness(77%) contrast(91%);
-    --a-btn-red-2: brightness(0) invert(17%) sepia(45%) saturate(5302%) hue-rotate(338deg) brightness(77%) contrast(91%) brightness(120%);
-    --a-btn-red-3: brightness(0) invert(17%) sepia(45%) saturate(5302%) hue-rotate(338deg) brightness(77%) contrast(91%) brightness(150%);
+    --a-btn-red-1: brightness(0) invert(17%) sepia(45%) saturate(5302%) hue-rotate(338deg) brightness(77%) contrast(91%)  brightness(130%);
+    --a-btn-red-2: brightness(0) invert(17%) sepia(45%) saturate(5302%) hue-rotate(338deg) brightness(77%) contrast(91%) brightness(120%)  brightness(130%);
+    --a-btn-red-3: brightness(0) invert(17%) sepia(45%) saturate(5302%) hue-rotate(338deg) brightness(77%) contrast(91%) brightness(150%) brightness(150%);
 
     --search-heighlight: var(--input-fg-color);
+
+    --topper-height: 30px;
+    --action-padding: 10px;
+
+    --menu-color-1: #2d5165;
+    --menu-color-2: #5abaec;
 }
 
 @font-face {
@@ -29,18 +35,18 @@
     font-style: normal;
 }
 
-body, html, main {
+body, html {
+    padding: 0;
+    margin: 0;
     background-color: var(--bg-color);
     color: var(--fg-color);
     font-family: var(--font);
     font-size: var(--font-size);
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
     display: flex;
     justify-content: center;
-    position: relative;
     overflow-x: hidden;
 }
 
@@ -50,7 +56,7 @@ body, html, main {
 
 ::-webkit-scrollbar-track {
     background: transparent;
-    border-left: 1px solid var(--grey-40);
+    border-left: 1px solid var(--grey-99);
     border-bottom: 1px solid var(--grey-40);
     border-top: 1px solid var(--grey-40);
 }
@@ -62,13 +68,14 @@ body, html, main {
 }
 
 ::-webkit-scrollbar-track:active {
-    border-left: 1px solid var(--grey-ff);
+    border-left: 1px solid var(--grey-99);
     border-bottom: 1px solid var(--grey-ff);
     border-top: 1px solid var(--grey-ff);
 }
 
 ::-webkit-scrollbar-thumb {
     background: var(--grey-40);
+    border-left: 1px solid var(--grey-99);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -79,232 +86,288 @@ body, html, main {
     background: var(--grey-ff);
 }
 
-#master-index-content-container {
-    padding: 10px;
-    padding-right: 0;
-    height: calc(100% - 40px);
-    width: calc(100% - 15px);
+main {
+    display: block;
+    padding: 5px 15px 0;
+    top: 30px;
+    width: calc(100% - 110px);
     max-width: max(69vw, 1200px);
+    max-height: calc(100% - 30px);
+    position: fixed;
+    overflow: auto;
 }
 
-div.op-container {
-    cursor: default;
-    width: 100%;
-    height: 1lh;
+main div.selectable {
+    user-select: none;
+    -webkit-user-select: none;
+    height: 20px;
+    padding: 2px 2px 2px 5px;
+    border: 1px solid transparent;
+    border-radius: 3px;
     display: flex;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
 }
 
-div.openAble {
-    cursor: default;
-    width: 100%;
-    display: inline;
+main div.selectable > div.text {
+    flex: 1 1 auto;
+    min-width: 0;
     white-space: nowrap;
     overflow: hidden;
-
+    text-overflow: ellipsis;
+    line-height: 16px;
 }
 
-input.openAble {
-    cursor: default;
-    width: 100%;
-    display: inline;
-    background-color: var(--bg-color);
-    color: var(--fg-color);
-    border: 1px solid var(--fg-color);
-    border-radius: 2px;
-    outline: none;
-    font-family: var(--font);
+main div.selectable > div.actions {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    z-index: -100;
+    gap: 0;
 }
 
-input::selection {
-    color: var(--input-bg-color);
-    background-color: var(--input-fg-color);
+main div.selectable > div.actions img.action {
+    padding: 0;
+    margin: 0;
 }
 
-img.actionBtn {
-    height: 1lh;
-    width: 1lh;
-    cursor: default;
-    user-select: none;
-    display: inline;
-    padding-right: 5px;
+main div.selectable:hover > div.actions {
+    width: fit-content;
+    height: 100%;
+    opacity: 1;
+    z-index: 0;
+    white-space: nowrap;
+}
+
+main div.selectable.renaming > div.actions {
+    width: fit-content;
+    height: 100%;
+    opacity: 1;
+    z-index: 0;
+    white-space: nowrap;
+}
+
+main div.selectable:hover,
+main div.selectable.selected,
+main div.selectable.renaming {
+    border: 1px solid var(--input-fg-color);
+    background-color: var(--input-bg-color);
+}
+
+main div.selectable img.action {
     filter: var(--action-btn-1);
-}
-
-img.actionBtn:hover {
-    filter: var(--action-btn-2);
-}
-
-img.actionBtn:active {
-    filter: var(--action-btn-3);
-}
-
-img.actionBtn.red {
-    filter: var(--a-btn-red-1) !important;
-}
-
-img.actionBtn.red:hover {
-    filter: var(--a-btn-red-2) !important;
-}
-
-img.actionBtn.red:active {
-    filter: var(--a-btn-red-3) !important;
-}
-
-div.icon-actions {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: min-content;
-    height: fit-content;
-    background-color: var(--bg-color);
-    border-bottom-left-radius: 3px;
-
-}
-
-img.tool-bar-action {
     height: 20px;
-    width: 20px;
-    user-select: none;
-    -webkit-user-select: none;
-    margin-top: 0px;
-    margin-right: 5px;
-    margin-left: 5px;
-    z-index: 2;
-    filter: var(--action-btn-1);
+    padding-right: 5px;
+    user-drag: none;
+    -webkit-user-drag: none;
 }
 
-
-img.tool-bar-action:first-child {
-    margin-top: 5px;
-}
-
-img.tool-bar-action:hover {
+main div.selectable img.action:hover {
     filter: var(--action-btn-2);
 }
 
-img.tool-bar-action:active {
+main div.selectable img.action:active {
     filter: var(--action-btn-3);
 }
 
-@keyframes topperBarSlideIn {
-    from {
-        transform: translateY(-31px);
-    }
-    to {
-        transform: translateY(0);
-    }
+main div.selectable:has(img.action[src="../icons/select-active.svg"]) {
+    border: 1px solid var(--input-fg-color);
+    background-color: var(--input-bg-color);
 }
 
-@keyframes topperBarSlideOut {
-    from {
-        transform: translateY(0px);
-    }
-    to {
-        transform: translateY(-31px);
-    }
-}
-
-@keyframes searchReasaltsFadeIn {
-    from {
-        transform: translateY(-31px);
-        opacity: 0;
-        height: 100%;
-    }
-    to {
-        transform: translateY(0px);
-        opacity: 1;
-        height: calc(100% - 32px);
-    }
-}
-
-@keyframes searchReasaltsFadeOut {
-    from {
-        transform: translateY(0px);
-        opacity: 1;
-        height: calc(100% - 32px);
-    }
-    to {
-        transform: translateY(-31px);
-        opacity: 0;
-        height: 100%;
-    }
-}
-
-body > div.margin-bar {
+body > div.action-holdings {
     position: fixed;
-    height: 30px;
+    top: 0px;
+    left: 0px;
+    height: fit-content;
+    right: 0px;
+    box-sizing: border-box;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+body > div.action-holdings.scrollbar {
+    right: 15px;
+}
+
+body > div.action-holdings > div.action-holdings-inner {
+    position: relative;
     width: 100%;
-    top: 0;
-    left: 0;
-    user-select: none;
-    -webkit-user-select: none;
-    margin-top: 0px;
-    z-index: 4;
-    background-color: var(--bg-color);
+}
+
+div.std-action-bar {
+    height: var(--topper-height);
     border-bottom: 1px solid var(--hard-outline-color);
     border-left: 1px solid var(--hard-outline-color);
-    animation: topperBarSlideIn 0.15s ease forwards;
+    background-color: var(--bg-color);
+    width: 100%;
+    user-select: none;
+    -webkit-user-select: none;
+    position: relative;
     display: flex;
     align-items: center;
 }
 
-body > div.margin-bar.exiting {
-    animation: topperBarSlideOut 0.15s ease forwards;
+div.std-action-bar.hidden {
+    display: none;
+    height: 0;
+    width: 0;
+    z-index: -100;
+    opacity: 0;
+    border: none;
 }
 
-body > div.margin-bar > input.search {
-    background-color: var(--bg-color);
-    color: var(--fg-color);
-    border: 1px solid var(--hard-outline-color);
-    border-radius: 2px;
-    outline: none;
-    width: 100%;
-    margin: 0 10px 0 3px;
-    font-family: var(--font);
+div.std-action-bar > div.left {
+    flex: 1 1 auto;
+    height: var(--topper-height);
+    display: flex;
+    align-items: center;
+    padding-left: 3px;
 }
 
-body > div.margin-bar > img {
-    height: 16px;
-    width: 16px;
-    margin: 0 5px;
+div.std-action-bar > div.left > div {
+    height: var(--topper-height);
+    display: flex;
+    align-items: center;
+}
+
+div.std-action-bar > div.left:has(img[src="../icons/selectall.svg"]) > div {
+    display: none;
+    z-index: -100;
+}
+
+div.std-action-bar > div.right {
+    margin-left: auto;
+    height: var(--topper-height);
+    display: flex;
+    align-items: center;
+    padding-right: 3px;
+}
+
+div.action-holdings img.action-buton {
+    width: calc(var(--topper-height) - var(--action-padding));
+    height: calc(var(--topper-height) - var(--action-padding));
+    margin-right: calc(var(--action-padding) / 2);
     user-select: none;
     filter: var(--action-btn-1);
     user-drag: none;
     -webkit-user-drag: none;
 }
 
-body > div.margin-bar > img:hover {
-    filter: var(--action-btn-2) !important;
+div.action-holdings img.action-buton:hover {
+    filter: var(--action-btn-2);
 }
 
-body > div.margin-bar > img:active {
-    filter: var(--action-btn-3) !important;
+div.action-holdings img.action-buton:active {
+    filter: var(--action-btn-3);
 }
 
-body > div.search-resalts {
-    position: absolute;
-    height: calc(100% - 32px);
-    width: calc(100% - 32px);
-    top: 31px;
-    left: 0;
-    padding-left: 31px;
-    margin-top: 0px;
-    z-index: 3;
+body div.selection-menu {
+    position: fixed;
+    top: 6px;
+    left: 6px;
+    width: fit-content;
+    height: fit-content;
+    padding: 3px;
+    border: 1px solid var(--fg-color);
+    border-radius: 4px;
     background-color: var(--bg-color);
-    animation: searchReasaltsFadeIn 0.15s ease forwards;
-    overflow: auto !important;
+    z-index: 999;
 }
 
-body > div.search-resalts.exiting {
-    animation: searchReasaltsFadeOut 0.15s ease forwards;
+body div.transparent-menu-overlay {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+    background-color: transparent;
+    opacity: 0;
+    z-index: 998;
 }
 
-body > div.search-resalts > i {
-    color: var(--grey-ff);
+body div.selection-menu div.menu-action {
+    width: max(fit-content, 100%);
+    background-color: var(--bg-color);
+    border-radius: 3px;
+    border: 1px solid transparent;
     user-select: none;
     -webkit-user-select: none;
+    padding: 0px 10px;
 }
 
-body > div.search-resalts b {
-    color: var(--search-heighlight);
+body div.selection-menu div.menu-action:hover {
+    background-color: var(--menu-color-1);
+    border: 1px solid var(--menu-color-2);
+}
+
+img.red {
+    filter: var(--a-btn-red-1) !important;
+}
+
+img.red:hover {
+    filter: var(--a-btn-red-2) !important;
+}
+
+img.red:active {
+    filter: var(--a-btn-red-3) !important;
+}
+
+input.rename-chat {
+    background-color: var(--input-bg-color);
+    color: var(--fg-color);
+    width: 100%;
+    outline: none;
+    border: 1px solid var(--input-fg-color);
+    border-radius: 3px;
+    line-height: var(--font-size);
+    font-size: var(--font-size);
+    font-family: var(--font);
+    z-index: 10000;
+}
+
+input.rename-chat::selection {
+    background-color: var(--input-fg-color);
+    color: var(--bg-color);
+}
+
+div.std-action-bar > div.center {
+    height: var(--topper-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3px;
+    width: 100%;
+}
+
+div.std-action-bar > div.center.hidden {
+    display: none;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    color: transparent;
+    background-color: transparent;
+    border: none;
+    z-index: -1000;
+}
+
+div.std-action-bar > div.center > input.search {
+    background-color: var(--input-bg-color);
+    color: var(--fg-color);
+    width: 60%;
+    outline: none;
+    border: 1px solid var(--input-fg-color);
+    border-radius: 3px;
+    line-height: var(--font-size);
+    font-size: var(--font-size);
+    font-family: var(--font);
+    display: flex;
+    align-items: center;
+}
+
+div.std-action-bar > div.center > input.search::selection {
+    background-color: var(--input-fg-color);
+    color: var(--bg-color);
 }
