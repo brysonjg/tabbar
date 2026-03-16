@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="svg46" width="22" height="22" version="1.1" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+ <defs id="defs3051">
+  <style id="current-color-scheme" type="text/css">.ColorScheme-Text {
+        color:#232629;
+      }
+      .ColorScheme-NegativeText {
+        color:#da4453;
+      }</style>
+ </defs>
+ <rect id="rect1676" x="3" y="3" width="16" height="16" rx="4.375" ry="4.375" fill-opacity="0" stroke="#696c6e"/>
+ <g id="g4430" transform="matrix(.83585 0 0 .79912 1.8056 2.2097)" fill="#696c6e" stroke-width="0">
+  <rect id="rect3505-7" transform="matrix(.65163 .75854 -.65163 .75854 0 0)" x="16.631" y="-9.3807" width="1.6109" height="12.887"/>
+  <rect id="rect3505-7-5" transform="matrix(.65163 -.75854 .65163 .75854 0 0)" x="-3.5111" y="9.6496" width="1.6109" height="8.5916"/>
+ </g>
+</svg>

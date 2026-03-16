@@ -1,269 +1,566 @@
+let selectedList = [];
+let activeRename = null;
+let searchDebounceTimeout = null;
+
 window.addEventListener("message", (event) => {
     if (!event.data || event.data.type !== "saveQuit") return;
     closeSelf();
 });
 
 window.onload = async () => {
-    await fixThemeOverSettable(); // correct themedge
-    await fixThemeOverSettable("chungus"); // import more themedge
+    await fixThemeOverSettable("chungus");
+    await fixThemeOverSettable("master");
+    await fixThemeOverSettable();
 
     window.gjson = await getGlobalJson();
-
-    renederJson(window.gjson);
-
-    setTimeout(updateActionButtonPosition, 0);
-    setTimeout(addToolbarListeners, 0);
-
     window.hasInitedFuzzysort = false;
-    window.fuzzysortIndex = null;
+
+    renderJson(window.gjson);
+    requestAnimationFrame(updateScrollbarState);
+
+    setTimeout(() => {
+        document.querySelector("div.std-action-bar > div.center").classList.remove("init");
+    }, 100);
 };
 
-window.onresize = updateActionButtonPosition;
+window.addEventListener("resize", updateScrollbarState);
 
-function hasVerticalScrollbar(element) {
-    return element.scrollHeight > element.clientHeight;
-}
+function updateScrollbarState() {
+    const root = document.body;
 
-function updateActionButtonPosition() {
-    const main = document.querySelector('main');
-    const actionRow = document.querySelector('div.icon-actions');
+    const holdings = document.querySelector("body > div.action-holdings");
+    if (!holdings) return;
 
-    if (!main || !actionRow) return;
-
-    if (hasVerticalScrollbar(main)) {
-        actionRow.style.right = '15px';
+    if (root.scrollHeight > root.clientHeight) {
+        holdings.classList.add("scrollbar");
     } else {
-        actionRow.style.right = '0';
+        holdings.classList.remove("scrollbar");
     }
 }
 
-function updateMarginBarPosition() {
-    const main = document.querySelector('main');
-    const bar = document.querySelector('body > div.margin-bar');
+function renderJson(json, renderOptions = {}) {
+    const main = document.querySelector("main");
 
-    if (!main || !bar) return;
+    main.innerHTML = "";
 
-    if (hasVerticalScrollbar(main)) {
-        bar.classList.add("scrollbar")
-    } else {
-        bar.classList.remove("scrollbar")
-    }
-}
+    const highlightMap = renderOptions.highlightMap instanceof Map ? renderOptions.highlightMap : null;
+    const orderedIds = Array.isArray(renderOptions.orderedIds) ? renderOptions.orderedIds : null;
 
-function renederJson(
-    json,
-    container = document.getElementById("master-index-content-container")
-) {
-    Object.keys(json).reverse().forEach((id) => {
-        if (id < 100) {
-            return;
-        }
+    const keys = (orderedIds ? orderedIds : Object.keys(json))
+        .filter((key) => String(key).length > 2);
 
-        // Get the highlighted title (from search) or the normal title from the JSON structure
-        const title = json[id]?.metadata?.highlightedTitle || json[id]?.metadata?.title || "Untitled";
+    if (!orderedIds) keys.reverse();
 
-        // Append the item
-        container.innerHTML += `
-            <div class="op-container">
-                <img class="actionBtn red" src="../icons/purgeTFM.svg" data-id="${id}">
-                <img class="actionBtn" src="../icons/document-edit.svg" data-id="${id}">
-                <div class="openAble" data-id="${id}">${title}</div>
-            </div>
-        `;
-    });
+    const selectedSet = new Set(selectedList);
 
-    setResetEventListeners(json, container)
-}
+    keys.forEach((key) => {
+        const div = document.createElement("div");
+        const title = json[key]?.metadata?.title;
+        const name = normalizeTitle(title);
 
-function setResetEventListeners(json, container) {
+        div.innerHTML =
+            `
+                <img class="action" id="selectImage" src="../icons/selectall.svg" title="select" />
+                <div class="text">
+                    ${name}
+                </div>
+                <div class="actions">
+                    <img class="action" id="renameImage" src="../icons/document-edit.svg" title="rename chat" />
+                    <img class="action red" id="deleteImage" src="../icons/removetablerow.svg" title="delete (no undo)" />
+                </div>
+            `.replaceAll("  ", "").replaceAll("\n", "")
+        ;
 
-    container.querySelectorAll("*").forEach((element) => {
-        const clone = element.cloneNode(true);
-        element.parentNode.replaceChild(clone, element);
-    });
+        div.dataset.id = key;
 
-    document.addEventListener("contextmenu", (event) => {
-        event.preventDefault();
-    });
+        const highlightIndexes = highlightMap?.get(String(key)) || highlightMap?.get(key);
+        setRowText(div, name, highlightIndexes);
 
-    document.querySelectorAll(".openAble").forEach((element) => {
-        element.addEventListener("click", () => {
-            const id = element.dataset.id;
-            makeNewTabWithID(id);
+        const selectImg = div.querySelector("img#selectImage");
+        const isSelected = selectedSet.has(key);
+
+        selectImg.dataset.selected = isSelected ? "true" : "false";
+        selectImg.src = isSelected ? "../icons/select-active.svg" : "../icons/selectall.svg";
+
+        selectImg.addEventListener("click", () => {
+            if (selectImg.dataset.selected === "true") {
+                selectImg.src = "../icons/selectall.svg";
+                selectImg.dataset.selected = "false";
+
+                const index = selectedList.indexOf(key);
+                const length = selectedList.length - 1;
+                selectedList[index] = selectedList[length];
+                selectedList.pop();
+
+                updateSelectAllButtonImage();
+            } else {
+                selectImg.src = "../icons/select-active.svg";
+                selectImg.dataset.selected = "true";
+
+                selectedList.push(key);
+
+                updateSelectAllButtonImage();
+            }
         });
+
+        const deleteImg = div.querySelector("img#deleteImage");
+        deleteImg.addEventListener("click", () => {
+            purgeTabMemory(div.dataset.id);
+            div.remove();
+            try {
+                const index = selectedList.indexOf(div.dataset.id);
+                const length = selectedList.length - 1;
+                selectedList[index] = selectedList[length];
+                selectedList.pop();
+            } catch {}
+        });
+
+        const renameImg = div.querySelector("img#renameImage");
+        renameImg.addEventListener("click", () => beginRename(div));
+
+
+        div.classList.add("selectable");
+        main.appendChild(div);
     });
 
-    document.querySelectorAll(".actionBtn").forEach((element) => {
-        if (element.getAttribute("src") === "../icons/purgeTFM.svg") {
-            element.addEventListener("click", () => {
-                purgeTabMemory(element.dataset.id);
-                element.parentNode.remove();
-            });
-        }
-
-        else if (element.getAttribute("src") === "../icons/document-edit.svg") {
-            element.addEventListener("click", () => {
-                const parent = element.parentNode;
-                const openAble = parent.querySelector("div.openAble");
-                if (!openAble) return;
-
-                const id = element.dataset.id;
-                let title = json[id]?.metadata?.title || "Untitled";
-
-                // Remove the div
-                parent.removeChild(openAble);
-
-                // Create input
-                const input = document.createElement("input");
-                input.className = "openAble";
-                input.value = title;
-                input.type = "text";
-
-                // Helper to create the div again
-                function createOpenAbleDiv(val) {
-                    const newDiv = document.createElement("div");
-                    newDiv.className = "openAble";
-                    newDiv.dataset.id = id;
-                    newDiv.textContent = val;
-
-                    // Add click handler for purging
-                    newDiv.addEventListener("click", () => {
-                        purgeTabMemory(id);
-                        newDiv.parentNode.remove();
-                    });
-
-                    // Re-add edit handler so user can edit again
-                    newDiv.addEventListener("dblclick", () => {
-                        element.click();
-                    });
-
-                    parent.appendChild(newDiv);
-                }
-
-                input.addEventListener("input", async (e) => {
-                    if (e.key === "Enter") {
-                        await chTitleOfTab(id, input.value); // make sure title updates
-                        json = await getGlobalJson();
-
-                        input.remove();
-                        createOpenAbleDiv(input.value);
-                    } else if (e.key === "Escape") {
-                        input.remove();
-                        createOpenAbleDiv(title);
-                    }
-                });
-
-                parent.appendChild(input);
-                input.focus();
-                input.select();
-            });
-        }
-    });
+    updateSelectAllButtonImage();
+    requestAnimationFrame(updateScrollbarState);
 }
 
-function addToolbarListeners() {
-    document.querySelector("img.tool-bar-action#searchInit")
-        .addEventListener("click", () => {
-            if (document.querySelector("body > div.margin-bar")) return;
-
-            const bar = document.createElement("div");
-            bar.classList.add("margin-bar");
-            bar.innerHTML = `
-                <img src="../icons/close-file.svg" title="close search">
-                <input class="search" value="">
-            `;
-            document.body.appendChild(bar);
-
-            const body = document.createElement("div");
-            body.classList.add("search-resalts");
-            body.innerHTML = `
-                <i>(please add query)</i>
-            `;
-            document.body.appendChild(body);
-
-            document.querySelector("body > div.margin-bar > img")
-                .addEventListener("click", () => {
-                    document.querySelector("body > div.margin-bar")
-                        .classList.add("exiting");
-
-                    setTimeout(() => {
-                        document.querySelector("body > div.margin-bar").remove();
-                    }, 150);
-
-
-                    document.querySelector("body > div.search-resalts")
-                        .classList.add("exiting");
-
-                    setTimeout(() => {
-                        document.querySelector("body > div.search-resalts").remove();
-                    }, 150);
-                });
-
-            document.querySelector("body > div.margin-bar > input.search")
-                .addEventListener("input", () => {
-                    updateSearchResualts(
-                        document.querySelector("body > div.margin-bar > input.search").value
-                    );
-                });
-
-            document.querySelector("body > div.margin-bar > input.search").focus();
-    });
+function normalizeTitle(title) {
+    const asString = String(title ?? "");
+    return asString.trim().length ? asString : "Untitled";
 }
 
-function updateSearchResualts(query) {
-    const searchResalts = document.querySelector("body > div.search-resalts");
-    if (!searchResalts) return;
+function setRowText(rowDiv, title, highlightIndexes = null) {
+    const existingText = rowDiv.querySelector("div.text");
+    const newText = document.createElement("div");
+    newText.classList.add("text");
 
-    if (query === "") {
-        searchResalts.innerHTML = "<i>(please add query)</i>";
-        return;
+    const normalizedTitle = normalizeTitle(title);
+
+    if (Array.isArray(highlightIndexes) && highlightIndexes.length && normalizedTitle !== "Untitled") {
+        const sortedIndexes = [...new Set(highlightIndexes)]
+            .filter((i) => Number.isInteger(i) && i >= 0 && i < normalizedTitle.length)
+            .sort((a, b) => a - b);
+
+        let cursor = 0;
+        let indexCursor = 0;
+
+        while (indexCursor < sortedIndexes.length) {
+            const start = sortedIndexes[indexCursor];
+            if (start > cursor) {
+                newText.appendChild(document.createTextNode(normalizedTitle.slice(cursor, start)));
+            }
+
+            let end = start + 1;
+            while (indexCursor + 1 < sortedIndexes.length && sortedIndexes[indexCursor + 1] === end) {
+                indexCursor++;
+                end++;
+            }
+
+            const span = document.createElement("span");
+            span.classList.add("search-highlight");
+            span.textContent = normalizedTitle.slice(start, end);
+            newText.appendChild(span);
+
+            cursor = end;
+            indexCursor++;
+        }
+
+        if (cursor < normalizedTitle.length) {
+            newText.appendChild(document.createTextNode(normalizedTitle.slice(cursor)));
+        }
+    } else {
+        newText.textContent = normalizedTitle;
     }
 
-    // One-time fuzzysort index init
-    if (!window.hasInitedFuzzysort) {
-        window.fuzzysortIndex = Object.entries(window.gjson)
+    newText.addEventListener("click", () => {
+        makeNewTabWithID(rowDiv.dataset.id);
+    });
+
+    if (existingText) existingText.replaceWith(newText);
+    else rowDiv.querySelector("input.rename-chat")?.replaceWith(newText);
+}
+
+function cancelActiveRename() {
+    if (!activeRename) return;
+    const { rowDiv, originalTitle, renameImg, submitImg, cancelImg } = activeRename;
+
+    rowDiv.classList.remove("renaming");
+    submitImg.remove();
+    cancelImg.remove();
+    rowDiv.querySelector("div.actions")?.insertBefore(renameImg, rowDiv.querySelector("img#deleteImage"));
+    setRowText(rowDiv, originalTitle);
+    activeRename = null;
+}
+
+function submitActiveRename() {
+    if (!activeRename) return;
+    const { rowDiv, originalTitle, renameImg, submitImg, cancelImg, input } = activeRename;
+    const nextTitleTrimmed = String(input.value ?? "").trim();
+    const nextTitle = nextTitleTrimmed.length ? nextTitleTrimmed : originalTitle;
+
+    chTitleOfTab(rowDiv.dataset.id, nextTitle);
+
+    rowDiv.classList.remove("renaming");
+    submitImg.remove();
+    cancelImg.remove();
+    rowDiv.querySelector("div.actions")?.insertBefore(renameImg, rowDiv.querySelector("img#deleteImage"));
+    setRowText(rowDiv, nextTitle);
+    activeRename = null;
+}
+
+function beginRename(rowDiv) {
+    if (!rowDiv) return;
+    if (activeRename?.rowDiv === rowDiv) return;
+    cancelActiveRename();
+
+    const textDiv = rowDiv.querySelector("div.text");
+    if (!textDiv) return;
+
+    const originalTitle = normalizeTitle(textDiv.textContent);
+    const input = document.createElement("input");
+    input.value = originalTitle;
+    input.classList.add("rename-chat");
+
+    const actionsDiv = rowDiv.querySelector("div.actions");
+    const renameImg = actionsDiv?.querySelector("img#renameImage");
+    const deleteImg = actionsDiv?.querySelector("img#deleteImage");
+    if (!actionsDiv || !renameImg || !deleteImg) return;
+
+    const submitImg = document.createElement("img");
+    submitImg.classList.add("action");
+    submitImg.id = "submitRenameImage";
+    submitImg.src = "../icons/submittitle-index.svg";
+    submitImg.title = "set title";
+
+    const cancelImg = document.createElement("img");
+    cancelImg.classList.add("action");
+    cancelImg.id = "cancelRenameImage";
+    cancelImg.src = "../icons/close-rename.svg";
+    cancelImg.title = "cancel rename";
+
+    submitImg.addEventListener("click", submitActiveRename);
+    cancelImg.addEventListener("click", cancelActiveRename);
+
+    input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            submitActiveRename();
+        } else if (event.key === "Escape") {
+            event.preventDefault();
+            cancelActiveRename();
+        }
+    });
+
+    rowDiv.classList.add("renaming");
+    renameImg.remove();
+    actionsDiv.insertBefore(submitImg, deleteImg);
+    actionsDiv.insertBefore(cancelImg, deleteImg);
+    textDiv.replaceWith(input);
+
+    activeRename = { rowDiv, originalTitle, renameImg, submitImg, cancelImg, input };
+    input.focus();
+    input.setSelectionRange(0, input.value.length);
+}
+
+function updateSelectAllButtonImage() {
+    const btn = document.getElementById("select-all-btn");
+
+    const visibleSelectables = document.querySelectorAll("div.selectable").length;
+    const visibleSelected = document.querySelectorAll('div.selectable img#selectImage[data-selected="true"]').length;
+
+    if (visibleSelected === 0) {
+        btn.src = "../icons/selectall.svg";
+        btn.setAttribute("title", "select all");
+    }
+    else if (visibleSelected === visibleSelectables) {
+        btn.src = "../icons/select-active.svg";
+        btn.setAttribute("title", "deselect all");
+    }
+    else {
+        btn.src = "../icons/parital-selection.svg";
+        btn.setAttribute("title", "deselect selected");
+    }
+}
+
+document.getElementById("select-all-btn").addEventListener("contextmenu", (event) => {
+    event.preventDefault();
+
+    const overlay = document.createElement("div");
+    overlay.classList.add("transparent-menu-overlay");
+    document.body.appendChild(overlay);
+
+    const menu = document.createElement("div");
+    menu.classList.add("selection-menu");
+
+    const visibleSelectables = document.querySelectorAll("div.selectable").length;
+    const visibleSelected = document.querySelectorAll('div.selectable img#selectImage[data-selected="true"]').length;
+
+    if (visibleSelected === 0) {
+        menu.innerHTML =
+            `
+                <div class="menu-action" data-action="select">Select All</div>
+            `
+        ;
+    }
+    else if (visibleSelected === visibleSelectables) {
+        menu.innerHTML =
+            `
+                <div class="menu-action" data-action="deselect">Deselect All</div>
+            `
+        ;
+    }
+    else {
+        menu.innerHTML =
+            `
+                <div class="menu-action" data-action="select">Select All</div>
+                <div class="menu-action" data-action="deselect">Deselect All</div>
+                <div class="menu-action" data-action="invert">Invert Selection</div>
+            `
+        ;
+    }
+
+    document.body.appendChild(menu);
+
+    document.addEventListener("mousedown", (event) => {
+        const menuAction = event.target.closest('.menu-action');
+
+        if (menuAction) {
+            const action = menuAction.dataset.action;
+
+            switch (action) {
+                case "select":
+                    const selectabes = document.querySelectorAll("div.selectable:has(img.action:not([src=\"../icons/select-active.svg\"]))");
+
+                    selectabes.forEach((element) => {
+                        selectedList.push(element.dataset.id);
+                        const selectImg = element.querySelector("img#selectImage");
+                        selectImg.dataset.selected = "true";
+                        selectImg.src = "../icons/select-active.svg";
+                    });
+
+                    updateSelectAllButtonImage()
+                    break;
+                case "deselect":
+                    const deselectabes = document.querySelectorAll("div.selectable:has(img.action[src=\"../icons/select-active.svg\"])");
+
+                    deselectabes.forEach((element) => {
+                        const index = selectedList.indexOf(element.dataset.id);
+                        const length = selectedList.length - 1;
+                        selectedList[index] = selectedList[length];
+                        selectedList.pop();
+
+                        const selectImg = element.querySelector("img#selectImage");
+                        selectImg.dataset.selected = "false";
+                        selectImg.src = "../icons/selectall.svg";
+                    });
+
+                    updateSelectAllButtonImage()
+                    break;
+                case "invert":
+                    const invertablesDeselectables = document.querySelectorAll(
+                        'div.selectable:has(img#selectImage:not([src="../icons/select-active.svg"]))'
+                    );
+
+                    const invertablesSelectables = document.querySelectorAll(
+                        'div.selectable:has(img#selectImage[src="../icons/select-active.svg"])'
+                    );
+
+                    invertablesSelectables.forEach((element) => {
+                        const index = selectedList.indexOf(element.dataset.id);
+
+                        if (index !== -1) {
+                            selectedList[index] = selectedList[selectedList.length - 1];
+                            selectedList.pop();
+                        }
+
+                        const selectImg = element.querySelector("img.action#selectImage");
+                        selectImg.dataset.selected = "false";
+                        selectImg.src = "../icons/selectall.svg";
+                    });
+
+                    invertablesDeselectables.forEach((element) => {
+                        selectedList.push(element.dataset.id);
+
+                        const selectImg = element.querySelector("img.action#selectImage");
+                        selectImg.dataset.selected = "true";
+                        selectImg.src = "../icons/select-active.svg";
+                    });
+
+                    updateSelectAllButtonImage();
+                    break;
+            }
+        }
+
+        overlay.remove();
+        menu.remove();
+    }, {once: true});
+});
+
+document.getElementById("select-all-btn").addEventListener("click", (event) => {
+    const btn = document.getElementById("select-all-btn");
+
+    const visibleSelectables = document.querySelectorAll("div.selectable").length;
+    const visibleSelected = document.querySelectorAll('div.selectable img#selectImage[data-selected="true"]').length;
+
+    if (visibleSelected === 0) {
+        const selectabes = document.querySelectorAll("div.selectable:has(img.action:not([src=\"../icons/select-active.svg\"]))");
+
+        selectabes.forEach((element) => {
+            selectedList.push(element.dataset.id);
+            const selectImg = element.querySelector("img.action");
+            selectImg.dataset.selected = "true";
+            selectImg.src = "../icons/select-active.svg";
+        });
+
+        updateSelectAllButtonImage();
+    }
+    else if (visibleSelected === visibleSelectables) {
+        const deselectabes = document.querySelectorAll("div.selectable:has(img.action[src=\"../icons/select-active.svg\"])");
+
+        deselectabes.forEach((element) => {
+            const index = selectedList.indexOf(element.dataset.id);
+            const length = selectedList.length - 1;
+            selectedList[index] = selectedList[length];
+            selectedList.pop();
+
+            const selectImg = element.querySelector("img.action");
+            selectImg.dataset.selected = "false";
+            selectImg.src = "../icons/selectall.svg";
+        });
+
+        updateSelectAllButtonImage();
+    }
+    else {
+        const deselectabes = document.querySelectorAll("div.selectable:has(img.action[src=\"../icons/select-active.svg\"])");
+
+        deselectabes.forEach((element) => {
+            const index = selectedList.indexOf(element.dataset.id);
+            const length = selectedList.length - 1;
+            selectedList[index] = selectedList[length];
+            selectedList.pop();
+
+            const selectImg = element.querySelector("img.action");
+            selectImg.dataset.selected = "false";
+            selectImg.src = "../icons/selectall.svg";
+        });
+
+        updateSelectAllButtonImage();
+    }
+});
+
+document.getElementById("delete-all-btn").addEventListener("click", (event) => {
+    selectedList.forEach((id) => {
+        let tab = document.querySelector(`div[data-id="${id}"]`);
+        if (tab) {
+            tab.remove();
+            purgeTabMemory(id);
+        }
+    });
+    selectedList = [];
+
+    updateSelectAllButtonImage();
+});
+
+document.getElementById("search-btn").addEventListener("click", () => {
+    const divCenter = document.querySelector("div.std-action-bar > div.center");
+    const inputElement = divCenter.querySelector("input.search");
+    const main = document.querySelector("main");
+
+    const ensureFuzzysortIndex = () => {
+        const entries = Object.entries(window.gjson || {});
+        if (window.hasInitedFuzzysort && window.fuzzysortIndexSourceSize === entries.length) return;
+
+        window.fuzzysortIndex = entries
             .filter(([id, value]) =>
                 Number(id) >= 100 &&
                 value?.metadata?.title
             )
             .map(([id, value]) => ({
                 id,
-                title: value.metadata.title,
+                title: fuzzysort.prepare(value.metadata.title),
                 ref: value
             }));
 
         window.hasInitedFuzzysort = true;
-    }
+        window.fuzzysortIndexSourceSize = entries.length;
+    };
 
-    const results = fuzzysort.go(query, window.fuzzysortIndex, {
-        key: "title",
-        threshold: -1000,
-        limit: 500
-    });
+    const exitSearch = () => {
+        divCenter.classList.add("hidden");
 
-    // Best matches last
-    results.reverse();
+        if (searchDebounceTimeout) clearTimeout(searchDebounceTimeout);
+        searchDebounceTimeout = null;
+        inputElement.value = "";
 
-    const outputJson = {};
-    for (const r of results) {
-        outputJson[r.obj.id] = r.obj.ref;
-        outputJson[r.obj.id].metadata = outputJson[r.obj.id].metadata || {};
-        try {
-            // Use fuzzysort's highlight helper to wrap matched characters in <b> tags
-            outputJson[r.obj.id].metadata.highlightedTitle = r.highlight('<b>','</b>');
-        } catch (e) {
-            // Fallback to normal title if highlight is unavailable
-            outputJson[r.obj.id].metadata.highlightedTitle = outputJson[r.obj.id].metadata.title || '';
-        }
-    }
+        const inputElementCopy = inputElement.cloneNode(true);
+        inputElement.replaceWith(inputElementCopy);
 
-    if (Object.keys(outputJson).length == 0) {
-        searchResalts.innerHTML = "<i>(no resualts)</i>";
+        renderJson(window.gjson);
+    };
+
+    divCenter.classList.toggle("hidden");
+
+    const isHidden = divCenter.classList.contains("hidden");
+
+    if (isHidden) {
+        exitSearch();
         return;
     }
 
-    searchResalts.innerHTML = "";
-    renederJson(outputJson, searchResalts);
-}
+    if (!isHidden) {
+        inputElement.focus();
+        inputElement.value = "";
 
-window.onclick = updateActionButtonPosition;
+        main.innerHTML = `<i class="search-mesh">(please add query)</i>`;
+
+        const runSearch = () => {
+            const query = String(inputElement.value ?? "");
+            const trimmed = query.trim();
+
+            if (trimmed.length === 0) {
+                main.innerHTML = `<i class="search-mesh">(please add query)</i>`;
+                return;
+            }
+
+            ensureFuzzysortIndex();
+
+            const results = fuzzysort.go(trimmed, window.fuzzysortIndex, {
+                key: "title",
+                threshold: -1000,
+                limit: 500
+            });
+
+            const outputJson = {};
+            const orderedIds = [];
+            const highlightMap = new Map();
+
+            for (const r of results) {
+                const id = String(r.obj.id);
+                orderedIds.push(id);
+                highlightMap.set(id, r.indexes);
+                outputJson[id] = r.obj.ref;
+            }
+
+            if (Object.keys(outputJson).length === 0) {
+                main.innerHTML = `<i class="search-mesh">(no results)</i>`;
+                return;
+            }
+
+            renderJson(outputJson, { orderedIds, highlightMap });
+        };
+
+        inputElement.addEventListener("input", () => {
+            if (searchDebounceTimeout) clearTimeout(searchDebounceTimeout);
+            searchDebounceTimeout = setTimeout(runSearch, 50);
+        });
+
+        inputElement.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+                exitSearch();
+            }
+        });
+    }
+});

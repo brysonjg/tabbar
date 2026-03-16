@@ -11,7 +11,7 @@ The interface takes a lot of inspiration from traditional desktop workflows and 
 - Real tabs for parallel chats
 - Fast switching between active conversations
 - An index view for browsing and searching saved chats
-- Bulk-style management tools for renaming, reopening, and purging chat history
+- Bulk-style management tools for renaming, reopening, and deleting chats
 - A cleaner, more desktop-like interface than the usual AI web app sludge
 - Theming, fonts, keybindings, model selection, and account settings
 - Chat history branching and version navigation
@@ -48,7 +48,6 @@ Clone the repo:
 
 ```bash
 git clone https://github.com/brysonjg/tabbar.git
-cd tabbar/chungus
 ```
 
 Create `./chungus/api-key.js` with your OpenRouter key:
@@ -84,7 +83,7 @@ Then open the local URL shown by Python and start using the app.
 4. Use the index page to reopen, search, rename, or purge old chats.
 5. Use settings to configure appearance, models, and keybindings.
 
-If you get an error like `Error: HTTP 123`, check the in-app documentation and your OpenRouter configuration first.
+If you get an error like `Error: HTTP 567`, check the in-app documentation and your OpenRouter configuration first.
 
 ## In-App Documentation
 
@@ -103,5 +102,6 @@ This project is a good fit if you:
 
 See:
 
-- `.github/LICENSE.md`
-- `.github/lgpl-2.1.md`
+    .github/LICENSE.md
+
+and the linsenciing for other librarys it directs to.

@@ -7,21 +7,34 @@
     <link rel="stylesheet" href="./indx.css">
   </head>
   <body>
-    <main>
-      <div id="master-index-content-container">
+    <div class="action-holdings">
+      <div class="action-holdings-inner">
+        <div class="std-action-bar">
+          <div class="left">
+            <img src="../icons/selectall.svg" class="action-buton" alt="Select All" title="select all" id="select-all-btn">
+            <div>
+              <img src="../icons/removetablerow.svg" class="action-buton red" alt="Delete Selected" title="delete selected (no undo)" id="delete-all-btn">
+            </div>
+          </div>
+          <div class="center hidden init">
+            <input class="search" />
+          </div>
+          <div class="right">
+            <img src="../icons/find-chat.svg" class="action-buton" alt="Search" title="search chats" id="search-btn">
+          </div>
+        </div>
       </div>
-    </main>
+    </div>
 
-    <div class="icon-actions">
-      <img class="tool-bar-action" src="../icons/find-chat.svg" id="searchInit" title="search"></img>
+    <div class="super-main">
+      <main>
+      </main>
     </div>
 
     <script src="../controlcommands.js" defer></script>
-    <script src="../utils/reftheme.js"></script>
-    <script src="../utils/kbutils.js"></script>
-
-    <script src="./libs/fuzzysort.min.js"></script>
-
+    <script src="../utils/reftheme.js" defer></script>
+    <script src="../utils/kbutils.js" defer></script>
+    <script src="./libs/fuzzysort.min.js" defer></script>
     <script src="./indx.js" defer></script>
   </body>
 </html>

@@ -1,10 +1,12 @@
-# zip formats
+# zip formats (complex historical (in this project) signifigens)
 *.zip
 
 # swap formats (ides)
 *.swp
 *.swo
 *.kate-swp
+.vscode/
+.cursor/
 
-# api key file
+# api key file (for the sake of the security of ten dollar)
 chungus/api-key.js

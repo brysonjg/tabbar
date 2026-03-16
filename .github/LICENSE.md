@@ -43,6 +43,14 @@ A full copy of the GNU LGPL v2.1 license is provided at:
 
     (project root)/.github/lgpl-2.1.md
 
+The `font.ttf` file in the project root is the Source Code Pro font family\
+from Google Fonts (Copyright (c) 2023 Adobe), licensed under the\
+SIL Open Font License, Version 1.1 (OFL-1.1).
+
+A full copy of the SIL OFL 1.1 license is provided at:
+
+    (project root)/.github/ofl-1.1.md
+
 Other third-party libraries used in this project:
 
 * Prism.js - MIT License (c) 2012 Lea Verou.
