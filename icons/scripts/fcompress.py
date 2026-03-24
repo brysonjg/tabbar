@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 
 INKSCAPE_COMMENT_RE = re.compile(
-    r"\s*<!-- Created with Inkscape \(http://www\.inkscape\.org/\) -->\s*\n?",
+    r"\s*<!--*-->\s*\n?",
     flags=re.MULTILINE,
 )
 
@@ -68,7 +68,7 @@ HELP_OPTS = {"-h", "--h", "--help"}
 def _print_help() -> None:
     print(
         "Usage: python3 fcompress.py\n"
-        "Cleans Inkscape comment headers from every SVG in the sibling icons directory.\n"
+        "Cleans SVG files of their comments.\n"
         "Options:\n"
         "  -h, --h, --help    show this help message and exit"
     )

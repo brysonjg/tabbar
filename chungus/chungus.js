@@ -424,7 +424,6 @@ function attachModelItemListeners(container) {
         if (type === 'setModel') {
             element.addEventListener('click', () => {
                 submisionModel = element.getAttribute('model');
-                console.log('Model set to', submisionModel);
             });
         }
     });
@@ -435,9 +434,8 @@ document.querySelector('img.change-title-btn').addEventListener("click", async (
 });
 
 function updateRules() {
-
     document.querySelectorAll("pre div.copy-btn").forEach((element) => {
-        element.addEventListener("click", () => {
+        element.onclick = () => {
             const code = element.parentElement.querySelector("code");
             if (!code) return;
 
@@ -451,7 +449,7 @@ function updateRules() {
             element.classList.add("copied");
             element.innerHTML = "Copied";
             setTimeout(resetBtn, 1000);
-        });
+        };
     });
 
     Prism.highlightAll();
@@ -461,7 +459,7 @@ function updateRules() {
     scheduleBlameSpacerUpdate();
 }
 
-function getRandomPUAChars(count = 255) {
+function getRandomPUAChars(count = 64) {
     const start = 0xE000;
     const end = 0xF8FF;
     const chars = [];
@@ -471,7 +469,7 @@ function getRandomPUAChars(count = 255) {
         chars.push(String.fromCharCode(codePoint));
     }
 
-    return (chars.sort(() => Math.random() - 0.5)).join("");
+    return chars.join("");
 }
 
 function getMarkdownToken(index) {
@@ -627,8 +625,9 @@ function renderMD(md, username = "user", arbs = "", files = {}, doAnimations = t
 
     // Display file names only in UI
     Object.keys(files).forEach((file) => {
+        const iconName = files[file].icon || getFileIconFileName(file, files[file].mimetype, null);
         fileFeild.innerHTML += `<div class="message-file">
-                                    <img src="../icons/type-icons/icons/${getFileIconFileName(file,files[file].mimetype)}" class="fname-icon" />
+                                    <img src="../icons/type-icons/icons/${iconName}" class="fname-icon" />
                                     ${file}
                                 </div>`;
     });
@@ -662,7 +661,14 @@ function collectFiles() {
         const fileName = div.textContent.trim();
         const fileContent = div.dataset.content || "";
         const fileMimetype = div.dataset.mimetype || "";
-        if (fileName) fileStruct[fileName] = { content: fileContent, mimetype: fileMimetype };
+        const fileIcon = div.dataset.icon || "";
+        if (fileName) {
+            fileStruct[fileName] = {
+                content: fileContent,
+                mimetype: fileMimetype,
+                icon: fileIcon
+            };
+        }
 
         div.remove();
     });
@@ -832,6 +838,8 @@ async function handleSubmision() {
                             actionButtons.classList.add("scrollbar");
                             bufferActionPassageFalse = false;
                         }
+
+                        updateRules();
 
                         await new Promise(requestAnimationFrame);
                     }
@@ -1097,19 +1105,23 @@ document.querySelector(".context#add-context").addEventListener("mousedown", () 
                 for (const file of files) {
                     const reader = new FileReader();
 
-                    reader.onload = (e) => {
+                    reader.onload = async (e) => {
                         const div = document.createElement("div");
                         div.classList.add("context");
                         div.textContent = file.name; // safe text content
                         div.dataset.content = e.target.result; // store file content safely
                         div.dataset.mimetype = file.type || "";
 
+                        const veiw = new DataView(await file.arrayBuffer());
+                        const iconName = getFileIconFileName(file.name, file.type, veiw);
+                        div.dataset.icon = iconName;
+
                         div.innerHTML = `
-                    <img
-                        src="../icons/type-icons/icons/${getFileIconFileName(file.name, file.type)}"
-                        class="fname-icon">
-                    </img>`
-                    + div.innerHTML;
+                            <img
+                                src="../icons/type-icons/icons/${iconName}"
+                                class="fname-icon">
+                            </img>`
+                            + div.innerHTML;
 
                         fileFeild.appendChild(div);
 
@@ -1126,7 +1138,7 @@ document.querySelector(".context#add-context").addEventListener("mousedown", () 
                             div.classList.remove("hovring");
                             div.querySelector("img.fname-icon").src =
                     "../icons/type-icons/icons/"
-                    + getFileIconFileName(file.name, file.type);
+                    + iconName;
                         });
                     };
 
@@ -1134,7 +1146,7 @@ document.querySelector(".context#add-context").addEventListener("mousedown", () 
                         console.error(`Error reading ${file.name}:`, err);
                     };
 
-                    reader.readAsText(file); // You can also use readAsArrayBuffer() or readAsDataURL()
+                    reader.readAsText(file);
                 }
         },
         { once: true }

@@ -150,7 +150,7 @@ function makeIconsAcordingToIconPack(ipack = {}) {
     document.querySelectorAll("img").forEach(
       (element) => {
         element.src = ipack[element.src] || element.src;
-        console.log(element)
+        console.log(element);
       }
     );
   });

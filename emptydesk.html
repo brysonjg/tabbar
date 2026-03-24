@@ -1,4 +1,4 @@
-<html><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -7,40 +7,40 @@
     <style>
 
       :root {
-        --font: "font";
-        --font-size: 16px;
-        --bg-color: #2a2e32;
-        --fg-color: #d4d4d4;
-        --asset-acsent-color: #64686b;
+          --font: "font";
+          --font-size: 16px;
+          --bg-color: #2a2e32;
+          --fg-color: #d4d4d4;
+          --asset-acsent-color: #64686b;
       }
 
       @font-face {
-        font-family: 'font';
-        src: url('font.ttf') format('truetype');
-        font-weight: normal;
-        font-style: normal;
+          font-family: 'font';
+          src: url('font.ttf') format('truetype');
+          font-weight: normal;
+          font-style: normal;
       }
 
       body, html {
-        background-color: var(--bg-color);
-        color: var(--asset-acsent-color);
-        font-family: var(--font);
-        font-size: min(7.5vw, 75px);
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
+          background-color: var(--bg-color);
+          color: var(--asset-acsent-color);
+          font-family: var(--font);
+          font-size: min(7.5vw, 75px);
+          width: 100vw;
+          height: 100vh;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
 
-        user-select: none;
-        -webkit-user-select: none;
+          user-select: none;
+          -webkit-user-select: none;
       }
 
       div {
-        width: min(40vw, 400px);
-        height: min(40vw, 400px);
+          width: min(40vw, 400px);
+          height: min(40vw, 400px);
       }
 
     </style>
@@ -55,34 +55,34 @@
     <script src="./utils/kbutils.js"></script>
     <script>
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            await fixThemeOverSettable("chungus");
+      document.addEventListener('DOMContentLoaded', async () => {
+          await fixThemeOverSettable("chungus");
 
-            // Get the root element
-            const rootElement = document.documentElement;
+          // Get the root element
+          const rootElement = document.documentElement;
 
-            // Get the computed style object
-            const computedStyles = window.getComputedStyle(rootElement);
+          // Get the computed style object
+          const computedStyles = window.getComputedStyle(rootElement);
 
-            document.querySelector("div").innerHTML = `
-            <?xml version="1.0" encoding="UTF-8"?>
-            <svg id="svg3769" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-              <defs id="defs3051">
-                <style id="current-color-scheme" type="text/css">
-                .ColorScheme-Text {
-                      color:#eff0f1;
-                }
-                </style>
-              </defs>
-              <rect id="rect894" x="3.04" y="2.0299" width=".92851" height="11.317" rx=".25" ry=".25" fill="${computedStyles.getPropertyValue('--asset-acsent-color')}" stroke-width=".97436"/>
-              <rect id="rect900" x="4.9296" y="2.0337" width="8.1677" height="1.2186" rx=".25" ry=".25" fill="${computedStyles.getPropertyValue('--asset-acsent-color')}" stroke-width="1.107"/>
-              <rect id="rect908" x="4.9507" y="4.5298" width="4.7192" height="1.2186" rx=".25" ry=".25" fill="${computedStyles.getPropertyValue('--asset-acsent-color')}" stroke-width=".84143"/>
-              <rect id="rect912" x="4.9708" y="7.0304" width="6.5477" height="1.2186" rx=".25" ry=".25" fill="${computedStyles.getPropertyValue('--asset-acsent-color')}" stroke-width=".99112"/>
-              <rect id="rect916" x="4.9532" y="9.5583" width="2.7558" height="1.2186" rx=".25" ry=".25" fill="${computedStyles.getPropertyValue('--asset-acsent-color')}" stroke-width=".64299"/>
-              <rect id="rect920" x="4.9602" y="12.085" width="8.2379" height="1.2186" rx=".25" ry=".25" fill="${computedStyles.getPropertyValue('--asset-acsent-color')}" stroke-width="1.1117"/>
-            </svg>
-            `
-        });
+          document.querySelector("div").innerHTML = `
+          <?xml version="1.0" encoding="UTF-8"?>
+          <svg id="svg3769" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+            <defs id="defs3051">
+              <style id="current-color-scheme" type="text/css">
+              .ColorScheme-Text {
+                    color:#eff0f1;
+              }
+              </style>
+            </defs>
+            <rect id="rect894" x="3.04" y="2.0299" width=".92851" height="11.317" rx=".25" ry=".25" fill="${computedStyles.getPropertyValue('--asset-acsent-color')}" stroke-width=".97436"/>
+            <rect id="rect900" x="4.9296" y="2.0337" width="8.1677" height="1.2186" rx=".25" ry=".25" fill="${computedStyles.getPropertyValue('--asset-acsent-color')}" stroke-width="1.107"/>
+            <rect id="rect908" x="4.9507" y="4.5298" width="4.7192" height="1.2186" rx=".25" ry=".25" fill="${computedStyles.getPropertyValue('--asset-acsent-color')}" stroke-width=".84143"/>
+            <rect id="rect912" x="4.9708" y="7.0304" width="6.5477" height="1.2186" rx=".25" ry=".25" fill="${computedStyles.getPropertyValue('--asset-acsent-color')}" stroke-width=".99112"/>
+            <rect id="rect916" x="4.9532" y="9.5583" width="2.7558" height="1.2186" rx=".25" ry=".25" fill="${computedStyles.getPropertyValue('--asset-acsent-color')}" stroke-width=".64299"/>
+            <rect id="rect920" x="4.9602" y="12.085" width="8.2379" height="1.2186" rx=".25" ry=".25" fill="${computedStyles.getPropertyValue('--asset-acsent-color')}" stroke-width="1.1117"/>
+          </svg>
+          `
+      });
 
     </script>
   </body>

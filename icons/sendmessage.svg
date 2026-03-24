@@ -1,11 +1,71 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg id="svg3769" width="16" height="16" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
- <defs id="defs3051">
-  <style id="current-color-scheme" type="text/css">.ColorScheme-Text {
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="svg3769"
+   width="16"
+   height="16"
+   version="1.1"
+   viewBox="0 0 16 16"
+   sodipodi:docname="sendmessage.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview8"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="32"
+     inkscape:cx="12.546875"
+     inkscape:cy="11.03125"
+     inkscape:window-width="1920"
+     inkscape:window-height="1007"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3769"
+     inkscape:lockguides="true" />
+  <defs
+     id="defs3051">
+    <style
+       id="current-color-scheme"
+       type="text/css">.ColorScheme-Text {
         color:#eff0f1;
       }</style>
- </defs>
- <path id="path1702" d="m0.013287 15.467-0.033247-14.8" fill="#8d8f91"/>
- <path id="path6966" d="m0.0019682 1.3454-0.0033865-1.3353 1.2799-0.0087988 14.717 8.2846-14.593 7.7099-1.398 0.009618-0.0025772-1.5469 5.6704-6.4035 1.0618 1.1978-5.0622 5.1691 12.277-6.1692-12.555-7.0132 5.4369 5.6702-1.147 1.1481z" fill="#8d8f91" stroke-opacity="0"/>
- <path id="path11910" d="m5.6585 8.0462 1.1675-1.1421-0.099142 2.3737z" fill="#8d8f91" stroke-opacity="0"/>
+  </defs>
+  <path
+     id="path525"
+     d="M 0,14.5 V 16 H 1.333 L 16,8 1.333,0 H 0 L -2.6609036e-4,1.5 5.7,8.0005 6.85,6.905 1.333,1.333 14,8 1.333,14.666666 6.85,9.095 5.7,8 Z"
+     fill="#8d8f91"
+     stroke-opacity="0"
+     sodipodi:nodetypes="ccccccccccccccc"
+     style="fill:#696c6e;fill-opacity:1" />
+  <rect
+     style="fill:#696c6e;fill-opacity:1;stroke:#696c6e;stroke-width:0"
+     id="rect5515"
+     width="1.149999"
+     height="1.094999"
+     x="5.7000003"
+     y="8.000001" />
+  <rect
+     style="fill:#696c6e;fill-opacity:1;stroke:#696c6e;stroke-width:0"
+     id="rect5538"
+     width="1.149999"
+     height="1.094999"
+     x="5.7000003"
+     y="6.9050007" />
+  <rect
+     style="fill:#696c6e;fill-opacity:1;stroke:#696c6e;stroke-width:0"
+     id="rect5540"
+     width="1.149999"
+     height="1.094999"
+     x="5.7000003"
+     y="-8.5519991"
+     transform="scale(1,-1)" />
 </svg>

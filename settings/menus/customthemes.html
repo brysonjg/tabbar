@@ -273,9 +273,7 @@
       editor.addEventListener("input", () => highlightEditable(editor));
 
       document.getElementById("saveBtn").addEventListener("click", async () => {
-        console.log("commited theme");
         let themeJson = JSON.parse(editor.textContent);
-        console.log(themeJson);
 
         let json = await getSettablesAsJson() || {};
         json.theme = themeJson;
