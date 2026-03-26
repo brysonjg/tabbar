@@ -2,13 +2,10 @@ TODO:
       add more good themes
       fix the user interface for keybindings and models
       add good documentation
-      add a way to stop the ai while it is typing
 
 Known Issues:
-      Large files freeze the DOM in chungus
       In chungus, error handling sucks trumendusly
       If you open the account settings and do nothing then open chungus it sudenly dose not work
-      The icons made for this project that are in icons/ folow no standard at all
       There are no software checks to make shore there are not any bugs
       When tab bars grow to long they go off the page
       When git graph commits on a single row grow to long the lines leading up to them and from them are indestinguishable

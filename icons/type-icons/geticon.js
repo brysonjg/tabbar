@@ -44,13 +44,6 @@ function isExecutable(name, view, ext = "") {
 
     if (!hasBytes(view, 2)) return false;
 
-    // Script hashbang (#!)
-    const isScript =
-        view.getUint8(0) === 0x23 &&
-        view.getUint8(1) === 0x21;
-
-    if (isScript) return true;
-
     if (!hasBytes(view, 4)) return false;
 
     // ELF binary

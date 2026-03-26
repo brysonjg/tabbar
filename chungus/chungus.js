@@ -31,7 +31,7 @@ window.onload = async () => {
             if (Array.isArray(json.chat)) {
                 // Legacy array format - convert to VersionObject structure
                 const repo = VersionObject.newRepository();
-                json.chat.forEach(msg => {
+                json.chat.forEach((msg) => {
                     repo[Object.keys(repo).filter(k => k !== 'active').length] = {
                         parent: 0,
                         content: [msg],
@@ -52,7 +52,7 @@ window.onload = async () => {
     }
     
     // Render loaded messages
-    messages.forEach(message => {
+    messages.forEach((message) => {
         if (message.role !== "system") {
             let username = "user";
             let icon = "../icons/defualt-user.svg";
@@ -351,7 +351,7 @@ async function toggleVersioningSidePanel() {
         document.querySelector("div#blameColumn").replaceChildren();
         document.querySelector("div#chat-container").replaceChildren();
 
-        messages.forEach(message => {
+        messages.forEach((message) => {
             if (message.role !== "system") {
                 let username = "user";
                 let icon = "../icons/defualt-user.svg";
@@ -479,7 +479,7 @@ function getMarkdownToken(index) {
 function translateMDtoHTML(md) {
     md = md.split("\uF8FE\uF8FE%%%%%__USER_UPLOADED_FILES_AFTER_THIS__%%%%%\uF8FE\uF8FE")[0];
 
-    const escapeHTML = str =>
+    const escapeHTML = (str) =>
         str.replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/\>/g, "&gt;")
@@ -507,16 +507,16 @@ function translateMDtoHTML(md) {
     );
 
     // Ordered lists
-    md = md.replace(/(?:^\d+\.\s.+\n?)+/gm, match => {
-        let items = match.trim().split(/\n/).map(line => {
+    md = md.replace(/(?:^\d+\.\s.+\n?)+/gm, (match) => {
+        let items = match.trim().split(/\n/).map((line) => {
             return line.replace(/^\d+\.\s+/, "<li>") + "</li>";
         }).join("");
         return `<ol type="decimal">${items}</ol>`;
     });
 
     // Unordered lists
-    md = md.replace(/(?:^[-*]\s.+\n?)+/gm, match => {
-        let items = match.trim().split(/\n/).map(line => {
+    md = md.replace(/(?:^[-*]\s.+\n?)+/gm, (match) => {
+        let items = match.trim().split(/\n/).map((line) => {
             return line.replace(/^[-*]\s+/, "<li>") + "</li>";
         }).join("");
         return `<ul>${items}</ul>`;
@@ -529,7 +529,7 @@ function translateMDtoHTML(md) {
 
 
     // Blockquotes (group consecutive > lines into one blockquote)
-    md = md.replace(/((?:^&gt;.*(?:\n|$))+)/gm, block => {
+    md = md.replace(/((?:^&gt;.*(?:\n|$))+)/gm, (block) => {
         const content = block
             .replace(/^&gt;\s?/gm, "")
             .trim()
@@ -562,8 +562,8 @@ function translateMDtoHTML(md) {
     // Table formatting
     md = md.replace(
         /((?:\|?.+\|.*(?:\n|<br>|$))+)/g,
-        tableBlock => {
-            const rows = tableBlock.split(/\r?\n|<br>/).map(r => r.trim()).filter(r => r);
+        (tableBlock) => {
+            const rows = tableBlock.split(/\r?\n|<br>/).map((r) => r.trim()).filter((r) => r);
 
             if (rows.length < 2) return tableBlock;
 
@@ -571,11 +571,11 @@ function translateMDtoHTML(md) {
             if (!/^:?-{3,}:?(?:\s*\|\s*:?-{3,}:?)*$/.test(separator)) return tableBlock;
 
             const headerCells = rows[0].replace(/^\||\|$/g, "").split("|")
-                .map(c => `<th>${c.trim()}</th>`).join("");
+                .map((c) => `<th>${c.trim()}</th>`).join("");
 
-            const bodyRows = rows.slice(2).map(r => {
+            const bodyRows = rows.slice(2).map((r) => {
                 const cols = r.replace(/^\||\|$/g, "").split("|")
-                    .map(c => `<td>${c.trim()}</td>`).join("");
+                    .map((c) => `<td>${c.trim()}</td>`).join("");
                 return `<tr>${cols}</tr>`;
             }).join("");
 
@@ -645,7 +645,7 @@ function renderMD(md, username = "user", arbs = "", files = {}, doAnimations = t
     const blameMain = document.getElementById(`blame_mn_`);
     const message = document.getElementById(`message_`);
 
-    [blameSpacer, blameMain, message, fileFeild].forEach(el => el.removeAttribute("id"));
+    [blameSpacer, blameMain, message, fileFeild].forEach((el) => el.removeAttribute("id"));
 
     updateRules();
     scheduleBlameSpacerUpdate();
@@ -657,7 +657,7 @@ function collectFiles() {
 
     const fileStruct = {};
 
-    fileFeild.querySelectorAll("div.context").forEach(div => {
+    fileFeild.querySelectorAll("div.context").forEach((div) => {
         const fileName = div.textContent.trim();
         const fileContent = div.dataset.content || "";
         const fileMimetype = div.dataset.mimetype || "";
@@ -744,7 +744,7 @@ async function handleSubmision() {
     if (Array.isArray(json.chat)) {
         // Legacy array format - create empty repo and migrate
         const repo = VersionObject.newRepository();
-        json.chat.forEach(msg => {
+        json.chat.forEach((msg) => {
             repo[Object.keys(repo).filter(k => k !== 'active').length] = {
                 parent: 0,
                 content: [msg],
@@ -768,7 +768,7 @@ async function handleSubmision() {
     await setLocalJson({ ...json, chat: chatData });
 
     // Prepare messages array for API submission
-    let apiChat = json.chat.compile().map(msg => {
+    let apiChat = json.chat.compile().map((msg) => {
         if (msg.role === "user" && Object.keys(msg.files || {}).length > 0) {
             // Merge file content for AI only
             let merged = msg.content;
@@ -789,6 +789,16 @@ async function handleSubmision() {
     let fullReply = "";
 
     try {
+        let globalOffStitch = false;
+        const submitIconAction = (event) => {
+            event.stopPropagation();
+            globalOffStitch = true;
+        };
+
+        document.getElementById("submitionIcon").src = "../icons/cancel-message.svg";
+
+        document.getElementById("submitionIcon").addEventListener("click", submitIconAction);
+
         const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
             method: "POST",
             headers: {
@@ -816,6 +826,7 @@ async function handleSubmision() {
         while (true) {
             const { value, done } = await reader.read();
             if (done) break;
+            if (globalOffStitch) break;
 
             buffer += decoder.decode(value, { stream: true });
             const parts = buffer.split("\n\n");
@@ -849,6 +860,9 @@ async function handleSubmision() {
             }
         }
 
+        document.getElementById("submitionIcon").src = "../icons/sendmessage.svg";
+        document.getElementById("submitionIcon").removeEventListener("click", submitIconAction);
+
         // Finalize assistant message
         streamEl.innerHTML = translateMDtoHTML(fullReply);
         updateRules();
@@ -861,7 +875,7 @@ async function handleSubmision() {
         let letAIRenameChat = false;
         let hasPassedAssistant = false;
 
-        json.chat.compile().forEach(msg => {
+        json.chat.compile().forEach((msg) => {
             if (msg.role === "assistant") {
                 letAIRenameChat = !hasPassedAssistant; // true only on first assistant message
                 hasPassedAssistant = true;
@@ -884,7 +898,7 @@ async function handleSubmision() {
 Please summarize the chat so far into a short, clear, and easily searchable title.
 The interface will the first section you provide in double quotes ("this is a title") as the chat title, make it concise and directly descriptive of the conversation.
 Avoid complex punctuation, unnecessary symbols, or formatting. The chat title sould sumerise the chat up to but not including this tittle request message.
-For the sake of the user please get to the title displaying quotes as soon as posible so that they wont have to wait much time teir chat to get titled.
+For the sake of the user please get to the title displaying quotes as soon as posible (while still strictly folowing the guidelines best you can) so that they wont have to wait much time their chat to get titled.
 
 Follow these guidelines for good titles:
 
@@ -894,6 +908,7 @@ A good title:
     - Is easy to read and remember
     - Is short (ideally 4 to 7 words)
     - Is syntactically meaningful (uses words like for and the to describe relationships instead of a pile of keywords)
+    - Gets to the main arguments of the conversavtion (e.g. if the conversation is talking about Microsoft stocks then the title should mention Micorsoft and Stocks somware it it, If the conversation is about say how much Fule needed to get moon, then it mentions Rocket fule and moon, if it is writing an Essay then it should clearly stat that in the title with "Essay on ...") and they should be recognisable from the text of the title alone
 
 A bad title:
     - Is vague or generic (e.g., "Chat" or "Conversation")
@@ -901,13 +916,14 @@ A bad title:
     - Includes irrelevant details
     - Describes or implies details never mentioned
     - Is overly long or difficult to scan quickly
-    - Uses markdown or other formating that is not plaintext (e.g. "**Bad Tittle**" or "# Uncool Tittle")`
+    - Uses markdown or other formating that is not plaintext (e.g. "**Bad Tittle**" or "# Uncool Tittle")
+    - Is stating that this is a sumery of the chat: "Chat Recap", "Overveiw of the Chat" etc.`
             };
 
             json.chat.commit([titleRequest]);
             chatData = json.chat.json;
 
-            apiChat = json.chat.compile().map(msg => {
+            apiChat = json.chat.compile().map((msg) => {
                 if (msg.role === "user" && Object.keys(msg.files || {}).length > 0) {
                     // Merge file content for AI only
                     let merged = msg.content;
@@ -978,6 +994,8 @@ A bad title:
             let title =
                 responseText.replace(/^["'\n\s]+|["'\n\s]+$/g, "").trim() || "Untitled";
 
+            console.log(responseText);
+
             setTabTitle(title);
 
             json = await getLocalJson() || {};
@@ -1018,11 +1036,11 @@ window.addEventListener("resize", () => {
 let menuToggled = false;
 const menus = document.querySelectorAll(".menu");
 
-menus.forEach(menu => {
+menus.forEach((menu) => {
     menu.addEventListener("click", () => {
         menuToggled = !menuToggled;
 
-        menus.forEach(m => {
+        menus.forEach((m) => {
             const dropdown = m.querySelector(".dropdown, .dropdown-nul");
             if (!dropdown) return;
 
@@ -1044,7 +1062,7 @@ menus.forEach(menu => {
     menu.addEventListener("mouseenter", () => {
         if (!menuToggled) return;
 
-        menus.forEach(m => {
+        menus.forEach((m) => {
             const dropdown = m.querySelector(".dropdown, .dropdown-nul");
             if (!dropdown) return;
 
@@ -1069,11 +1087,11 @@ document.addEventListener("click", (event) => {
     }
 
     const menusArray = Array.from(menus);
-    const clickedInsideMenu = elementList.some(el => menusArray.includes(el));
+    const clickedInsideMenu = elementList.some((el) => menusArray.includes(el));
 
     if (!clickedInsideMenu) {
         menuToggled = false;
-        document.querySelectorAll(".dropdown").forEach(drop => {
+        document.querySelectorAll(".dropdown").forEach((drop) => {
             drop.classList.remove("dropdown");
             drop.classList.add("dropdown-nul");
         });
@@ -1092,65 +1110,100 @@ document.querySelectorAll(".menu .dropdown .menu-item, .menu .dropdown-nul .menu
     }
 });
 
-document.querySelector(".context#add-context").addEventListener("mousedown", () => {
-    const fileInput = document.querySelector("#hidden-file-input");
-    fileInput.click();
-    const fileFeild = document.querySelector("#file-feild");
+async function readFileTextInChunks(file, chunkSize = 4 * 1024 * 1024) {
+    let offset = 0;
+    let text = "";
 
-    fileInput.addEventListener(
+    while (offset < file.size) {
+        const chunk = file.slice(offset, offset + chunkSize);
+        text += await chunk.text();
+        offset += chunkSize;
+
+        if (offset < file.size) {
+            await new Promise(requestAnimationFrame);
+        }
+    }
+
+    return text;
+}
+
+async function getFilePreviewDataView(file, previewBytes = 256) {
+    const previewSlice = file.slice(0, previewBytes);
+    const buffer = await previewSlice.arrayBuffer();
+    return new DataView(buffer);
+}
+
+const addContextButton = document.querySelector(".context#add-context");
+const hiddenFileInput = document.querySelector("#hidden-file-input");
+const fileFeild = document.querySelector("#file-feild");
+const fileLoadingIcon = "../icons/fileonload.svg";
+
+addContextButton?.addEventListener("mousedown", () => {
+    if (!hiddenFileInput || !fileFeild) return;
+    hiddenFileInput.click();
+
+    hiddenFileInput.addEventListener(
         "change",
         async (event) => {
-                const files = event.target.files;
+            const files = Array.from(event.target.files || []);
 
-                for (const file of files) {
-                    const reader = new FileReader();
+            try {
+                if (files.length === 0) return;
+                for (let index = 0; index < files.length; index++) {
+                    const file = files[index];
 
-                    reader.onload = async (e) => {
-                        const div = document.createElement("div");
-                        div.classList.add("context");
-                        div.textContent = file.name; // safe text content
-                        div.dataset.content = e.target.result; // store file content safely
-                        div.dataset.mimetype = file.type || "";
+                    if (file.size > 6e8) {
+                        continue;
+                    }
 
-                        const veiw = new DataView(await file.arrayBuffer());
-                        const iconName = getFileIconFileName(file.name, file.type, veiw);
-                        div.dataset.icon = iconName;
+                    const div = document.createElement("div");
+                    div.classList.add("context");
+                    div.dataset.mimetype = "";
+                    div.dataset.content = "";
+                    div.dataset.icon = "";
 
-                        div.innerHTML = `
-                            <img
-                                src="../icons/type-icons/icons/${iconName}"
-                                class="fname-icon">
-                            </img>`
-                            + div.innerHTML;
+                    const iconImg = document.createElement("img");
+                    iconImg.className = "fname-icon";
+                    iconImg.src = fileLoadingIcon;
 
-                        fileFeild.appendChild(div);
+                    div.appendChild(iconImg);
+                    div.appendChild(document.createTextNode(file.name));
 
-                        div.addEventListener("click", () => {
-                            div.remove();
-                        });
+                    fileFeild.appendChild(div);
 
-                        div.addEventListener("mouseover", () => {
-                            div.classList.add("hovring");
-                            div.querySelector("img.fname-icon").src = "../icons/close-file.svg";
-                        });
+                    div.addEventListener("click", () => {
+                        div.remove();
+                    });
 
-                        div.addEventListener("mouseleave", () => {
-                            div.classList.remove("hovring");
-                            div.querySelector("img.fname-icon").src =
-                    "../icons/type-icons/icons/"
-                    + iconName;
-                        });
-                    };
+                    div.addEventListener("mouseover", () => {
+                        div.classList.add("hovring");
+                        div.querySelector("img.fname-icon").src = "../icons/close-file.svg";
+                    });
 
-                    reader.onerror = (err) => {
-                        console.error(`Error reading ${file.name}:`, err);
-                    };
+                    div.addEventListener("mouseleave", () => {
+                        div.classList.remove("hovring");
+                        const currentIcon = div.dataset.icon;
+                        div.querySelector("img.fname-icon").src =
+                            currentIcon
+                                ? `../icons/type-icons/icons/${currentIcon}`
+                                : fileLoadingIcon;
+                    });
 
-                    reader.readAsText(file);
+                    const fileContent = await readFileTextInChunks(file);
+                    const previewView = await getFilePreviewDataView(file);
+                    const iconName = getFileIconFileName(file.name, file.type, previewView);
+
+                    div.dataset.content = fileContent;
+                    div.dataset.mimetype = file.type || "";
+                    div.dataset.icon = iconName;
+                    iconImg.src = `../icons/type-icons/icons/${iconName}`;
+
+                    await new Promise(requestAnimationFrame);
                 }
+            } finally {
+                hiddenFileInput.value = "";
+            }
         },
         { once: true }
     );
-},{
-    once: false
 });
