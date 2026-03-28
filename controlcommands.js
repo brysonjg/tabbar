@@ -24,19 +24,18 @@ function makeNewTabWithID(tabID) {
     window.parent.postMessage({ type: 'openTabWithID', tabID: tabID }, '*');
 }
 
-async function getGlobalJson() {
-    // privlaged like makeNewTabWithID
-
+async function getGlobalNameQuery() {
     return new Promise((resolve) => {
-        function handleGJSONMessage(event) {
-            if (event.data && event.data.type === 'GJsonReturn') {
-                window.removeEventListener('message', handleGJSONMessage);
-                resolve(event.data.json);
+        const handleGlobalNameQueryMessage = (event) => {
+            if (event.data && event.data.type === "globalNameQueryReturn") {
+                window.removeEventListener("message", handleGlobalNameQueryMessage);
+                const names = event.data.names;
+                resolve(names && typeof names === "object" ? names : {});
             }
-        }
+        };
 
-        window.addEventListener('message', handleGJSONMessage);
-        window.parent.postMessage({ type: 'getGJson' }, '*');
+        window.addEventListener("message", handleGlobalNameQueryMessage);
+        window.parent.postMessage({ type: "getGlobalNameQuery" }, "*");
     });
 }
 
