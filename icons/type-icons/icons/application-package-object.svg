@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="svg5" width="22mm" height="22mm" version="1.1" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
- <g id="layer1">
+<svg id="svg5" width="22" height="22" version="1.1" viewBox="0 0 5.8208 5.8208" xmlns="http://www.w3.org/2000/svg">
+ <g id="layer1" transform="scale(.26458)">
   <rect id="rect182" x="4.7625" y="4.3987" width="12.336" height="13.461" fill="#d4d4d4" stroke-width=".26458"/>
   <rect id="rect2786" x="3" y="3" width="16" height="2.666" fill="#cb0000" stroke-width=".42833"/>
   <rect id="rect2786-5" x="3" y="16.333" width="16" height="2.666" fill="#cb0000" stroke-width=".42833"/>

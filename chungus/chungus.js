@@ -52,7 +52,7 @@ window.onload = async () => {
     }
     
     // Render loaded messages
-    messages.forEach((message) => {
+    for (const message of messages) {
         if (message.role !== "system") {
             let username = "user";
             let icon = "../icons/defualt-user.svg";
@@ -65,9 +65,9 @@ window.onload = async () => {
                 username = "assistant";
             }
 
-            renderMD(message.content, username, "", message.files, false, true, icon);
+            await renderMD(message.content, username, "", message.files, false, true, icon);
         }
-    });
+    }
 
     let lastTitle = document.title;
 
@@ -299,7 +299,7 @@ function graphCompressionForSidePanel(repo) {
 
         const parent = nearestKeptAncestor(repo[id]?.parent);
         compressed[id].parent = parent;
-
+z
         if (compressed[parent] && !compressed[parent].children.includes(id)) {
             compressed[parent].children.push(id);
         }
@@ -351,7 +351,7 @@ async function toggleVersioningSidePanel() {
         document.querySelector("div#blameColumn").replaceChildren();
         document.querySelector("div#chat-container").replaceChildren();
 
-        messages.forEach((message) => {
+        for (const message of messages) {
             if (message.role !== "system") {
                 let username = "user";
                 let icon = "../icons/defualt-user.svg";
@@ -364,9 +364,9 @@ async function toggleVersioningSidePanel() {
                     username = "assistant";
                 }
 
-                renderMD(message.content, username, "", message.files, false, true, icon);
+                await renderMD(message.content, username, "", message.files, false, true, icon);
             }
-        });
+        }
 
         json.chat = repo.json;
 
@@ -433,7 +433,25 @@ document.querySelector('img.change-title-btn').addEventListener("click", async (
     await reTitleTab();
 });
 
-function updateRules() {
+/** Resolves when Prism has finished highlighting all matching code blocks (sync or worker). */
+function prismHighlightAllComplete() {
+    return new Promise((resolve) => {
+        const selector =
+            'code[class*="language-"], [class*="language-"] code, code[class*="lang-"], [class*="lang-"] code';
+        const pending = document.querySelectorAll(selector).length;
+        if (pending === 0) {
+            resolve();
+            return;
+        }
+        let done = 0;
+        Prism.highlightAll(false, () => {
+            done += 1;
+            if (done >= pending) resolve();
+        });
+    });
+}
+
+async function updateRules() {
     document.querySelectorAll("pre div.copy-btn").forEach((element) => {
         element.onclick = () => {
             const code = element.parentElement.querySelector("code");
@@ -452,7 +470,7 @@ function updateRules() {
         };
     });
 
-    Prism.highlightAll();
+    await prismHighlightAllComplete();
 
     // Update title button position after content changes
     updateTitleButtonPosition();
@@ -594,7 +612,7 @@ function translateMDtoHTML(md) {
     return "<br style=\"user-select: none;\">" + md;
 }
 
-function renderMD(md, username = "user", arbs = "", files = {}, doAnimations = true, useIcons=true, iconScript="../icons/defualt-user.svg") {
+async function renderMD(md, username = "user", arbs = "", files = {}, doAnimations = true, useIcons=true, iconScript="../icons/defualt-user.svg") {
     document.querySelectorAll("div.usr-input-master-container.befor-messages")
         .forEach((element) => {
             element.classList.remove("befor-messages");
@@ -647,7 +665,7 @@ function renderMD(md, username = "user", arbs = "", files = {}, doAnimations = t
 
     [blameSpacer, blameMain, message, fileFeild].forEach((el) => el.removeAttribute("id"));
 
-    updateRules();
+    await updateRules();
     scheduleBlameSpacerUpdate();
 }
 
@@ -731,7 +749,7 @@ async function handleSubmision() {
         userIcon = "../icons/defualt-user.svg";
     }
 
-    renderMD(message, userName, `usermeasage="${userMessageID}"`, fileStruct, true, true, userIcon);
+    await renderMD(message, userName, `usermeasage="${userMessageID}"`, fileStruct, true, true, userIcon);
     textArea.value = "";
     const userMessage = document.querySelector(`[usermeasage="${userMessageID}"]`);
     userMessage.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -783,7 +801,7 @@ async function handleSubmision() {
 
     // Placeholder for streaming assistant response
     const streamId = "streaming_reply_" + Date.now();
-    renderMD("", "assistant", `streamid="${streamId}"`, [], true, true, "../icons/ai-defult.svg");
+    await renderMD("", "assistant", `streamid="${streamId}"`, [], true, true, "../icons/ai-defult.svg");
     const streamEl = document.querySelector(`[streamid=${streamId}]`);
 
     let fullReply = "";
@@ -850,7 +868,7 @@ async function handleSubmision() {
                             bufferActionPassageFalse = false;
                         }
 
-                        updateRules();
+                        await updateRules();
 
                         await new Promise(requestAnimationFrame);
                     }
@@ -865,11 +883,11 @@ async function handleSubmision() {
 
         // Finalize assistant message
         streamEl.innerHTML = translateMDtoHTML(fullReply);
-        updateRules();
+        await updateRules();
         json.chat.commit([{ role: "assistant", content: fullReply, type: null }]);
         let chatData = json.chat.json;
         await setLocalJson({ ...json, chat: chatData });
-        updateRules();
+        await updateRules();
 
         // detertype whether the AI should rename the chat
         let letAIRenameChat = false;

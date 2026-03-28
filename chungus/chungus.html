@@ -4,6 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>chungusmain</title>
+    <script>
+      (function () {
+        if (typeof localStorage === "undefined") return;
+        const themeKey = "__tabbar_theme_master";
+        const fontKey = "__tabbar_theme_font";
+
+        try {
+          const storedTheme = localStorage.getItem(themeKey);
+          if (storedTheme) {
+            const vars = JSON.parse(storedTheme);
+            if (vars && typeof vars === "object") {
+              const root = document.documentElement;
+              Object.entries(vars).forEach(([key, value]) => {
+                if (!key) return;
+                root.style.setProperty(`--${key.trim()}`, value);
+              });
+            }
+          }
+        } catch (error) {
+          console.warn("chungus: unable to preapply cached theme", error);
+        }
+
+        try {
+          const cachedFont = localStorage.getItem(fontKey);
+          if (cachedFont) {
+            document.documentElement.style.setProperty("--font", cachedFont);
+          }
+        } catch {
+          // ignore font cache failures
+        }
+      })();
+    </script>
     <link rel="stylesheet" href="./chungus.css">
 
     <!--   prism   -->
@@ -60,6 +92,7 @@
     </div>
 
     <script src="../controlcommands.js"></script>
+    <script src="../utils/quickyQuery.js"></script>
     <script src="../utils/reftheme.js"></script>
     <script src="../utils/kbutils.js"></script>
     <script src="../utils/historyObject.js"></script>

@@ -13,7 +13,7 @@ This document tells contributors how to style their code so the project stays re
 2. Keep indentation levels to no more than four spaces. Prefer two spaces in markup and Markdown, four spaces in CSS/JavaScript/Python blocks.
 3. Do not commit trailing whitespace, extra blank lines, or mixed line endings.
 4. Library files that distribute minified/compressed code are the only exception to human-readable formatting; do not format or hand-edit those files.
-5. Comments should explain *why* a block exists, not restate what the code already makes obvious.
+5. Comments should explain *why* a block exists, not restate what the code already makes obvious. It may also *denote the location of a code segment*. Generaly it should be the human reading the code not the human reading the comments.
 6. The project root should stay clean: keep licensing, documentation, and tooling files in their designated folders (e.g., `.github/`, `docs/`). Avoid dumping build artifacts or personal files in the root.
 7. Python is the only language allowed for build/utility scripts; target the latest stable Python 3 release and keep dependencies minimal. Scripts may depend on external libraries only when the script itself bootstraps that dependency (e.g., installs it or vendors it) before use.
 
@@ -38,7 +38,7 @@ This document tells contributors how to style their code so the project stays re
 - Global helpers (top-level `const`/`let` declarations, `function` statements, `addEventListener` attachments, immediate-run arrow expressions like `(() => {})()`, and `window.onload = …`) should be the only things visible when the file is fully folded in an editor.
 - Favor array iteration helpers (`array.forEach(...)`) over explicit `for` loops when iterating a known array. Numeric loops are acceptable for ranged iteration, but readability is the main goal.
 - Use `document.querySelector(...)` instead of `document.getElementById(...)` for consistency with CSS selectors.
-- Avoid deeply nested `try`/`catch` blocks. If you must check for a DOM node, prefer a guard clause (`if (!thing) return;`) over wrapping the remaining logic in an `if` block.
+- Avoid deeply nested `try`/`catch` blocks (or any other error checking metheds). If you must check for a DOM node, prefer a guard clause (`if (!thing) return;`) over wrapping the remaining logic in an `if` block.
 - Always include semicolons at line endings. Omitting them is considered a syntax violation.
 - When attaching event listeners, omit the third `options` argument unless you specifically need capturing or passive behavior; do not supply `false`, `null`, or empty objects—simply call `.addEventListener(type, handler)`.
 - Use the ternary operator only for expressions that comfortably fit on a single line (typically when rendering short values in template strings).

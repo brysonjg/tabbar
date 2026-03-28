@@ -35,6 +35,9 @@ async function loadGoogleFontForThemingSettables(fontName) {
     }
 }
 
+const THEME_STORAGE_KEY = "__tabbar_theme_master";
+const THEME_FONT_STORAGE_KEY = "__tabbar_theme_font";
+
 async function fixThemeOverSettable(name = null) {
   try {
     const stylesRoot = document.documentElement;
@@ -78,16 +81,12 @@ async function fixThemeOverSettable(name = null) {
 
   try {
     let settables = await getSettablesAsJson();
-    // fall back to reading from localStorage if parent doesn't respond
     if (!settables) {
       try {
-        const raw = localStorage.getItem('ChatJson');
-        if (raw) {
-          const json = JSON.parse(raw) || {};
-          settables = json[7] || null;
-        }
+        await localDB.ensureOpen();
+        settables = await localDB.getSettables();
       } catch (e) {
-        console.warn('local fallback parse error', e);
+        console.warn("local fallback getSettables error", e);
       }
     }
 
@@ -103,25 +102,21 @@ async function fixThemeOverSettable(name = null) {
   }
 }
 
+// Always get settables from IndexedDB to match the scripts.js / localDB flow.
 async function fixThemeSchemaAtTopLeval() {
-    let jsonStore = localStorage.getItem("ChatJson");
-    if (!jsonStore) {
-        jsonStore = "{}";
-        localStorage.setItem("ChatJson", jsonStore);
-    }
-
-    let json;
+    let settables;
     try {
-        json = JSON.parse(jsonStore);
-    } catch {
-        console.warn("Invalid ChatJson");
+        await localDB.ensureOpen();
+        settables = await localDB.getSettables();
+    } catch (e) {
+        console.warn("fixThemeSchemaAtTopLeval: Failed to get settables from localDB", e);
         return;
     }
 
     try {
-        if (!json[7] || !json[7].theme || !json[7].theme.master) return;
+        if (!settables || !settables.theme || !settables.theme.master) return;
 
-        const vars = json[7].theme.master;
+        const vars = settables.theme.master;
 
         Object.keys(vars).forEach(themeVar => {
             document.documentElement.style.setProperty(
@@ -129,38 +124,129 @@ async function fixThemeSchemaAtTopLeval() {
                 vars[themeVar]
             );
         });
+        try {
+            localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(vars));
+        } catch (err) {
+            console.warn("fixThemeSchemaAtTopLeval: Unable to cache theme vars", err);
+        }
     } catch (e) {
         console.warn("Top-level theme error:", e);
     }
 
     try {
-        if (!json[7] || !json[7].font || !json[7].font.font) return;
-        const fontName = json[7].font.font;
+        if (!settables || !settables.font || !settables.font.font) return;
+        const fontName = settables.font.font;
 
         await loadGoogleFontForThemingSettables(fontName);
 
         document.documentElement.style.setProperty(`--font`, fontName);
+        try {
+            localStorage.setItem(THEME_FONT_STORAGE_KEY, fontName);
+        } catch (err) {
+            console.warn("fixThemeSchemaAtTopLeval: Unable to cache theme font", err);
+        }
     } catch (e) {
         console.warn("Top-level font error:", e);
     }
+
+    if (!settables || !settables.theme || !settables.theme.master) {
+        try {
+            localStorage.removeItem(THEME_STORAGE_KEY);
+        } catch (ignore) {}
+    }
+
+    if (!settables || !settables.font || !settables.font.font) {
+        try {
+            localStorage.removeItem(THEME_FONT_STORAGE_KEY);
+        } catch (ignore) {}
+    }
 }
 
-function makeIconsAcordingToIconPack(ipack = {}) {
-  let observer = new MutationObserver( async () => {
-    document.querySelectorAll("img").forEach(
-      (element) => {
-        element.src = ipack[element.src] || element.src;
-        console.log(element);
+async function getIconPackage() {
+  const isTopLevel = window.top === window;
+  let settingsJson = null;
+
+  if (isTopLevel) {
+    try {
+      await localDB.ensureOpen();
+      settingsJson = await localDB.getSettables();
+    } catch (err) {
+      console.warn("getIconPackage getSettables failed:", err);
+      return {};
+    }
+  } else {
+    settingsJson = await getSettablesAsJson();
+    if (settingsJson === null) return {};
+  }
+
+  if (!settingsJson) return {};
+  return settingsJson.ipack || {};
+}
+
+function normalizeIconPath(value) {
+  if (!value || typeof value !== "string") return "";
+  const sanitized = value.replace(/\\/g, "/").split(/[?#]/)[0];
+
+  try {
+    const resolved = new URL(sanitized, document.baseURI);
+    return resolved.pathname.replace(/^\/+/, "");
+  } catch {
+    return sanitized.replace(/^(?:\.\.\/|\.\/)+/, "").replace(/^\/+/, "");
+  }
+}
+
+async function makeIconsAcordingToIconPack() {
+  const ipack = await getIconPackage();
+  if (!ipack || Object.keys(ipack).length === 0) return;
+
+  const normalizedIconPackage = new Map();
+  Object.entries(ipack).forEach(([key, value]) => {
+    const normalizedKey = normalizeIconPath(key);
+    if (normalizedKey) {
+      normalizedIconPackage.set(normalizedKey, value);
+    }
+  });
+
+  const resolveIconReplacement = (element) => {
+    const attrSrc = element.getAttribute && element.getAttribute("src");
+    const normalizedAttr = normalizeIconPath(attrSrc);
+    const normalizedProp = normalizeIconPath(element.src);
+
+    if (element.src && ipack[element.src]) {
+      return ipack[element.src];
+    }
+
+    if (attrSrc && ipack[attrSrc]) {
+      return ipack[attrSrc];
+    }
+
+    if (normalizedProp && normalizedIconPackage.has(normalizedProp)) {
+      return normalizedIconPackage.get(normalizedProp);
+    }
+
+    if (normalizedAttr && normalizedIconPackage.has(normalizedAttr)) {
+      return normalizedIconPackage.get(normalizedAttr);
+    }
+
+    return null;
+  };
+
+  let observer = new MutationObserver(() => {
+    document.querySelectorAll("img").forEach((element) => {
+      const replacement = resolveIconReplacement(element);
+      if (replacement) {
+        element.src = replacement;
       }
-    );
+      console.log(element);
+    });
   });
 
   observer.observe(document.body, {
-      childList: true,
-      subtree: true,
+    childList: true,
+    subtree: true,
   });
 }
 
-// document.addEventListener("DOMContentLoaded", () => {
-//   makeIconsAcordingToIconPack(ipack);
-// })
+document.addEventListener("DOMContentLoaded", () => {
+  makeIconsAcordingToIconPack();
+});
