@@ -12,8 +12,6 @@ function hasExecutableExtension(ext) {
         case "cmd":
         case "com":
         case "csh":
-        case "deb":
-        case "desktop":
         case "dll":
         case "dmg":
         case "exe":
@@ -24,7 +22,6 @@ function hasExecutableExtension(ext) {
         case "msi":
         case "out":
         case "pkg":
-        case "ps1":
         case "run":
         case "scr":
         case "sh":
@@ -96,6 +93,7 @@ function getFileIconFileName(fname, fmime, fview) {
             return 'text-x-readme.svg';
         case 'license':
         case 'license.md':
+        case 'license.txt':
             return 'text-x-copying.svg';
         case 'package.json':
         case 'package-lock.json':
@@ -114,10 +112,6 @@ function getFileIconFileName(fname, fmime, fview) {
             return "application-x-ms-dos-executable.svg";
         }
 
-        if (ext === "ps1") {
-            return "application-x-powershell.svg";
-        }
-
         return "application-x-executable.svg";
     }
 
@@ -129,6 +123,40 @@ function getFileIconFileName(fname, fmime, fview) {
         case 'js': return 'application-x-javascript.svg';
         case 'md': return 'text-x-markdown.svg';
         case 'c': return 'text-x-csrc.svg';
+        case 'ps1': return 'application-x-powershell.svg';
+        case '3dmf': return '3d-3dmf.svg';
+        case '3ds': return '3d-3ds.svg';
+        case 'abc': return '3d-abc.svg';
+        case 'c4d': return '3d-c4d.svg';
+        case 'dae': return '3d-dae.svg';
+        case 'duf': return '3d-duf.svg';
+        case 'dwg': return '3d-dwg.svg';
+        case 'dxf': return '3d-dxf.svg';
+        case 'fbx': return '3d-fbx.svg';
+        case 'fpp': return '3d-fpp.svg';
+        case 'glb':
+        case 'gltf': return '3d-glb.svg';
+        case 'igs':
+        case 'iges': return '3d-igs.svg';
+        case 'iprop': return '3d-iprop.svg';
+        case 'max': return '3d-max.svg';
+        case 'obj': return '3d-obj.svg';
+        case 'ply': return '3d-ply.svg';
+        case 'sat': return '3d-sat.svg';
+        case 'stl': return '3d-stl.svg';
+        case 'usd':
+        case 'usdz':
+        case 'usdc': return '3d-usd.svg';
+        case 'vdb': return '3d-vdb.svg';
+        case 'wrl':
+        case 'vrml': return '3d-wrl.svg';
+        case 'x3d': return '3d-x3d.svg';
+        case 'f90':
+        case 'f': case 'for':
+        case 'ftn': case 'f95':
+        case 'f03': case 'f08':
+        case 'f18':
+            return 'text-fortran.svg';
         case '':
             return `${(fmime || 'none').replace('/', '-')}.svg`;
         default:

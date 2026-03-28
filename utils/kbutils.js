@@ -61,14 +61,8 @@ async function registerKeybindings() {
         window.self == window.top &&
         window.location.href.endsWith("index.html")
     ) {
-        let jsonStore = localStorage.getItem("ChatJson");
-        if (!jsonStore) {
-            jsonStore = "{}";
-            localStorage.setItem("ChatJson", jsonStore);
-        }
-
-        const chatJson = JSON.parse(jsonStore);
-        const settables = (7 in chatJson) ? chatJson[7] : null;
+        await localDB.ensureOpen();
+        const settables = await localDB.getSettables();
         const keybindings = settables?.kbshortcuts || null;
 
         if (keybindings == null) return;

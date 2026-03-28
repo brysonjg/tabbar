@@ -1,0 +1,1 @@
+window.ipkg = {}; // no overrides

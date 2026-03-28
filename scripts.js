@@ -190,7 +190,7 @@ function cleanupLowZFrames() {
     lowZPriorityQueue.length = 0;
 }
 
-(() => {
+(async () => {
     startCorectTabChecksumScedual(100);
 
     const savedTabs = localStorage.getItem("tabArray");
@@ -214,19 +214,23 @@ function cleanupLowZFrames() {
 
     setActiveTab(document.querySelector(".tab.active"));
 
-    let chatObjectText = localStorage.getItem("ChatJson");
-    if (!chatObjectText) return;
-
-    let json = JSON.parse(chatObjectText);
-
-    if (!json[7]) {
-        json[7] = {};
+    try {
+        await localDB.ensureOpen();
+    } catch (e) {
+        console.warn("localDB ensureOpen failed:", e);
+        return;
     }
 
-    if (json[7].theme === undefined) {
-        json[7].theme = window.theme_brz_dark;
-        localStorage.setItem("ChatJson", JSON.stringify(json));
+    let settables = await localDB.getSettables();
+    if (!settables || typeof settables !== "object") {
+        settables = {};
     }
+
+    if (settables.theme === undefined) {
+        settables.theme = window.theme_brz_dark;
+        await localDB.setSettables(settables);
+    }
+
     fixThemeSchemaAtTopLeval();
 })();
 
@@ -762,21 +766,28 @@ window.addEventListener("message", (event) => {
         fixTabCloseEventListeners();
     }
 
-    if (event.data.type === "getGJson") {
+    if (event.data.type === "getGlobalNameQuery") {
         const activeTab = getActiveTabElement();
-        if (!activeTab || activeTab.getAttribute('tabid') !== "0") {
-            event.source.postMessage({ type: "GJsonReturn", json: "Error Low Privlage" }, "*");
+        if (!activeTab || activeTab.getAttribute("tabid") !== "0") {
+            try {
+                event.source.postMessage({ type: "globalNameQueryReturn", names: null }, "*");
+            } catch {}
             return;
         }
 
-        if (localStorage.getItem("ChatJson") !== null) {
-            const json = JSON.parse(localStorage.getItem("ChatJson"));
+        (async () => {
             try {
-                event.source.postMessage({ type: "GJsonReturn", json: json }, "*");
-            } catch {}
-        } else {
-            localStorage.setItem("ChatJson", JSON.stringify({}));
-        }
+                await localDB.ensureOpen();
+                const names = await localDB.getGlobalNameQuery();
+                event.source.postMessage({ type: "globalNameQueryReturn", names }, "*");
+            } catch (e) {
+                console.warn("getGlobalNameQuery failed:", e);
+                try {
+                    event.source.postMessage({ type: "globalNameQueryReturn", names: {} }, "*");
+                } catch {}
+            }
+        })();
+        return;
     }
 
     if (!event.data || typeof event.data.type !== "string") return;
@@ -785,35 +796,36 @@ window.addEventListener("message", (event) => {
     const activeTabID = activeTab ? activeTab.getAttribute('tabid') : null;
 
     if (type === "getLJson") {
-        if (!activeTab || !activeTabID) {
-            event.source.postMessage({ type: "LJsonReturn", json: null }, "*");
-            return;
-        }
-        let jsonStore = localStorage.getItem("ChatJson");
-        if (!jsonStore) {
-            jsonStore = "{}";
-            localStorage.setItem("ChatJson", jsonStore);
-        }
-
-        const json = JSON.parse(jsonStore);
-        const response = (activeTabID in json) ? json[activeTabID] : null;
-
-        try {
-            event.source.postMessage({ type: "LJsonReturn", json: response }, "*");
-        } catch {}
+        (async () => {
+            if (!activeTab || !activeTabID) {
+                event.source.postMessage({ type: "LJsonReturn", json: null }, "*");
+                return;
+            }
+            try {
+                await localDB.ensureOpen();
+                const response = await localDB.getSession(activeTabID);
+                try {
+                    event.source.postMessage({ type: "LJsonReturn", json: response }, "*");
+                } catch {}
+            } catch (e) {
+                console.warn("getLJson failed:", e);
+                try {
+                    event.source.postMessage({ type: "LJsonReturn", json: null }, "*");
+                } catch {}
+            }
+        })();
     }
 
     if (type === "setLJson") {
-        if (!activeTab || !activeTabID) return;
-        let jsonStore = localStorage.getItem("ChatJson");
-        if (!jsonStore) {
-            jsonStore = "{}";
-        }
-
-        const json = JSON.parse(jsonStore);
-        json[activeTabID] = event.data.json;
-
-        localStorage.setItem("ChatJson", JSON.stringify(json));
+        (async () => {
+            if (!activeTab || !activeTabID) return;
+            try {
+                await localDB.ensureOpen();
+                await localDB.setSession(activeTabID, event.data.json);
+            } catch (e) {
+                console.warn("setLJson failed:", e);
+            }
+        })();
     }
 
     if (type === "setTitle") {
@@ -831,34 +843,29 @@ window.addEventListener("message", (event) => {
         // Remove lowZFrame if it exists
         removeLowZFrame(targetTabID);
 
-        let json = localStorage.getItem("ChatJson");
-        if (!json) return;
+        (async () => {
+            try {
+                await localDB.ensureOpen();
+                await localDB.deleteSession(targetTabID);
+                await localDB.clearActiveTabIdIfMatches(targetTabID);
+            } catch (e) {
+                console.warn("purge localDB failed:", e);
+            }
 
-        json = JSON.parse(json);
+            const targetTab = getTabElementById(targetTabID);
+            if (!targetTab) return;
+            const wasActive = targetTab.classList.contains("active");
 
-        if (json[targetTabID]) {
-            delete json[targetTabID];
-        }
+            if (wasActive) {
+                const currentTabs = getTabElements();
+                const index = currentTabs.indexOf(targetTab);
+                let nextTab = currentTabs[index + 1] || currentTabs[index - 1];
+                if (nextTab) setActiveTab(nextTab);
+            }
 
-        if (json.activeTabID === targetTabID) {
-            delete json.activeTabID;
-        }
-
-        localStorage.setItem("ChatJson", JSON.stringify(json));
-
-        const targetTab = getTabElementById(targetTabID);
-        if (!targetTab) return;
-        const wasActive = targetTab.classList.contains("active");
-
-        if (wasActive) {
-            const currentTabs = getTabElements();
-            const index = currentTabs.indexOf(targetTab);
-            let nextTab = currentTabs[index + 1] || currentTabs[index - 1];
-            if (nextTab) setActiveTab(nextTab);
-        }
-
-        targetTab.remove();
-        getTabElements();
+            targetTab.remove();
+            getTabElements();
+        })();
     }
 
     if (type === "chtitle") {
@@ -873,45 +880,50 @@ window.addEventListener("message", (event) => {
             setTabTitle(tabInQuestion, title);
         }
 
-        let json = localStorage.getItem("ChatJson");
-        if (!json) return;
-
-        json = JSON.parse(json);
-
-        if (!json[tabid]) json[tabid] = {};
-        if (!json[tabid].metadata) json[tabid].metadata = {};
-
-        json[tabid].metadata.title = title;
-        localStorage.setItem("ChatJson", JSON.stringify(json));
+        (async () => {
+            try {
+                await localDB.ensureOpen();
+                await localDB.patchSessionTitle(tabid, title);
+            } catch (e) {
+                console.warn("chtitle localDB failed:", e);
+            }
+        })();
     }
 
     if (type == "setSETTABLES") {
         if (!activeTab || activeTab.getAttribute("tabid") !== "7") return;
 
-        let jsonStore = localStorage.getItem("ChatJson");
-        if (!jsonStore) {
-            jsonStore = "{}";
-        }
-
-        const json = JSON.parse(jsonStore);
-        json[7] = event.data.json;
-
-        localStorage.setItem("ChatJson", JSON.stringify(json));
+        (async () => {
+            try {
+                await localDB.ensureOpen();
+                await localDB.setSettables(event.data.json);
+            } catch (e) {
+                console.warn("setSETTABLES failed:", e);
+            }
+        })();
     }
 
     if (type == "getSETTABLES") {
-        let jsonStore = localStorage.getItem("ChatJson");
-        if (!jsonStore) {
-            jsonStore = "{}";
-            localStorage.setItem("ChatJson", jsonStore);
-        }
-
-        const json = JSON.parse(jsonStore);
-        const response = (7 in json) ? json[7] : null;
-
-        try {
-            event.source.postMessage({ type: "settablesJsonReturn", json: response }, "*");
-        } catch {}
+        (async () => {
+            try {
+                await localDB.ensureOpen();
+                const response = await localDB.getSettables();
+                try {
+                    event.source.postMessage(
+                        { type: "settablesJsonReturn", json: response },
+                        "*"
+                    );
+                } catch {}
+            } catch (e) {
+                console.warn("getSETTABLES failed:", e);
+                try {
+                    event.source.postMessage(
+                        { type: "settablesJsonReturn", json: null },
+                        "*"
+                    );
+                } catch {}
+            }
+        })();
     }
 
     if (type == "updtTheme") {

@@ -12,10 +12,10 @@ window.onload = async () => {
     await fixThemeOverSettable("master");
     await fixThemeOverSettable();
 
-    window.gjson = await getGlobalJson();
+    window.globalNames = await getGlobalNameQuery();
     window.hasInitedFuzzysort = false;
 
-    renderJson(window.gjson);
+    renderJson(window.globalNames);
     requestAnimationFrame(updateScrollbarState);
 
     setTimeout(() => {
@@ -55,7 +55,10 @@ function renderJson(json, renderOptions = {}) {
 
     keys.forEach((key) => {
         const div = document.createElement("div");
-        const title = json[key]?.metadata?.title;
+        const raw = json[key];
+        const title = typeof raw === "string"
+            ? raw
+            : raw?.metadata?.title;
         const name = normalizeTitle(title);
 
         div.innerHTML =
@@ -105,10 +108,12 @@ function renderJson(json, renderOptions = {}) {
 
         const deleteImg = div.querySelector("img#deleteImage");
         deleteImg.addEventListener("click", () => {
-            purgeTabMemory(div.dataset.id);
+            const rowId = div.dataset.id;
+            purgeTabMemory(rowId);
+            delete window.globalNames[rowId];
             div.remove();
             try {
-                const index = selectedList.indexOf(div.dataset.id);
+                const index = selectedList.indexOf(rowId);
                 const length = selectedList.length - 1;
                 selectedList[index] = selectedList[length];
                 selectedList.pop();
@@ -202,6 +207,7 @@ function submitActiveRename() {
     const nextTitle = nextTitleTrimmed.length ? nextTitleTrimmed : originalTitle;
 
     chTitleOfTab(rowDiv.dataset.id, nextTitle);
+    window.globalNames[rowDiv.dataset.id] = nextTitle;
 
     rowDiv.classList.remove("renaming");
     submitImg.remove();
@@ -457,6 +463,7 @@ document.getElementById("delete-all-btn").addEventListener("click", (event) => {
         if (tab) {
             tab.remove();
             purgeTabMemory(id);
+            delete window.globalNames[id];
         }
     });
     selectedList = [];
@@ -470,18 +477,18 @@ document.getElementById("search-btn").addEventListener("click", () => {
     const main = document.querySelector("main");
 
     const ensureFuzzysortIndex = () => {
-        const entries = Object.entries(window.gjson || {});
+        const entries = Object.entries(window.globalNames || {});
         if (window.hasInitedFuzzysort && window.fuzzysortIndexSourceSize === entries.length) return;
 
         window.fuzzysortIndex = entries
-            .filter(([id, value]) =>
+            .filter(([id, title]) =>
                 Number(id) >= 100 &&
-                value?.metadata?.title
+                String(title ?? "").trim().length > 0
             )
-            .map(([id, value]) => ({
+            .map(([id, title]) => ({
                 id,
-                title: fuzzysort.prepare(value.metadata.title),
-                ref: value
+                title: fuzzysort.prepare(String(title)),
+                ref: { metadata: { title: String(title) } },
             }));
 
         window.hasInitedFuzzysort = true;
@@ -498,7 +505,7 @@ document.getElementById("search-btn").addEventListener("click", () => {
         const inputElementCopy = inputElement.cloneNode(true);
         inputElement.replaceWith(inputElementCopy);
 
-        renderJson(window.gjson);
+        renderJson(window.globalNames);
     };
 
     divCenter.classList.toggle("hidden");
