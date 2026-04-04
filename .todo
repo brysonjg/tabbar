@@ -12,4 +12,3 @@ Known Issues:
       Tab scrolling (using mouse wheel on the tab bar to "scroll" tabs) works but not well and can crashes on people with high-end mouses
       The default models are probably outdated and dont work
       When attatching files after enough of them they go off screen (chungus)
-      In theme writing, you can't tell when a varible is ment to be a filter verses a hex color versus a number of pixels

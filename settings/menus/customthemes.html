@@ -19,8 +19,9 @@
         --icon-3: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2);
 
         --btn-active-border: #3daee9;
-        --btn-hover-bg: #1f485e;
         --btn-active-bg: #3daee9;
+
+        --context-hover-bg: #3daee920;
       }
 
       @font-face {
@@ -113,6 +114,11 @@
           background: #888;
       }
 
+      ::selection {
+          background-color: var(--context-hover-bg);
+          color: inherit;
+      }
+
       .save-btn {
         position: fixed;
         bottom: 10px;
@@ -129,7 +135,7 @@
       }
 
       .save-btn:hover {
-        background-color: var(--btn-hover-bg);
+        background-color: var(--context-hover-bg);
         border: 1px solid var(--btn-active-border);
       }
 
@@ -144,17 +150,19 @@
   <body>
     <img class="exitIcon" src="../../icons/go-up-settings-lvl.svg" id="exitIcon" />
     <div class="master-cont">
-      <pre class="editor language-json" id="editor" contenteditable="true" autocorrect="off" autocapitalize="off" spellcheck="false"></pre>
+      <pre class="editor language-cithdef" id="editor" contenteditable="true" autocorrect="off" autocapitalize="off" spellcheck="false"></pre>
     </div>
     <div class="save-btn" id="saveBtn">Commit</div>
 
     <script src="../../controlcommands.js"></script>
     <script src="../../utils/quickyQuery.js"></script>
     <script src="../../utils/reftheme.js"></script>
+    <script src="../../utils/themeObjectNotation.js"></script>
     <script src="../../utils/kbutils.js"></script>
     <script src="./theme_json/template.js"></script>
     <script>
       window.onload = async () => {
+          await fixThemeOverSettable("chungus"); // import more theming
           await fixThemeOverSettable(); // correct themedge
           await fixThemeOverSettable("prism"); // import prism theming
           editor.textContent = window.theme_temp;
@@ -219,15 +227,97 @@
       }
 
       // --- Editing logic ---
-      editor.addEventListener('keydown', e => {
-        const TAB = '  ';
+      const TAB = '    ';
 
+      function setCaretPosition(element, start, end) {
+          const range = document.createRange();
+          const sel = window.getSelection();
+
+          let charIndex = 0;
+          let nodeStack = [element];
+          let node, foundStart = false, stop = false;
+
+          while (!stop && (node = nodeStack.pop())) {
+              if (node.nodeType === 3) {
+              const nextCharIndex = charIndex + node.length;
+
+              if (!foundStart && start >= charIndex && start <= nextCharIndex) {
+                  range.setStart(node, start - charIndex);
+                  foundStart = true;
+              }
+
+              if (foundStart && end >= charIndex && end <= nextCharIndex) {
+                  range.setEnd(node, end - charIndex);
+                  stop = true;
+              }
+
+              charIndex = nextCharIndex;
+              } else {
+              let i = node.childNodes.length;
+              while (i--) nodeStack.push(node.childNodes[i]);
+              }
+          }
+
+          sel.removeAllRanges();
+          sel.addRange(range);
+      }
+
+      editor.addEventListener('keydown', (e) => {
         if (e.key === 'Tab') {
           e.preventDefault();
-          if (!e.shiftKey) {
-            document.execCommand('insertText', false, TAB);
-            highlightEditable(editor);
+
+          const sel = window.getSelection();
+          if (!sel.rangeCount) return;
+
+          const range = sel.getRangeAt(0);
+
+          // Get full text and selection offsets
+          const pre = range.cloneRange();
+          pre.selectNodeContents(editor);
+          pre.setEnd(range.startContainer, range.startOffset);
+          const startOffset = pre.toString().length;
+
+          const post = range.cloneRange();
+          post.selectNodeContents(editor);
+          post.setEnd(range.endContainer, range.endOffset);
+          const endOffset = post.toString().length;
+
+          const text = editor.innerText;
+
+          // Find line boundaries
+          const lineStart = text.lastIndexOf('\n', startOffset - 1) + 1;
+          const lineEnd = text.indexOf('\n', endOffset);
+          const finalEnd = lineEnd === -1 ? text.length : lineEnd;
+
+          const before = text.slice(0, lineStart);
+          const selected = text.slice(lineStart, finalEnd);
+          const after = text.slice(finalEnd);
+
+          const lines = selected.split('\n');
+
+          let newLines;
+          if (e.shiftKey) {
+              // UNINDENT
+              newLines = lines.map(line => {
+                  if (line.startsWith(TAB)) return line.slice(TAB.length);
+                  if (line.startsWith('\t')) return line.slice(1);
+                  return line;
+              });
+          } else {
+              // INDENT
+              newLines = lines.map(line => TAB + line);
           }
+
+          const newText = before + newLines.join('\n') + after;
+          editor.textContent = newText;
+
+          // Restore selection
+          const newStart = startOffset + (e.shiftKey ? -TAB.length : TAB.length);
+          const newEnd = endOffset + (e.shiftKey ? -TAB.length * lines.length : TAB.length * lines.length);
+
+          setCaretPosition(editor, newStart, newEnd);
+
+          highlightEditable(editor);
         }
 
         else if (e.key === 'Enter') {
@@ -274,7 +364,7 @@
       editor.addEventListener("input", () => highlightEditable(editor));
 
       document.getElementById("saveBtn").addEventListener("click", async () => {
-        let themeJson = JSON.parse(editor.textContent);
+        let themeJson = thone.parse(editor.textContent);
 
         let json = await getSettablesAsJson() || {};
         json.theme = themeJson;
@@ -282,7 +372,9 @@
         setSettablesByJson(json);
 
         updateTopLevelTheme();
+        await fixThemeOverSettable("chungus"); // import more theming
         await fixThemeOverSettable(); // correct themedge
+        await fixThemeOverSettable("prism"); // import prism theming
       });
 
       document.addEventListener("contextmenu", (event) => {
