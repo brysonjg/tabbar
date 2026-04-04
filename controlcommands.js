@@ -13,13 +13,13 @@ async function getTabID() {
 }
 
 function closeSelf() {
-    window.parent.postMessage({ type: 'exitCurent' }, '*');
+    window.parent.postMessage({ type: 'exitCurrent' }, '*');
 }
 
 function makeNewTabWithID(tabID) {
-    // this function is privlaged and only works at tab id 0
-    // so that on the off chance that the ai leans how to
-    // script enject it wont open 30 quintilian tabs
+    // this function is privileged and only works at tab id 0
+    // so that on the off chance that the ai learns how to
+    // script inject it wont open 30 quintilian tabs
 
     window.parent.postMessage({ type: 'openTabWithID', tabID: tabID }, '*');
 }
@@ -41,14 +41,14 @@ async function getGlobalNameQuery() {
 
 async function getLocalJson() {
     return new Promise((resolve) => {
-        function handleLJSONMessage(event) {
+        function handleLocalJSONMessage(event) {
             if (event.data && event.data.type === 'LJsonReturn') {
-                window.removeEventListener('message', handleLJSONMessage);
+                window.removeEventListener('message', handleLocalJSONMessage);
                 resolve(event.data.json);
             }
         }
 
-        window.addEventListener('message', handleLJSONMessage);
+        window.addEventListener('message', handleLocalJSONMessage);
         window.parent.postMessage({ type: 'getLJson' }, '*');
     });
 }
@@ -62,15 +62,15 @@ function setTabTitle(title) {
 }
 
 function purgeTabMemory(tabid) {
-    // privlaged function reserved for tab id 0
+    // privileged function reserved for tab id 0
 
     window.parent.postMessage({ type: 'purge', tabid: tabid }, '*');
 }
 
 function chTitleOfTab(tabid, title) {
-    // privlaged function reserved for tab id 0
+    // privileged function reserved for tab id 0
 
-    window.parent.postMessage({ type: 'chtitle', tabid: tabid, title: title}, '*');
+    window.parent.postMessage({ type: 'changeTitle', tabid: tabid, title: title}, '*');
 }
 
 function setSettablesByJson(json) {
@@ -98,15 +98,15 @@ async function getSettablesAsJson() {
 }
 
 function updateTopLevelTheme() {
-    window.parent.postMessage({ type: 'updtTheme' }, '*');
+    window.parent.postMessage({ type: 'updateTheme' }, '*');
 }
 
 function toggleBlueDote() {
-    window.parent.postMessage({ type: 'toggleAcctiveDot' }, '*');
+    window.parent.postMessage({ type: 'toggleActiveDot' }, '*');
 }
 
 function setBlueDote(type) {
-    window.parent.postMessage({ type: 'setAcctiveDot', do: String(type) }, '*');
+    window.parent.postMessage({ type: 'setActiveDot', do: String(type) }, '*');
 }
 
 async function getBlueDote(type) {
@@ -119,6 +119,6 @@ async function getBlueDote(type) {
         }
 
         window.addEventListener('message', handleBlueDoteMessage);
-        window.parent.postMessage({ type: 'getAcctiveDot' }, '*');
+        window.parent.postMessage({ type: 'getActiveDot' }, '*');
     });
 }

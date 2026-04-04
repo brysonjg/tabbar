@@ -1,1 +1,14 @@
-application-vnd.oasis.opendocument.formula.svg
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="svg2" width="22" height="22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata id="metadata3874">
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g id="layer1" transform="translate(-326 -534.36)">
+  <path id="path4" d="m345 539.36-9.332 6e-3 -3.168 9.4941-2.166-3.5h-1.334v1h1l2.5 5 3.9414-11h8.5586zm-5 3c-2.2091 0-4 1.7909-4 4s1.7909 4 4 4c1.1491-2e-3 2.242-0.4977 3-1.3613v1.3613h1v-8h-1v1.3613c-0.75804-0.86363-1.8509-1.3595-3-1.3613zm0 1c1.6568 0 3 1.3432 3 3s-1.3432 3-3 3-3-1.3432-3-3 1.3432-3 3-3z" color="#000000" color-rendering="auto" fill="#555" image-rendering="auto" shape-rendering="auto"/>
+ </g>
+</svg>

@@ -4,11 +4,11 @@ TODO:
       add good documentation
 
 Known Issues:
-      In chungus, error handling sucks trumendusly
-      If you open the account settings and do nothing then open chungus it sudenly dose not work
+      In chungus, error handling sucks tremendously
+      If you open the account settings and do nothing then open chungus it suddenly does not work
       There are no software checks to make shore there are not any bugs
       When tab bars grow to long they go off the page
-      When git graph commits on a single row grow to long the lines leading up to them and from them are indestinguishable
-      Tab scrolling (using mouse wheel on the tab bar to "scroll" tabs) works but not well and can crashes on people with high-end mouses
-      The default models are probably outdated and dont work
-      When attatching files after enough of them they go off screen (chungus)
+      When git graph commits on a single row grow too long the lines leading up to them and from them are indistinguishable
+      The default models are probably outdated and don't work
+      When attaching files after enough of them they go off screen (chungus)
+      the markdown parser sucks

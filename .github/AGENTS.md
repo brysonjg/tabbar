@@ -30,7 +30,7 @@ To install and run the project:
    ```
 5. Insert your OpenRouter API key:
    ```js
-   const gloablAPIKey = "sk-or-...";
+   const globalAPIKey = "sk-or-...";
    ```
 6. Open `index.html` in a browser.
    The app runs correctly using file:// URLs.

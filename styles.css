@@ -12,6 +12,7 @@
     --blue-outline: #587180;
     --active-tab-topper-border: 3px;
     --tab-inactive-blue: #296A8C;
+    --tab-hover-fg-color: var(--fg-color);
     --font: 'font';
 
     --tab-close-1: brightness(0) saturate(100%) invert(56.9%) saturate(2.8%) hue-rotate(210deg);
@@ -66,13 +67,15 @@ div.tab {
     padding: 0 var(--tab-horz-padding);
     user-select: none;
     cursor: default;
-    transition: background-color 0.15s ease;
+    color: var(--fg-color);
+    transition: background-color 0.15s ease, color 0.15s ease;
     position: relative;
     z-index: 1;
 }
 
 div.tab:not(.active):hover {
     background-color: var(--dark-blue-hl);
+    color: var(--tab-hover-fg-color);
     border-bottom: var(--hard-outline-width) solid var(--blue-outline);
 }
 
@@ -82,7 +85,7 @@ body.dragging-tabs div.tab:hover {
 }
 
 div.tab.active {
-    background-color: var(--topper-color);
+    background-color: var(--topper-color) !important;
     border-left: var(--hard-outline-width) solid var(--hard-outline-color);
     border-right: var(--hard-outline-width) solid var(--hard-outline-color);
     border-top-left-radius: var(--active-tab-topper-border);
@@ -109,6 +112,7 @@ div.tab.dragged {
     top: 0;
     transform: none !important;
     transition: none !important;
+    background-color: var(--dark-blue-hl);
 }
 
 div.tab.dragMotion {

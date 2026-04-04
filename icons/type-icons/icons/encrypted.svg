@@ -1,1 +1,4 @@
-application-pgp-encrypted.svg
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22" height="22" xmlns="http://www.w3.org/2000/svg">
+ <path d="m11 3c-2.3268 0-4.0778 1.7854-4 4v4h-3v8h14v-8h-3v-4c0-2.216-1.6732-4-4-4zm0 1c1.7444 0 3 1.0613 3 3v4h-6v-4c0-1.9387 1.2556-3 3-3z" fill="#555"/>
+</svg>
