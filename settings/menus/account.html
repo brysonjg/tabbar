@@ -14,7 +14,7 @@
           --hard-outline-width: 1px;
           --dark-blue-hl: #1f485e;
           --light-blue-hl: #3daee9;
-          --denyal-red: #da4453;
+          --denial-red: #da4453;
           --blue-outline: #587180;
           --font: font;
 
@@ -123,7 +123,7 @@
           background: var(--grey-ff);
       }
 
-      div.account-infermation {
+      div.account-information {
           min-height: 50px;
           height: fit-content;
           width: 100%;
@@ -415,23 +415,23 @@
 
       div.mainContainerAfterBlackout .submitLine .submit.no:hover {
           background-color: var(--bg-color);
-          color: var(--denyal-red);
-          border: 1px solid var(--denyal-red);
+          color: var(--denial-red);
+          border: 1px solid var(--denial-red);
       }
 
       div.mainContainerAfterBlackout .submitLine .submit.no:active {
-          background-color: var(--denyal-red);
+          background-color: var(--denial-red);
           color: var(--bg-color);
-          border: 1px solid var(--denyal-red);
+          border: 1px solid var(--denial-red);
       }
 
     </style>
   </head>
   <body>
     <div class="master-container">
-      <div class="account-infermation">
+      <div class="account-information">
         <div>
-          <img src="../../icons/defualt-user.svg" class="user-account-icon" />
+          <img src="../../icons/default-user.svg" class="user-account-icon" />
         </div>
 
         <div>
@@ -445,6 +445,7 @@
     <script src="../../utils/quickyQuery.js"></script>
     <script src="../../utils/reftheme.js"></script>
     <script src="../../utils/kbutils.js"></script>
+    <script src="../../utils/doDenyTabScroll.js"></script>
     <script>
       // Message streaming setup
       let modalIframe = null;
@@ -505,7 +506,7 @@
                           await main();
                       }
                       else {
-                          console.warn("In loadAccountSettings, the call stack for main exeeded 50 calls, and thus the function loadAccountSettings was called off.");
+                          console.warn("In loadAccountSettings, the call stack for main exceeded 50 calls, and thus the function loadAccountSettings was called off.");
                           return;
                       }
                   }
@@ -537,7 +538,7 @@
           if (event.source !== window.parent) return;
 
           // Handle theme updates
-          if (event.data?.type === "updtTheme") {
+          if (event.data?.type === "updateTheme") {
               setTimeout(async () => {
                   await fixThemeOverSettable("chungus");
               }, 35);
@@ -645,16 +646,16 @@
 
       // Apply input handlers to display name and username fields
       addEventListenersInput(
-          document.querySelector(".account-infermation input.account-shown-name"),
+          document.querySelector(".account-information input.account-shown-name"),
           "displayname"
       );
       addEventListenersInput(
-          document.querySelector(".account-infermation input.account-user-name"),
+          document.querySelector(".account-information input.account-user-name"),
           "username"
       );
 
       // Avatar click handler - opens modal
-      document.querySelector(".account-infermation div:first-child").addEventListener("click", () => {
+      document.querySelector(".account-information div:first-child").addEventListener("click", () => {
           // Create blackout modal
           let blackout = document.createElement('div');
           blackout.classList.add("blackout");
@@ -724,6 +725,7 @@
           // Wheel navigation for tabs
           document.querySelector(".blackout .mainContainerAfterBlackout .tabBar")
               .addEventListener("wheel", (event) => {
+                  if (doDenyTabScroll()) return;
                   const tabs = Array.from(document.querySelectorAll('.blackout .mainContainerAfterBlackout .tabBar .tab'));
                   const activeTab = document.querySelector('.blackout .mainContainerAfterBlackout .tabBar .tab.active');
 
@@ -806,7 +808,7 @@
 
           if (await yesNoElementConfirm("Reset avatar to default?")) {
               const avatarImg = document.querySelector('.user-account-icon');
-              avatarImg.src = "../../icons/defualt-user.svg";
+              avatarImg.src = "../../icons/default-user.svg";
 
               // Set avatar to null in account data (indicating default)
               currentAccountData.avatar = null;

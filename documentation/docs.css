@@ -1,6 +1,6 @@
 :root {
     --bg-color: #2a2e32;
-    --memu-font-size: 16px;
+    --menu-font-size: 16px;
     --fg-color: #d4d4d4;
     --menu-hover: #1f485e;
     --menu-border: #3daee9;
@@ -27,7 +27,7 @@
 body, html {
     background-color: var(--bg-color);
     color: var(--fg-color);
-    font-size: var(--memu-font-size);
+    font-size: var(--menu-font-size);
     font-family: var(--font);
     max-height: 100vh;
     height: 100%;
@@ -55,22 +55,34 @@ div.menu-side-bar {
     -webkit-user-select: none;
 }
 
-::-webkit-scrollbar { width: 12px; }
+div.menu-side-bar::-webkit-scrollbar {
+    width: 12px;
+}
 
-::-webkit-scrollbar-track {
+div.menu-side-bar::-webkit-scrollbar-track {
     background: transparent;
     border-right: 1px solid var(--grey-40);
 }
-::-webkit-scrollbar-track:hover {
+
+div.menu-side-bar::-webkit-scrollbar-track:hover {
     border-right: 1px solid var(--grey-99);
 }
-::-webkit-scrollbar-track:active {
+
+div.menu-side-bar::-webkit-scrollbar-track:active {
     border-right: 1px solid var(--grey-ff);
 }
 
-::-webkit-scrollbar-thumb { background: var(--grey-40); }
-::-webkit-scrollbar-thumb:hover { background: var(--grey-99); }
-::-webkit-scrollbar-thumb:active { background: var(--grey-ff); }
+div.menu-side-bar::-webkit-scrollbar-thumb {
+    background: var(--grey-40);
+}
+
+div.menu-side-bar::-webkit-scrollbar-thumb:hover {
+    background: var(--grey-99);
+}
+
+div.menu-side-bar::-webkit-scrollbar-thumb:active {
+    background: var(--grey-ff);
+}
 
 div.menu {
     direction: ltr;
@@ -94,8 +106,8 @@ div.menu:hover {
 }
 
 div.menu:active {
-    background-color: var(--menu-border);
-    color: var(--bg-color)
+    background-color: var(--menu-border) !important;
+    color: var(--bg-color) !important;
 }
 
 div.menu.active {
@@ -120,124 +132,34 @@ div.content-major > div.content {
     width: 100%;
     border: none;
     padding-left: 12px;
-
-    user-select: none;
-    -webkit-user-select: none;
+    overflow: auto;
 }
 
-/* HEADERS */
-
-h1, h2, h3 {
-    margin-top: 5px;
-    margin-bottom: 5px;
+div.content-major > div.content::-webkit-scrollbar {
+    width: 15px;
 }
 
-h {
-    color: var(--link-blue);
-    background-color: var(--bg-blue-dark);
-    padding: 0 2px;
-    border-radius: 3px;
+div.content-major > div.content::-webkit-scrollbar-track {
+    background: transparent;
+    border-right: 1px solid var(--grey-40);
 }
 
-/* LINKS */
-
-a {
-    text-decoration: none;
+div.content-major > div.content-bar::-webkit-scrollbar-track:hover {
+    border-right: 1px solid var(--grey-99);
 }
 
-a:link {
-    color: var(--link-blue);
+div.content-major > div.content-bar::-webkit-scrollbar-track:active {
+    border-right: 1px solid var(--grey-ff);
 }
 
-a:visited {
-    color: var(--link-purple);
+div.content-major > div.content::-webkit-scrollbar-thumb {
+    background: var(--grey-40);
 }
 
-a:active {
-    color: var(--link-active-red);
+div.content-major > div.content::-webkit-scrollbar-thumb:hover {
+    background: var(--grey-99);
 }
 
-/* INLINE CODE */
-
-code {
-    background-color: var(--code-bg);
-    padding: 0 2px;
-    border-radius: 3px;
-}
-
-/* QUOTES / TABLES */
-
-blockquote {
-    margin: 10px 25px;
-    border-left: 1px solid var(--fg-color);
-    padding: 0 15px;
-}
-
-table {
-    border-collapse: collapse;
-    width: 100%;
-    border-radius: 3px;
-}
-
-td, th {
-    border: 1px solid var(--fg-color);
-    padding: 8px;
-    text-align: left;
-}
-
-th {
-    background-color: var(--table-header-bg);
-    color: var(--table-header-fg);
-}
-
-tr:nth-child(odd) td {
-    background-color: var(--table-row-alt-bg);
-}
-
-/* KaTeX */
-
-div.katexRender {
-    display: flex;
-    justify-content: center;
-    height: 20px;
-}
-
-/* CODE BLOCKS */
-
-pre.code {
-    border: 1px solid var(--fg-color);
-    border-radius: 4px;
-    padding: 12px;
-    position: relative;
-}
-
-pre.code div.copy-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    padding: 4px 8px;
-    width: fit-content;
-    font-size: 16px;
-    border: 1px solid var(--copy-border);
-    border-radius: 4px;
-    background: var(--copy-bg);
-    color: var(--copy-fg);
-    cursor: pointer;
-    user-select: none;
-}
-
-pre.code div.copy-btn:hover {
-    border: 1px solid var(--copy-border-hover);
-    background: var(--copy-bg-hover);
-}
-
-pre.code div.copy-btn:active {
-    border: 1px solid var(--copy-border-active);
-    background: var(--copy-bg-active);
-}
-
-pre.code div.copy-btn.copied {
-    border: 1px solid var(--copy-success-bd);
-    background: var(--copy-success-bg);
-    color: var(--copy-success-fg);
+div.content-major > div.content::-webkit-scrollbar-thumb:active {
+    background: var(--grey-ff);
 }

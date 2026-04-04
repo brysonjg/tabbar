@@ -16,11 +16,11 @@ window.theme_brz_dark = {
                                 "bg-color": "#2a2e32",
                                 "fg-color": "#d4d4d4",
                                 "hard-outline-color": "#64686b",
-                                "asset-acsent-color": "#64686b",
+                                "asset-accent-color": "#64686b",
                                 "dark-blue-hl": "#1f485e",
                                 "light-blue-hl": "#3daee9",
                                 "transparent-blue": "#3daee938",
-                                "denyal-red": "#da4453",
+                                "denial-red": "#da4453",
                                 "blue-outline": "#587180",
 
                                 "icon-filter": "brightness(1000) brightness(83%)",
@@ -209,7 +209,6 @@ window.theme_brz_dark = {
                                 "prism-italic-font-style": "italic",
                                 "prism-italic-font-weight": "400"
                             },
-
                             gitgraph:
                             {
                                 "versioning-graph-bg": "#2a2e32",

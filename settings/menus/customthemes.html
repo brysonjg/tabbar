@@ -163,7 +163,7 @@
     <script>
       window.onload = async () => {
           await fixThemeOverSettable("chungus"); // import more theming
-          await fixThemeOverSettable(); // correct themedge
+          await fixThemeOverSettable(); // correcting theming
           await fixThemeOverSettable("prism"); // import prism theming
           editor.textContent = window.theme_temp;
           highlightEditable(editor);
@@ -176,7 +176,7 @@
         window.parent.postMessage({ type: "naviiframe", url: "./menus/appearance.html" }, "*");
       });
 
-      // --- Prism rehighlight helper ---
+      // --- Prism re-highlighting helper ---
       function highlightEditable(el) {
         const pos = saveSelection(el);
         Prism.highlightElement(el);
@@ -373,7 +373,7 @@
 
         updateTopLevelTheme();
         await fixThemeOverSettable("chungus"); // import more theming
-        await fixThemeOverSettable(); // correct themedge
+        await fixThemeOverSettable(); // correcting theming
         await fixThemeOverSettable("prism"); // import prism theming
       });
 

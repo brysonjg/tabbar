@@ -10,6 +10,7 @@ window.addEventListener("message", async (event) => {
 
 async function initDocsPage() {
     try {
+        await fixThemeOverSettable("chungus");
         await fixThemeOverSettable("settings");
         await fixThemeOverSettable("prism");
         makePagebarAccurate();
@@ -39,6 +40,27 @@ function makePagebarAccurate() {
         }
     });
 
+    pageBar.addEventListener("wheel", (event) => {
+        event.preventDefault();
+        if (doDenyTabScroll()) return;
+
+        const activeMenu = document.querySelector('.menu.active');
+        const menus = Array.from(document.querySelectorAll('.menu'));
+
+        if (!activeMenu) return;
+        if (menus.length <= 1) return;
+
+        let currentMenuIndex = menus.indexOf(activeMenu);
+        currentMenuIndex += event.deltaY / Math.abs(event.deltaY);
+        currentMenuIndex += menus.length;
+        currentMenuIndex %= menus.length;
+
+        const nextMenu = menus[currentMenuIndex];
+        if (!nextMenu) return;
+
+        nextMenu.click();
+    }, { passive: false });
+
     const firstMenu = pageBar.querySelector(".menu");
     firstMenu.classList.add("active");
 
@@ -46,7 +68,7 @@ function makePagebarAccurate() {
     loadMarkdownDocsFile(fileOfActivePage);
 
     setTimeout(() => {
-        let markdown = translateMDtoHTMLDecupled(window.content);
+        let markdown = translateMDtoHTMLDecoupled(window.content);
         document.querySelector("div.content-major > div.content")
         .innerHTML = markdown;
         batUpdateRules();
@@ -68,13 +90,31 @@ function makePagebarAccurate() {
             loadMarkdownDocsFile(file);
 
             setTimeout(() => {
-                let markdown = translateMDtoHTMLDecupled(window.content);
+                let markdown = translateMDtoHTMLDecoupled(window.content);
                 document.querySelector("div.content-major > div.content")
                     .innerHTML = markdown;
                 batUpdateRules();
             }, 10);
         });
     });
+
+    const loadFirstMenu = () => {
+        const file = firstMenu.dataset.file;
+        loadMarkdownDocsFile(file);
+
+        setTimeout(() => {
+            if (window.content) {
+                let markdown = translateMDtoHTMLDecoupled(window.content);
+                document.querySelector("div.content-major > div.content")
+                    .innerHTML = markdown;
+                batUpdateRules();
+            }
+            else {
+                loadFirstMenu();
+            }
+        }, 2);
+    };
+    loadFirstMenu();
 }
 
 async function loadMarkdownDocsFile(file) {

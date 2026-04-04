@@ -1,5 +1,5 @@
 window.onload = async () => {
-    await fixThemeOverSettable(); // correct themedge
+    await fixThemeOverSettable(); // correcting theming
 
     // theme imports
     await fixThemeOverSettable("prism");
@@ -55,13 +55,13 @@ window.onload = async () => {
     for (const message of messages) {
         if (message.role !== "system") {
             let username = "user";
-            let icon = "../icons/defualt-user.svg";
+            let icon = "../icons/default-user.svg";
 
             if (accountData && message.role === "user") {
                 username = accountData.displayname || accountData.username || "User";
-                icon = accountData.avatar || "../icons/defualt-user.svg";
+                icon = accountData.avatar || "../icons/default-user.svg";
             } else if (message.role === "assistant") {
-                icon = "../icons/ai-defult.svg";
+                icon = "../icons/ai-default.svg";
                 username = "assistant";
             }
 
@@ -155,7 +155,7 @@ function startBlameSpacerScheduler() {
 
 function updateTitleButtonPosition() {
     const chatOuterer = document.querySelector('.chat-outerer');
-    const titleBtn = document.querySelector('div.aciton-groupe-bar');
+    const titleBtn = document.querySelector('div.action-groupe-bar');
 
     if (!chatOuterer || !titleBtn) return;
 
@@ -181,11 +181,11 @@ async function reTitleTab() {
         </div>
     `);
 
-    const titleBtn = document.querySelector('div.aciton-groupe-bar');
+    const titleBtn = document.querySelector('div.action-groupe-bar');
 
     titleBtn.style.top = 'calc(5px + 2px)'; // 2 pixels more than its typical
 
-    let topBarFlashForeRenameIneterval = setInterval(() => {
+    let topBarFlashForRenameInterval = setInterval(() => {
         if (document.querySelector("div.top-bar-flash-for-rename")) {
             if (hasVerticalScrollbar(chatOuterer)) {
                 document.querySelector("div.top-bar-flash-for-rename").classList.add("rightborder");
@@ -217,15 +217,15 @@ async function reTitleTab() {
         }
 
         setTimeout(() => renameBar.remove(), 250);
-        clearInterval(topBarFlashForeRenameIneterval);
+        clearInterval(topBarFlashForRenameInterval);
 
-        titleBtn.style.top = '5px';  // set height back to its defualt
+        titleBtn.style.top = '5px';  // set height back to its default
     };
 
     const cancelRename = () => {
         renameBar.classList.add("on-close");
         setTimeout(() => renameBar.remove(), 250);
-        clearInterval(topBarFlashForeRenameIneterval);
+        clearInterval(topBarFlashForRenameInterval);
     };
 
     submitBtn.addEventListener("click", closeBar);
@@ -299,7 +299,7 @@ function graphCompressionForSidePanel(repo) {
 
         const parent = nearestKeptAncestor(repo[id]?.parent);
         compressed[id].parent = parent;
-z
+
         if (compressed[parent] && !compressed[parent].children.includes(id)) {
             compressed[parent].children.push(id);
         }
@@ -354,13 +354,13 @@ async function toggleVersioningSidePanel() {
         for (const message of messages) {
             if (message.role !== "system") {
                 let username = "user";
-                let icon = "../icons/defualt-user.svg";
+                let icon = "../icons/default-user.svg";
 
                 if (window.account && message.role === "user") {
                     username = window.account.displayname || window.account.username || "User";
-                    icon = window.account.avatar || "../icons/defualt-user.svg";
+                    icon = window.account.avatar || "../icons/default-user.svg";
                 } else if (message.role === "assistant") {
-                    icon = "../icons/ai-defult.svg";
+                    icon = "../icons/ai-default.svg";
                     username = "assistant";
                 }
 
@@ -423,7 +423,7 @@ function attachModelItemListeners(container) {
         const type = element.getAttribute('type');
         if (type === 'setModel') {
             element.addEventListener('click', () => {
-                submisionModel = element.getAttribute('model');
+                submissionModel = element.getAttribute('model');
             });
         }
     });
@@ -460,14 +460,14 @@ async function updateRules() {
 
 function translateMDtoHTML(md) {
     md = md.split("\uF8FE\uF8FE%%%%%__USER_UPLOADED_FILES_AFTER_THIS__%%%%%\uF8FE\uF8FE")[0];
-    md = translateMDtoHTMLDecupled(md);
+    md = translateMDtoHTMLDecoupled(md);
     return "<br style=\"user-select: none;\">" + md;
 }
 
-async function renderMD(md, username = "user", arbs = "", files = {}, doAnimations = true, useIcons=true, iconScript="../icons/defualt-user.svg") {
-    document.querySelectorAll("div.usr-input-master-container.befor-messages")
+async function renderMD(md, username = "user", arbs = "", files = {}, doAnimations = true, useIcons=true, iconScript="../icons/default-user.svg") {
+    document.querySelectorAll("div.usr-input-master-container.before-messages")
         .forEach((element) => {
-            element.classList.remove("befor-messages");
+            element.classList.remove("before-messages");
 
             if (doAnimations) {
                 element.classList.add("animation");
@@ -487,16 +487,16 @@ async function renderMD(md, username = "user", arbs = "", files = {}, doAnimatio
     container.innerHTML += `
         <div id="message_" class="chat-message" ${arbs}>
         ${translateMDtoHTML(md)}
-        <div id="__file_feild__" class="message-file-feild"></div>
+        <div id="__file_field__" class="message-file-field"></div>
         </div>
     `;
 
-    const fileFeild = document.getElementById("__file_feild__");
+    const fileField = document.getElementById("__file_field__");
 
     // Display file names only in UI
     Object.keys(files).forEach((file) => {
         const iconName = files[file].icon || getFileIconFileName(file, files[file].mimetype, null);
-        fileFeild.innerHTML += `<div class="message-file">
+        fileField.innerHTML += `<div class="message-file">
                                     <img src="../icons/type-icons/icons/${iconName}" class="fname-icon" />
                                     ${file}
                                 </div>`;
@@ -515,19 +515,19 @@ async function renderMD(md, username = "user", arbs = "", files = {}, doAnimatio
     const blameMain = document.getElementById(`blame_mn_`);
     const message = document.getElementById(`message_`);
 
-    [blameSpacer, blameMain, message, fileFeild].forEach((el) => el.removeAttribute("id"));
+    [blameSpacer, blameMain, message, fileField].forEach((el) => el.removeAttribute("id"));
 
     await updateRules();
     scheduleBlameSpacerUpdate();
 }
 
 function collectFiles() {
-    const fileFeild = document.getElementById("file-feild");
-    if (!fileFeild) return {};
+    const fileField = document.getElementById("file-field");
+    if (!fileField) return {};
 
     const fileStruct = {};
 
-    fileFeild.querySelectorAll("div.context").forEach((div) => {
+    fileField.querySelectorAll("div.context").forEach((div) => {
         const fileName = div.textContent.trim();
         const fileContent = div.dataset.content || "";
         const fileMimetype = div.dataset.mimetype || "";
@@ -546,7 +546,7 @@ function collectFiles() {
     return fileStruct;
 }
 
-let submisionModel = "arcee-ai/trinity-large-preview:free"; // default fallback
+let submissionModel = "arcee-ai/trinity-large-preview:free"; // default fallback
 
 (async () => {
     try {
@@ -554,7 +554,7 @@ let submisionModel = "arcee-ai/trinity-large-preview:free"; // default fallback
         if (settables?.models) {
             const { activeIndex, models } = settables.models;
             if (models?.[activeIndex]?.api_name) {
-                submisionModel = models[activeIndex].api_name;
+                submissionModel = models[activeIndex].api_name;
             }
         }
     } catch (err) {
@@ -563,13 +563,13 @@ let submisionModel = "arcee-ai/trinity-large-preview:free"; // default fallback
 })();
 
 
-async function handleSubmision() {
+async function handleSubmission() {
     const textArea = document.querySelector("textarea");
     const message = textArea.value.trim();
 
     if (message === "") return;
 
-    // indecate that the function is in execution
+    // indicate that the function is in execution
     setBlueDote(true);
 
     const fileStruct = collectFiles();
@@ -589,16 +589,16 @@ async function handleSubmision() {
         }
     }
 
-    let userIcon = "../icons/defualt-user.svg";
+    let userIcon = "../icons/default-user.svg";
 
     try {
         userIcon = window.account.avatar;
     } catch {
-        userIcon = "../icons/defualt-user.svg";
+        userIcon = "../icons/default-user.svg";
     }
 
     if (!userIcon) {
-        userIcon = "../icons/defualt-user.svg";
+        userIcon = "../icons/default-user.svg";
     }
 
     await renderMD(message, userName, `usermeasage="${userMessageID}"`, fileStruct, true, true, userIcon);
@@ -653,7 +653,7 @@ async function handleSubmision() {
 
     // Placeholder for streaming assistant response
     const streamId = "streaming_reply_" + Date.now();
-    await renderMD("", "assistant", `streamid="${streamId}"`, [], true, true, "../icons/ai-defult.svg");
+    await renderMD("", "assistant", `streamid="${streamId}"`, [], true, true, "../icons/ai-default.svg");
     const streamEl = document.querySelector(`[streamid=${streamId}]`);
 
     let fullReply = "";
@@ -665,18 +665,18 @@ async function handleSubmision() {
             globalOffStitch = true;
         };
 
-        document.getElementById("submitionIcon").src = "../icons/cancel-message.svg";
+        document.getElementById("submissionIcon").src = "../icons/cancel-message.svg";
 
-        document.getElementById("submitionIcon").addEventListener("click", submitIconAction);
+        document.getElementById("submissionIcon").addEventListener("click", submitIconAction);
 
         const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
             method: "POST",
             headers: {
-                Authorization: `Bearer ${gloablAPIKey}`,
+                Authorization: `Bearer ${globalAPIKey}`,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                model: submisionModel,
+                model: submissionModel,
                 messages: apiChat,
                 stream: true
             }),
@@ -689,7 +689,7 @@ async function handleSubmision() {
         let buffer = "";
 
         const chatOuterer = document.querySelector('.chat-outerer');
-        const actionButtons = document.querySelector('div.aciton-groupe-bar');
+        const actionButtons = document.querySelector('div.action-groupe-bar');
 
         if (!chatOuterer || !actionButtons) return;
 
@@ -730,8 +730,8 @@ async function handleSubmision() {
             }
         }
 
-        document.getElementById("submitionIcon").src = "../icons/sendmessage.svg";
-        document.getElementById("submitionIcon").removeEventListener("click", submitIconAction);
+        document.getElementById("submissionIcon").src = "../icons/sendmessage.svg";
+        document.getElementById("submissionIcon").removeEventListener("click", submitIconAction);
 
         // Finalize assistant message
         streamEl.innerHTML = translateMDtoHTML(fullReply);
@@ -741,7 +741,7 @@ async function handleSubmision() {
         await setLocalJson({ ...json, chat: chatData });
         await updateRules();
 
-        // detertype whether the AI should rename the chat
+        // determine whether the AI should rename the chat
         let letAIRenameChat = false;
         let hasPassedAssistant = false;
 
@@ -763,12 +763,12 @@ async function handleSubmision() {
             const titleRequest = {
                 role: "user",
                 content:
-`(this message is generated by the ai interface, not the user, but is placed here on the behalf of the user inorder to automaticaly give they're chat a title)
+`(this message is generated by the ai interface, not the user, but is placed here on the behalf of the user in order to automatically give they're chat a title)
 
 Please summarize the chat so far into a short, clear, and easily searchable title.
 The interface will the first section you provide in double quotes ("this is a title") as the chat title, make it concise and directly descriptive of the conversation.
-Avoid complex punctuation, unnecessary symbols, or formatting. The chat title sould sumerise the chat up to but not including this tittle request message.
-For the sake of the user please get to the title displaying quotes as soon as posible (while still strictly folowing the guidelines best you can) so that they wont have to wait much time their chat to get titled.
+Avoid complex punctuation, unnecessary symbols, or formatting. The chat title should summarize the chat up to but not including this title request message.
+For the sake of the user please get to the title displaying quotes as soon as possible (while still strictly following the guidelines best you can) so that they wont have to wait much time their chat to get titled.
 
 Follow these guidelines for good titles:
 
@@ -778,7 +778,7 @@ A good title:
     - Is easy to read and remember
     - Is short (ideally 4 to 7 words)
     - Is syntactically meaningful (uses words like for and the to describe relationships instead of a pile of keywords)
-    - Gets to the main arguments of the conversavtion (e.g. if the conversation is talking about Microsoft stocks then the title should mention Micorsoft and Stocks somware it it, If the conversation is about say how much Fule needed to get moon, then it mentions Rocket fule and moon, if it is writing an Essay then it should clearly stat that in the title with "Essay on ...") and they should be recognisable from the text of the title alone
+    - Gets to the main arguments of the conversation (e.g. if the conversation is talking about Microsoft stocks then the title should mention Microsoft and Stocks somewhere in it, If the conversation is about say how much Fuel needed to get to the moon, then it mentions Rocket, fuel and moon, if it is writing an Essay then it should clearly state that in the title with "Essay on ...") and they should be recognizable from the text of the title alone (it gose without saying that if a conversation is not about the stock market or whatever do not mention it)
 
 A bad title:
     - Is vague or generic (e.g., "Chat" or "Conversation")
@@ -786,8 +786,8 @@ A bad title:
     - Includes irrelevant details
     - Describes or implies details never mentioned
     - Is overly long or difficult to scan quickly
-    - Uses markdown or other formating that is not plaintext (e.g. "**Bad Tittle**" or "# Uncool Tittle")
-    - Is stating that this is a sumery of the chat: "Chat Recap", "Overveiw of the Chat" etc.`
+    - Uses markdown or other formatting that is not plaintext (e.g. "**Bad Title**" or "# Uncool Title")
+    - Is stating that this is a summary of the chat: "Chat Recap", "Overview of the Chat", "Chat Summary", "Summary" etc.`
             };
 
             json.chat.commit([titleRequest]);
@@ -809,11 +809,11 @@ A bad title:
             const response4Tittle = await fetch("https://openrouter.ai/api/v1/chat/completions", {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${gloablAPIKey}`,
+                    Authorization: `Bearer ${globalAPIKey}`,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    model: submisionModel,
+                    model: submissionModel,
                     messages: apiChat,
                     stream: true
                 }),
@@ -878,22 +878,22 @@ A bad title:
         streamEl.innerHTML = `<p><b>Error:</b> ${err.message}</p>`;
     }
 
-    setBlueDote(false); // indecate that the function is no longer executing
+    setBlueDote(false); // indicate that the function is no longer executing
 
 }
 
 document.querySelector("textarea").addEventListener("keydown", async (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
         event.preventDefault();
-        await handleSubmision();
+        await handleSubmission();
         setBlueDote(false);
         await updateVpanel();
     }
 });
 
-document.getElementById("submitionIcon").addEventListener("click", async (event) => {
+document.getElementById("submissionIcon").addEventListener("click", async (event) => {
     event.preventDefault();
-    await handleSubmision();
+    await handleSubmission();
     setBlueDote(false);
     await updateVpanel();
 });
@@ -974,7 +974,7 @@ document.querySelectorAll(".menu .dropdown .menu-item, .menu .dropdown-nul .menu
     switch (type) {
         case "setModel":
             element.addEventListener( "click", () => {
-                submisionModel = element.getAttribute("model");
+                submissionModel = element.getAttribute("model");
             });
             break;
     }
@@ -1005,11 +1005,11 @@ async function getFilePreviewDataView(file, previewBytes = 256) {
 
 const addContextButton = document.querySelector(".context#add-context");
 const hiddenFileInput = document.querySelector("#hidden-file-input");
-const fileFeild = document.querySelector("#file-feild");
+const fileField = document.querySelector("#file-field");
 const fileLoadingIcon = "../icons/fileonload.svg";
 
 addContextButton?.addEventListener("mousedown", () => {
-    if (!hiddenFileInput || !fileFeild) return;
+    if (!hiddenFileInput || !fileField) return;
     hiddenFileInput.click();
 
     hiddenFileInput.addEventListener(
@@ -1039,19 +1039,19 @@ addContextButton?.addEventListener("mousedown", () => {
                     div.appendChild(iconImg);
                     div.appendChild(document.createTextNode(file.name));
 
-                    fileFeild.appendChild(div);
+                    fileField.appendChild(div);
 
                     div.addEventListener("click", () => {
                         div.remove();
                     });
 
                     div.addEventListener("mouseover", () => {
-                        div.classList.add("hovring");
+                        div.classList.add("hovering");
                         div.querySelector("img.fname-icon").src = "../icons/close-file.svg";
                     });
 
                     div.addEventListener("mouseleave", () => {
-                        div.classList.remove("hovring");
+                        div.classList.remove("hovering");
                         const currentIcon = div.dataset.icon;
                         div.querySelector("img.fname-icon").src =
                             currentIcon
