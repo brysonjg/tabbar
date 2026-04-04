@@ -53,11 +53,11 @@ git clone https://github.com/brysonjg/tabbar.git
 Create `./chungus/api-key.js` with your OpenRouter key:
 
 ```javascript
-const gloablAPIKey = "sk-or-...";
+const globalAPIKey = "sk-or-...";
 ```
 
 You can use a free OpenRouter key if that is enough for your use case.
-To get an OpenRouter key go to [openrouter.ai](https://openrouter.ai) and make an accout then
+To get an OpenRouter key go to [openrouter.ai](https://openrouter.ai) and make an account then
 make a key and copy it into the file.
 
 Then start the app in either of these ways:
@@ -104,4 +104,4 @@ See:
 
     .github/LICENSE.md
 
-and the linsenciing for other librarys it directs to.
+and the licensing for other libraries it directs to.

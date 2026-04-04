@@ -1,1 +1,6 @@
-audio-x-flac.svg
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22" height="22" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <g id="layer1" transform="translate(-326 -534.36)">
+  <path id="rect5233" transform="translate(326 534.36)" d="m7 3v11.504a2.5 2.5 0 0 0-1.5-0.50391 2.5 2.5 0 0 0-2.5 2.5 2.5 2.5 0 0 0 2.5 2.5 2.5 2.5 0 0 0 2.5-2.5v-9.5h10v5.5039a2.5 2.5 0 0 0-1.5-0.50391 2.5 2.5 0 0 0-2.5 2.5 2.5 2.5 0 0 0 2.5 2.5 2.5 2.5 0 0 0 2.5-2.5v-11.5h-12zm1 1h10v2h-10v-2z" fill="#22a7f0"/>
+ </g>
+</svg>

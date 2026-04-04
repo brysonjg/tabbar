@@ -1,1 +1,7 @@
-application-x-srt.svg
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22" height="22" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <g id="layer1-43" transform="translate(-326 -534.36)" fill="#6c7a89">
+  <path id="rect4156-9" transform="translate(326 534.36)" d="m8 8v7l4 4v-4h7v-7h-11zm1 1h9v5h-9v-5z"/>
+  <path id="rect5636" transform="translate(326 534.36)" d="m3 3v11h4v-7h8v-4h-12zm1 1h2v2h-2v-2zm3 0h4v2h-4v-2zm5 0h2v2h-2v-2zm-8 3h2v3h-2v-3zm0 4h2v2h-2v-2z"/>
+ </g>
+</svg>

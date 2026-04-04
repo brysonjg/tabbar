@@ -1,0 +1,191 @@
+/* HEADERS */
+
+h1, h2, h3 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+h {
+    color: var(--link-blue);
+    background-color: var(--bg-blue-dark);
+    padding: 0 2px;
+    border-radius: 3px;
+}
+
+/* PARAGRAPH */
+
+p {
+    margin: 5px 0;
+}
+
+/* LINKS */
+
+a {
+    text-decoration: none;
+}
+
+a:link {
+    color: var(--link-blue);
+}
+
+a:visited {
+    color: var(--link-purple);
+}
+
+a:active {
+    color: var(--link-active-red);
+}
+
+/* INLINE CODE */
+
+code {
+    background-color: var(--code-bg);
+    padding: 0 2px;
+    border-radius: 3px;
+}
+
+/* BLOCK QUOTES */
+
+blockquote {
+    margin: 10px 25px;
+    border-left: 1px solid var(--fg-color);
+    padding: 0 15px;
+}
+
+/* TABLES */
+
+div.tcontainer:has(> table) {
+    border: 1px solid var(--fg-color);
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: var(--table-container-bg);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid var(--fg-color);
+    padding: 8px;
+    text-align: left;
+}
+
+th:first-child, td:first-child {
+    border-left: none;
+}
+
+th:last-child, td:last-child {
+    border-right: none;
+}
+
+tbody > tr:last-child > td {
+    border-bottom: none;
+}
+
+th {
+    border-top: none;
+    background-color: var(--table-header-bg);
+    color: var(--table-header-fg);
+}
+
+tr:nth-child(even) td {
+    background-color: var(--table-row-even-bg);
+}
+
+tr:nth-child(odd) td {
+    background-color: var(--table-row-odd-bg);
+}
+
+/* CODE BLOCKS */
+
+pre.code {
+    border: 1px solid var(--fg-color);
+    border-radius: 4px;
+    padding: 12px;
+    position: relative;
+}
+
+pre.code::-webkit-scrollbar {
+    width: 15px;
+}
+
+pre.code::-webkit-scrollbar-track {
+    background: transparent;
+    border-left: 1px solid var(--grey-40);
+    border-bottom: 1px solid var(--grey-40);
+    border-top: 1px solid var(--grey-40);
+}
+
+pre.code::-webkit-scrollbar-track:hover {
+    border-left: 1px solid var(--grey-99);
+    border-bottom: 1px solid var(--grey-99);
+    border-top: 1px solid var(--grey-99);
+}
+
+pre.code::-webkit-scrollbar-track:active {
+    border-left: 1px solid var(--grey-ff);
+    border-bottom: 1px solid var(--grey-ff);
+    border-top: 1px solid var(--grey-ff);
+}
+
+pre.code::-webkit-scrollbar-thumb {
+    background: var(--grey-40);
+}
+
+pre.code::-webkit-scrollbar-thumb:hover {
+    background: var(--grey-99);
+}
+
+pre.code::-webkit-scrollbar-thumb:active {
+    background: var(--grey-ff);
+}
+
+pre.code div.copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 4px 8px;
+    width: fit-content;
+    font-size: 16px;
+    border: 1px solid var(--copy-border-solid, var(--copy-border));
+    border-radius: 4px;
+    background: var(--copy-bg-solid, var(--copy-bg));
+    color: var(--copy-fg-solid, var(--copy-fg));
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+pre.code div.copy-btn:hover {
+    border: 1px solid var(--copy-border-hover-solid, var(--copy-border-hover));
+    background: var(--copy-bg-hover-solid, var(--copy-bg-hover));
+}
+
+pre.code div.copy-btn:active {
+    border: 1px solid var(--copy-border-active-solid, var(--copy-border-active));
+    background: var(--copy-bg-active-solid, var(--copy-bg-active));
+}
+
+pre.code div.copy-btn.copied {
+    border: 1px solid var(--copy-success-bd-solid, var(--copy-success-bd));
+    background: var(--copy-success-bg-solid, var(--copy-success-bg));
+    color: var(--copy-success-fg-solid, var(--copy-success-fg));
+}
+
+pre.code div.copy-btn.stick-to-top {
+    position: fixed;
+}
+
+pre.code div.copy-btn.bottom {
+    top: auto;
+    bottom: 8px;
+    right: 8px;
+}
+
+/* LISTS */
+
+ul {
+    list-style-type: disc !important;
+}

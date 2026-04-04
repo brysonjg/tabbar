@@ -1,1 +1,18 @@
-text-rtf.svg
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="svg2" width="22" height="22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata id="metadata3874">
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g id="layer1" transform="translate(-326 -534.36)" fill="#0c2d63">
+  <rect id="rect4279" x="329" y="537.36" width="8" height="1"/>
+  <rect id="rect4281" x="329" y="541.36" width="16" height="1"/>
+  <rect id="rect4283" x="329" y="548.36" width="16" height="1"/>
+  <rect id="rect4285" x="329" y="545.36" width="8" height="1"/>
+  <rect id="rect4287" x="329" y="552.36" width="12" height=".99998"/>
+ </g>
+</svg>

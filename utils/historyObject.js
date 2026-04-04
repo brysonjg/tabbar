@@ -36,7 +36,7 @@ class VersionObject {
         });
 
         if (invalidate) {
-            throw new Error(`(historyObject): Structural validation failed, and the object was invalidated. A vlaue was not an Object.`);
+            throw new Error(`(historyObject): Structural validation failed, and the object was invalidated. A value was not an Object.`);
         }
 
         invalidate = false;
@@ -48,7 +48,7 @@ class VersionObject {
         }
 
         if (!Object.prototype.hasOwnProperty.call(object, activePointer)) {
-            throw new Error(`(historyObject): Structural validation failed, the active pointer points to an location that isnt in the object.`);
+            throw new Error(`(historyObject): Structural validation failed, the active pointer points to an location that isn't in the object.`);
         }
 
         if (!Object.prototype.hasOwnProperty.call(object, 0)) {
@@ -56,7 +56,7 @@ class VersionObject {
         }
 
         keys.forEach((key) => {
-            // the folowing exception for 0 is becouses as the root it has no parent
+            // the following exception for 0 is because as the root it has no parent
             if (key != 0) {
                 let value = object[key];
                 if (!Object.prototype.hasOwnProperty.call(object, value.parent)) {
@@ -67,7 +67,7 @@ class VersionObject {
         });
 
         if (invalidate) {
-            throw new Error(`(historyObject): Structural validation failed, node links to id that dosent exist.`);
+            throw new Error(`(historyObject): Structural validation failed, node links to id that doesn't exist.`);
         }
 
         invalidate = false;
@@ -88,7 +88,7 @@ class VersionObject {
         });
 
         if (invalidate) {
-            throw new Error(`(historyObject): Structural validation failed, node dosent contain Array[] children.`);
+            throw new Error(`(historyObject): Structural validation failed, node doesn't contain Array[] children.`);
         }
 
         invalidate = false;
@@ -109,10 +109,10 @@ class VersionObject {
         });
 
         if (invalidate) {
-            throw new Error(`(historyObject): Structural validation failed, node dosent contain Array[] content.`);
+            throw new Error(`(historyObject): Structural validation failed, node doesn't contain Array[] content.`);
         }
 
-        // asigning values
+        // assigning values
         this.active = activePointer;
         this.json = object;
         this.object = object;
@@ -165,7 +165,7 @@ class VersionObject {
         return newId;
     }
     checkout(id) {
-        // switch the head to an id after varification
+        // switch the head to an id after verification
 
         // verify that id is a node
         if (!this.keys.includes(id)) {
@@ -185,9 +185,10 @@ class VersionObject {
 
         // Traverse upward to root
         const stack = [];
-        while (cursor !== null) {
+        while (cursor !== null && cursor !== undefined) {
             stack.push(cursor);
-            cursor = this.object[cursor].parent;
+            const node = this.object[cursor];
+            cursor = node ? node.parent : null;
         }
 
         // Reverse to go root → active
@@ -271,7 +272,7 @@ class VersionObject {
 class VersionPanel {
     constructor(element, object, argument={}) {
         this.parentElement = element;
-        this.veringObject = object;
+        this.versingObject = object;
         this.nodeHitRegions = [];
         this._clickListener = null;
 
@@ -289,15 +290,15 @@ class VersionPanel {
         this.dpr = window.devicePixelRatio || 1;
 
         const documentStyles = window.getComputedStyle(document.body);
-        let colorPalet = [];
-        let colorPaletItorator = 0;
+        let colorPalette = [];
+        let colorPaletteIterator = 0;
         const charSet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_";
 
         while (true) {
             let currentID = "";
 
-            if (colorPaletItorator > 0) {
-                let n = colorPaletItorator;
+            if (colorPaletteIterator > 0) {
+                let n = colorPaletteIterator;
 
                 while (n > 0) {
                     const remainder = n % 64;
@@ -312,14 +313,14 @@ class VersionPanel {
 
             if (!value) break;
 
-            colorPalet.push(value);
-            colorPaletItorator++;
+            colorPalette.push(value);
+            colorPaletteIterator++;
         }
 
         this.arcv = {
             padding: 7,
             gridCellSurface: 20,
-            colorPalet: [...colorPalet],
+            colorPalette: [...colorPalette],
             ...argument
         };
 
@@ -331,7 +332,7 @@ class VersionPanel {
         this.autoResizeCanvas();
     }
 
-    _getColorIDOfItorater(iter) {
+    _getColorIDOfIterator(iter) {
         const charSet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_";
 
         if (iter === 0) return charSet[0];
@@ -404,8 +405,8 @@ class VersionPanel {
 
         this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
 
-        if (this.veringObject) {
-            this.displayObject(this.veringObject);
+        if (this.versingObject) {
+            this.displayObject(this.versingObject);
         }
     }
 
@@ -420,14 +421,14 @@ class VersionPanel {
         this.ctx.fill();
     }
 
-    _conectNodes(startIndex, endIndex, startY) {
+    _connectNodes(startIndex, endIndex, startY) {
         const padding = this.arcv.padding;
         const cellSize = this.arcv.gridCellSurface;
 
         const x1 = (startIndex + 0.5) * cellSize + (startIndex + 1) * padding;
         const y1 = startY + cellSize;
         const x2 = (endIndex + 0.5) * cellSize + (endIndex + 1) * padding;
-        const y2 = startY + padding + cellSize; // connect to bottom of parent circle
+        const y2 = startY + padding + cellSize;
 
         this.ctx.beginPath();
         this.ctx.moveTo(x1, y1);
@@ -439,8 +440,8 @@ class VersionPanel {
     displayObject() {
         const padding = this.arcv.padding;
         const cellSize = this.arcv.gridCellSurface;
-        const colors = this.arcv.colorPalet;
-        const object = this.veringObject
+        const colors = this.arcv.colorPalette;
+        const object = this.versingObject
         const radius = cellSize / 2;
         this.nodeHitRegions = [];
 
@@ -454,7 +455,6 @@ class VersionPanel {
         while (pointers.length > 0) {
             let drawX = 0;
             let newPointers = [];
-            let newPositions = [];
 
             drawY += padding;
 
@@ -482,7 +482,7 @@ class VersionPanel {
                 node.children.forEach((child, j) => {
                     const childIndex = newPointers.indexOf(child);
                     if (childIndex !== -1) {
-                        this._conectNodes(i, childIndex, drawY);
+                        this._connectNodes(i, childIndex, drawY);
                     }
                 });
 
@@ -490,13 +490,13 @@ class VersionPanel {
             });
 
             pointers = newPointers;
-            positions = newPositions;
+            positions = [];
             drawY += cellSize;
         }
     }
 
     setRenderObject(object) {
-        this.veringObject = object;
+        this.versingObject = object;
         this.displayObject();
     }
 }

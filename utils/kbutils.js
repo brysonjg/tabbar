@@ -14,9 +14,9 @@ async function registerRunKeyboardShortcutFunction(kbs) {
     const AsyncFunction =
         Object.getPrototypeOf(async function () {}).constructor;
 
-    const asyncronus = (String(kbs.asyncfn) == "true") || false;
+    const asynchronous = (String(kbs.asyncfn) == "true") || false;
 
-    if (asyncronus) {
+    if (asynchronous) {
         const fun = new AsyncFunction(kbs.callback);
         await fun();
     }

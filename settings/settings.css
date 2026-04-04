@@ -1,6 +1,6 @@
 :root {
     --bg-color: #2a2e32;
-    --memu-font-size: 16px;
+    --menu-font-size: 16px;
     --fg-color: #d4d4d4;
     --menu-hover: #1f485e;
     --menu-border: #3daee9;
@@ -27,7 +27,7 @@
 body, html {
     background-color: var(--bg-color);
     color: var(--fg-color);
-    font-size: var(--memu-font-size);
+    font-size: var(--menu-font-size);
     font-family: var(--font);
     max-height: 100vh;
     height: 100%;
@@ -94,8 +94,8 @@ div.menu:hover {
 }
 
 div.menu:active {
-    background-color: var(--menu-border);
-    color: var(--bg-color)
+    background-color: var(--menu-border) !important;
+    color: var(--bg-color) !important;
 }
 
 div.menu.active {

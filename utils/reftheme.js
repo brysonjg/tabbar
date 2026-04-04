@@ -3,7 +3,7 @@ async function loadGoogleFontForThemingSettables(fontName) {
     const url = `https://fonts.googleapis.com/css2?family=${formatted}:wght@400;700&display=swap`;
 
     if (fontName === "font") {
-        // the font is defualt
+        // the font is default
         return true;
     }
 
@@ -103,13 +103,13 @@ async function fixThemeOverSettable(name = null) {
 }
 
 // Always get settables from IndexedDB to match the scripts.js / localDB flow.
-async function fixThemeSchemaAtTopLeval() {
+async function fixThemeSchemaAtTopLevel() {
     let settables;
     try {
         await localDB.ensureOpen();
         settables = await localDB.getSettables();
     } catch (e) {
-        console.warn("fixThemeSchemaAtTopLeval: Failed to get settables from localDB", e);
+        console.warn("fixThemeSchemaAtTopLevel: Failed to get settables from localDB", e);
         return;
     }
 
@@ -127,7 +127,7 @@ async function fixThemeSchemaAtTopLeval() {
         try {
             localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(vars));
         } catch (err) {
-            console.warn("fixThemeSchemaAtTopLeval: Unable to cache theme vars", err);
+            console.warn("fixThemeSchemaAtTopLevel: Unable to cache theme vars", err);
         }
     } catch (e) {
         console.warn("Top-level theme error:", e);
@@ -143,7 +143,7 @@ async function fixThemeSchemaAtTopLeval() {
         try {
             localStorage.setItem(THEME_FONT_STORAGE_KEY, fontName);
         } catch (err) {
-            console.warn("fixThemeSchemaAtTopLeval: Unable to cache theme font", err);
+            console.warn("fixThemeSchemaAtTopLevel: Unable to cache theme font", err);
         }
     } catch (e) {
         console.warn("Top-level font error:", e);
@@ -194,59 +194,3 @@ function normalizeIconPath(value) {
     return sanitized.replace(/^(?:\.\.\/|\.\/)+/, "").replace(/^\/+/, "");
   }
 }
-
-async function makeIconsAcordingToIconPack() {
-  const ipack = await getIconPackage();
-  if (!ipack || Object.keys(ipack).length === 0) return;
-
-  const normalizedIconPackage = new Map();
-  Object.entries(ipack).forEach(([key, value]) => {
-    const normalizedKey = normalizeIconPath(key);
-    if (normalizedKey) {
-      normalizedIconPackage.set(normalizedKey, value);
-    }
-  });
-
-  const resolveIconReplacement = (element) => {
-    const attrSrc = element.getAttribute && element.getAttribute("src");
-    const normalizedAttr = normalizeIconPath(attrSrc);
-    const normalizedProp = normalizeIconPath(element.src);
-
-    if (element.src && ipack[element.src]) {
-      return ipack[element.src];
-    }
-
-    if (attrSrc && ipack[attrSrc]) {
-      return ipack[attrSrc];
-    }
-
-    if (normalizedProp && normalizedIconPackage.has(normalizedProp)) {
-      return normalizedIconPackage.get(normalizedProp);
-    }
-
-    if (normalizedAttr && normalizedIconPackage.has(normalizedAttr)) {
-      return normalizedIconPackage.get(normalizedAttr);
-    }
-
-    return null;
-  };
-
-  let observer = new MutationObserver(() => {
-    document.querySelectorAll("img").forEach((element) => {
-      const replacement = resolveIconReplacement(element);
-      if (replacement) {
-        element.src = replacement;
-      }
-      console.log(element);
-    });
-  });
-
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true,
-  });
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  makeIconsAcordingToIconPack();
-});

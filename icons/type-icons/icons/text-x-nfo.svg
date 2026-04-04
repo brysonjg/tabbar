@@ -1,1 +1,8 @@
-text-x-texinfo.svg
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22" height="22" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <g id="layer1" transform="translate(-326 -534.36)" fill="#22a7f0">
+  <rect id="rect4120" x="336" y="540.36" width="2" height="2"/>
+  <rect id="rect4124" x="336" y="543.36" width="2" height="7"/>
+  <path id="rect4129" d="m337 537.36c-4.432 0-8 3.568-8 8s3.568 8 8 8 8-3.568 8-8-3.568-8-8-8zm0 1c3.878 0 7 3.122 7 7s-3.122 7-7 7-7-3.122-7-7 3.122-7 7-7z"/>
+ </g>
+</svg>

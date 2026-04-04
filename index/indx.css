@@ -19,7 +19,7 @@
     --a-btn-red-2: brightness(0) invert(17%) sepia(45%) saturate(5302%) hue-rotate(338deg) brightness(77%) contrast(91%) brightness(120%)  brightness(130%);
     --a-btn-red-3: brightness(0) invert(17%) sepia(45%) saturate(5302%) hue-rotate(338deg) brightness(77%) contrast(91%) brightness(150%) brightness(150%);
 
-    --search-heighlight: var(--input-fg-color);
+    --search-highlight: var(--input-fg-color);
 
     --topper-height: 30px;
     --action-padding: 10px;
@@ -257,7 +257,7 @@ div.std-action-bar > div.right {
     padding-right: 3px;
 }
 
-div.action-holdings img.action-buton {
+div.action-holdings img.action-button {
     width: calc(var(--topper-height) - var(--action-padding));
     height: calc(var(--topper-height) - var(--action-padding));
     margin-right: calc(var(--action-padding) / 2);
@@ -267,11 +267,11 @@ div.action-holdings img.action-buton {
     -webkit-user-drag: none;
 }
 
-div.action-holdings img.action-buton:hover {
+div.action-holdings img.action-button:hover {
     filter: var(--action-btn-2);
 }
 
-div.action-holdings img.action-buton:active {
+div.action-holdings img.action-button:active {
     filter: var(--action-btn-3);
 }
 
@@ -417,7 +417,7 @@ div.std-action-bar > div.center > input.search::selection {
 }
 
 div.text > span.search-highlight {
-    color: var(--search-heighlight);
+    color: var(--search-highlight);
 }
 
 main > div.search-empty-message {

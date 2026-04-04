@@ -1,4 +1,4 @@
-# zip formats (complex historical (in this project) signifigens)
+# zip archive format (projects historical artifacts)
 *.zip
 
 # swap formats (ides)
@@ -8,5 +8,17 @@
 .vscode/
 .cursor/
 
-# api key file (for the sake of the security of ten dollar)
+# api key file (contributors api-credits)
 chungus/api-key.js
+
+# annoying operating system metadata
+.directory
+.DS_store
+
+# python stuff that is better keep out of the remote repository
+**/__pycache__/
+**/.venv/
+*.py[cod]
+
+# no one commits a file that was dering python cleanup of icons
+.*.svg.scour.*

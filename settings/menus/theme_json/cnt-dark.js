@@ -8,17 +8,17 @@ window.theme_cnt_dark = {
 
                                 "grey-40": "#5555",
                                 "grey-99": "#7f8c8d99",
-                                "--grey-ff": "#555",
+                                "grey-ff": "#555",
                             },
                             chungus: {
                                 "bg-color": "#111214",
                                 "fg-color": "#f0f0f0",
                                 "hard-outline-color": "#444",
-                                "asset-acsent-color": "#333",
+                                "asset-accent-color": "#333",
                                 "dark-blue-hl": "#004e7a",
                                 "light-blue-hl": "#00baff",
                                 "transparent-blue": "#00baff38",
-                                "denyal-red": "#da4453",
+                                "denial-red": "#da4453",
                                 "blue-outline": "#0070a0",
 
                                 "icon-filter": "brightness(1000) saturate(10%) hue-rotate(200deg) brightness(80%)",
@@ -62,9 +62,11 @@ window.theme_cnt_dark = {
                                 "context-hover-fg": "#f0f0f0",
                                 "context-active-bg": "#00baff55",
 
+                                "table-container-bg": "#111214",
                                 "table-header-bg": "#1e1f22",
-                                "table-row-alt-bg": "#16171a",
-                                "table-header-fg": "#f8f8f8",
+                                "table-row-odd-bg": "#16171a",
+                                "table-row-even-bg": "#111214",
+                                "table-header-fg": "#f8f8f8"
                             },
                             prism: {
                                 "prism-block-bg": "#181a1f",
@@ -165,7 +167,6 @@ window.theme_cnt_dark = {
                                 "prism-property-font-style": "normal",
                                 "prism-property-font-weight": "400"
                             },
-
                             gitgraph: {
                                 "versioning-graph-bg": "#111214",
                                 "versioning-graph-right-border": "#5555",

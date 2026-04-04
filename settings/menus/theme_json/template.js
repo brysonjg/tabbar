@@ -59,8 +59,10 @@ window.theme_temp =
         "context-hover-fg": "" <color>,
         "context-active-bg": "" <color>,
 
+        "table-container-bg": "" <color>,
         "table-header-bg": "" <color>,
-        "table-row-alt-bg": "" <color>,
+        "table-row-odd-bg": "" <color>,
+        "table-row-even-bg": "" <color>,
         "table-header-fg": "" <color>,
     },
     prism: {

@@ -12,7 +12,7 @@ window.addEventListener("message", async (event) => {
     }
 
     if (event.source !== window.parent) {
-        if (event.data?.type === "updtTheme") {
+        if (event.data?.type === "updateTheme") {
             setTimeout( async () => {
                 await fixThemeOverSettable();
             }, 35)
@@ -99,7 +99,9 @@ document.addEventListener("visibilitychange", () => {
 });
 
 document.querySelectorAll(".menu").forEach( (element) => {
-    element.addEventListener("mousedown", () => {
+    element.addEventListener("click", () => {
+        if (element.classList.contains("active")) return;
+
         document.querySelectorAll(".menu").forEach( (element2) => {
             element2.classList.remove("active");
         });
@@ -132,6 +134,8 @@ window.addEventListener('resize', adjustMenuWidth);
 
 sidebar.addEventListener("wheel", (event) => {
     event.preventDefault();
+    if (doDenyTabScroll()) return;
+
     const activeMenu = document.querySelector('.menu.active');
 
     let allMenus = Array.from(document.querySelectorAll('.menu'));

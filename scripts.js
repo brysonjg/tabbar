@@ -51,11 +51,6 @@ const lowZFrames = new Map();
 const lowZPriorityQueue = [];
 let loadingTabInSwitching = false;
 
-function getTabElements() {
-    tabs = Array.from(document.querySelectorAll(".tab"));
-    return tabs;
-}
-
 function getActiveTabElement() {
     return document.querySelector(".tab.active");
 }
@@ -84,9 +79,9 @@ function applyAriaAttributesToTab(tabElement) {
 
 function applyAriaAttributesToAllTabs() {
     const tabElements = getTabElements();
-    for (let index = 0; index < tabElements.length; index++) {
-        applyAriaAttributesToTab(tabElements[index]);
-    }
+    tabElements.forEach((tabElement) => {
+        applyAriaAttributesToTab(tabElement);
+    });
 }
 
 // Add lowZ frame to registry with semantic ordering
@@ -191,7 +186,7 @@ function cleanupLowZFrames() {
 }
 
 (async () => {
-    startCorectTabChecksumScedual(100);
+    startCorrectTabChecksumSchedule(100);
 
     const savedTabs = localStorage.getItem("tabArray");
     if (!savedTabs) {
@@ -231,7 +226,7 @@ function cleanupLowZFrames() {
         await localDB.setSettables(settables);
     }
 
-    fixThemeSchemaAtTopLeval();
+    fixThemeSchemaAtTopLevel();
 })();
 
 applyAriaAttributesToTabbar();
@@ -273,6 +268,11 @@ function addTabListeners(tab) {
     });
 }
 
+function getTabElements() {
+    tabs = Array.from(document.querySelectorAll(".tab"));
+    return tabs;
+}
+
 function setActiveTab(tab) {
     if (!tab) return;
     if (!chungus) return;
@@ -284,17 +284,8 @@ function setActiveTab(tab) {
 
     applyAriaAttributesToAllTabs();
 
-    if (loadingTabInSwitching) return;
-    loadingTabInSwitching = true;
-
-    if (!chungus.src.endsWith("about:blank")) chungus.src = "about:blank";
-
     const tabid = tab.getAttribute("tabid");
     const dataURL = tab.getAttribute("data-url") || "./chungus/chungus.html";
-
-    chungus.onload = () => {
-        loadingTabInSwitching = false;
-    };
 
     // Use requestAnimationFrame to schedule next load safely
     requestAnimationFrame(() => {
@@ -302,7 +293,7 @@ function setActiveTab(tab) {
     });
 }
 
-function startCorectTabChecksumScedual(interval) {
+function startCorrectTabChecksumSchedule(interval) {
     setInterval(() => {
         const activeTab = document.querySelector(".tab.active");
         if (!activeTab) return;
@@ -468,6 +459,7 @@ function onMouseUp() {
 function cancelCurrentDragOperation() {
     const overlay = document.getElementById("overlay");
     if (overlay) overlay.remove();
+    window.top.focus();
 
     document.removeEventListener("mousemove", onMouseMove);
     document.removeEventListener("mouseup", onMouseUp);
@@ -511,6 +503,7 @@ function onKeyDownDuringDrag(keyboardEvent) {
     if (keyboardEvent.key === "Escape") {
         keyboardEvent.preventDefault();
         cancelCurrentDragOperation();
+        return;
     }
 }
 
@@ -518,7 +511,7 @@ function makeNewTabID() {
     let result = '';
     result += Math.floor(Math.random() * 9) + 1;
     for (let i = 0; i < 999; i++) {
-        result += Math.floor(Math.random() * 10);
+        result += Math.floor(Math.random() * 100);
     }
     return result;
 }
@@ -649,10 +642,11 @@ tabbar.addEventListener("dblclick", (event) => {
 
 tabbar.addEventListener("wheel", (event) => {
     event.preventDefault();
+    if (doDenyTabScroll()) return;
     const activeTab = document.querySelector('.tab.active');
 
     if (!activeTab) return;
-    if (tabs.length == 1) return;
+    if (tabs.length <= 1) return;
 
     let currentIndex = tabs.indexOf(activeTab);
     currentIndex += event.deltaY / Math.abs(event.deltaY);
@@ -663,7 +657,6 @@ tabbar.addEventListener("wheel", (event) => {
     if (!nextTab) return;
 
     setActiveTab(nextTab);
-
 }, { passive: false });
 
 tabbar.addEventListener("contextmenu", (event) => {
@@ -691,7 +684,7 @@ window.addEventListener("message", (event) => {
         event.source.postMessage({ type: "fetchTabIDResponse", result: tabid }, "*");
     }
 
-    if (event.data.type === "exitCurent") {
+    if (event.data.type === "exitCurrent") {
         // Find which frame sent this message
         const lowZFrameInfo = getLowZFrameBySource(event.source);
 
@@ -868,7 +861,7 @@ window.addEventListener("message", (event) => {
         })();
     }
 
-    if (type === "chtitle") {
+    if (type === "changeTitle") {
         const activeTab = getActiveTabElement();
         if (!activeTab || activeTab.getAttribute("tabid") !== "0") return;
 
@@ -885,7 +878,7 @@ window.addEventListener("message", (event) => {
                 await localDB.ensureOpen();
                 await localDB.patchSessionTitle(tabid, title);
             } catch (e) {
-                console.warn("chtitle localDB failed:", e);
+                console.warn("changeTitle localDB failed:", e);
             }
         })();
     }
@@ -926,8 +919,8 @@ window.addEventListener("message", (event) => {
         })();
     }
 
-    if (type == "updtTheme") {
-        fixThemeSchemaAtTopLeval();
+    if (type == "updateTheme") {
+        fixThemeSchemaAtTopLevel();
     }
 
     if (type == "newTabEvent") {
@@ -960,7 +953,7 @@ window.addEventListener("message", (event) => {
         }
     }
 
-    if (type == "toggleAcctiveDot") {
+    if (type == "toggleActiveDot") {
         let tabid = getTabIDFromSource(event.source);
         let tabdiv = document.querySelector(`div.tab[tabid="${tabid}"]`);
 
@@ -987,7 +980,7 @@ window.addEventListener("message", (event) => {
         }
     }
 
-    if (type == "setAcctiveDot") {
+    if (type == "setActiveDot") {
         let tabid = getTabIDFromSource(event.source);
         let tabdiv = document.querySelector(`div.tab[tabid="${tabid}"]`);
 
@@ -1021,7 +1014,7 @@ window.addEventListener("message", (event) => {
         }
     }
 
-    if (type == "getAcctiveDot") {
+    if (type == "getActiveDot") {
         let tabid = getTabIDFromSource(event.source);
         let tabdiv = document.querySelector(`div.tab[tabid="${tabid}"]`);
 

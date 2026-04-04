@@ -65,4 +65,4 @@ except for direct communication with OpenRouter.
 
 Users are solely responsible for securing their API keys.
 The authors assume no liability for lost, compromised, or misused API keys.
-No Warrenty for API key safty of any kind is in order.
+No Warranty for API key safety of any kind is in order.
