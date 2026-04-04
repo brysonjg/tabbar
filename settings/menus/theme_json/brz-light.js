@@ -14,11 +14,11 @@ window.theme_brz_light = {
                                 "bg-color": "#eff0f1",
                                 "fg-color": "#232629",
                                 "hard-outline-color": "#7f8c8d",
-                                "asset-acsent-color": "#7f8c8d",
+                                "asset-accent-color": "#7f8c8d",
                                 "dark-blue-hl": "#2980b9",
                                 "light-blue-hl": "#3daee9",
                                 "transparent-blue": "#3daee938",
-                                "denyal-red": "#ff98a2",
+                                "denial-red": "#ff98a2",
                                 "blue-outline": "#8ab4c8",
 
                                 "icon-filter": "brightness(1000) saturate(15%) hue-rotate(210deg) brightness(16%)",
@@ -64,9 +64,11 @@ window.theme_brz_light = {
                                 "context-hover-fg": "#004b6d",
                                 "context-active-bg": "#3daee950",
 
-                                "table-header-bg": "#bdc3c780",
-                                "table-row-alt-bg": "#e8eaec",
-                                "table-header-fg": "#131619",
+                                "table-container-bg": "#eff0f1",
+                                "table-header-bg": "#d6d9dc",
+                                "table-row-odd-bg": "#e8eaec",
+                                "table-row-even-bg": "#eff0f1",
+                                "table-header-fg": "#131619"
                             },
                             prism: {
                                 "prism-block-bg": "#aeeef69",
@@ -167,7 +169,6 @@ window.theme_brz_light = {
                                 "prism-property-font-style": "normal",
                                 "prism-property-font-weight": "400"
                             },
-
                             gitgraph: {
                                 "versioning-graph-bg": "#eff0f1",
                                 "versioning-graph-right-border": "#7f8c8d40",

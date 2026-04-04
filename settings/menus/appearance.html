@@ -11,9 +11,9 @@
           --fg-color: #d4d4d4;
           --man-color: #000a;
 
-          --card-1-filt: brightness(1);
-          --card-2-filt: brightness(1.25);
-          --card-3-filt: brightness(2);
+          --card-1-filter: brightness(1);
+          --card-2-filter: brightness(1.25);
+          --card-3-filter: brightness(2);
 
           --light-blue-hl: #3daee9,
       }
@@ -106,15 +106,15 @@
           cursor: pointer;
           user-select: none;
           -webkit-user-select: none;
-          filter: var(--card-1-filt);
+          filter: var(--card-1-filter);
       }
 
       img.theme-showcase:hover {
-          filter: var(--card-2-filt);
+          filter: var(--card-2-filter);
       }
 
       img.theme-showcase:active {
-          filter: var(--card-3-filt);
+          filter: var(--card-3-filter);
       }
 
       div.buffer {
@@ -179,7 +179,7 @@
               <div class="theme-img-wrapper" data-label="more themes" id="morethemes">
                 <img class="theme-showcase" src="./theme_imgs/more-themes.svg" alt="">
               </div>
-              <div class="theme-img-wrapper" data-label="custum themes" id="customthemes">
+              <div class="theme-img-wrapper" data-label="custom themes" id="customthemes">
                 <img class="theme-showcase" src="./theme_imgs/custom-themes.svg" alt="">
               </div>
             </div>
@@ -192,7 +192,7 @@
       <div class="body">
         <div class="section font">
         <br />
-        <div class="title">Defult Font</div>
+        <div class="title">Default Font</div>
           <div class="body">
             <h1 class="font" data-font="font">
               Thing In Font
@@ -220,7 +220,7 @@
     <script>
 
       window.onload = async () => {
-          await fixThemeOverSettable(); // correct themedge
+          await fixThemeOverSettable(); // correcting theming
       }
 
       document.addEventListener("contextmenu", (event) => {
@@ -234,7 +234,7 @@
           setSettablesByJson(json);
 
           updateTopLevelTheme();
-          await fixThemeOverSettable(); // correct themedge
+          await fixThemeOverSettable(); // correcting theming
       });
 
       document.getElementById("lighttheme").addEventListener("click", async () => {
@@ -244,7 +244,7 @@
           setSettablesByJson(json);
 
           updateTopLevelTheme();
-          await fixThemeOverSettable(); // correct themedge
+          await fixThemeOverSettable(); // correcting theming
       });
 
       document.getElementById("morethemes").addEventListener("click", () => {
@@ -263,7 +263,7 @@
               setSettablesByJson(json);
 
               updateTopLevelTheme();
-              await fixThemeOverSettable(); // correct themedge
+              await fixThemeOverSettable(); // correcting theming
           });
       });
 

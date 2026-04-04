@@ -1,1 +1,16 @@
-libreoffice-oasis-text-template.svg
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="svg2" width="22" height="22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata id="metadata3874">
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g id="layer1" transform="translate(-326 -534.36)">
+  <g id="layer1-23" fill="#0b4764">
+   <path id="rect4847" transform="translate(326 534.36)" d="m3 3v1h8v-1h-8zm0 4v1h16v-1h-16zm0 4v1h7v-1h-7zm8 0v8h8v-8h-8zm1 1h6v6h-6v-6zm-9 2v1h7v-1h-7zm0 4v1h7v-1h-7z" fill="#0b4764" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+  </g>
+ </g>
+</svg>

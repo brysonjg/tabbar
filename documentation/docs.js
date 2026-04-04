@@ -10,9 +10,10 @@ window.addEventListener("message", async (event) => {
 
 async function initDocsPage() {
     try {
+        await fixThemeOverSettable("chungus");
         await fixThemeOverSettable("settings");
         await fixThemeOverSettable("prism");
-        makePagebarAccurate();
+        await makePagebarAccurate();
     } catch (error) {
         console.error("Failed to initialize docs page", error);
     }
@@ -22,8 +23,33 @@ document.addEventListener("contextmenu", (event) => {
      event.preventDefault();
 });
 
-function makePagebarAccurate() {
+function getContentContainer() {
+    return document.querySelector("div.content-major > div.content");
+}
+
+async function renderPage(file) {
+    const content = getContentContainer();
+    if (!content) return;
+
+    try {
+        await loadMarkdownDocsFile(file);
+        const md = typeof window.content === "string" ? window.content : "";
+        content.innerHTML = translateMDtoHTMLDecoupled(md);
+        await batUpdateRules();
+    } catch (error) {
+        console.error("Failed to load docs page", file, error);
+        const fallback = `# Page failed to load\n\nTried to load: \`${String(file)}\`\n\n- Make sure the file exists in \`documentation/docs/\`.\n- Check the browser console for the underlying error.\n`;
+        content.innerHTML = translateMDtoHTMLDecoupled(fallback);
+        await batUpdateRules();
+    }
+}
+
+async function makePagebarAccurate() {
     const pageBar = document.querySelector(".menu-side-bar");
+    if (!pageBar) return;
+
+    // Avoid duplicating menus if this is ever called twice.
+    pageBar.innerHTML = "";
 
     window.pagedefs.forEach((def) => {
         if (def.type === "page") {
@@ -39,23 +65,35 @@ function makePagebarAccurate() {
         }
     });
 
+    pageBar.addEventListener("wheel", (event) => {
+        event.preventDefault();
+        if (doDenyTabScroll()) return;
+
+        const activeMenu = document.querySelector('.menu.active');
+        const menus = Array.from(document.querySelectorAll('.menu'));
+
+        if (!activeMenu) return;
+        if (menus.length <= 1) return;
+
+        let currentMenuIndex = menus.indexOf(activeMenu);
+        currentMenuIndex += event.deltaY / Math.abs(event.deltaY);
+        currentMenuIndex += menus.length;
+        currentMenuIndex %= menus.length;
+
+        const nextMenu = menus[currentMenuIndex];
+        if (!nextMenu) return;
+
+        nextMenu.click();
+    }, { passive: false });
+
     const firstMenu = pageBar.querySelector(".menu");
+    if (!firstMenu) return;
     firstMenu.classList.add("active");
-
-    const fileOfActivePage = firstMenu.dataset.file;
-    loadMarkdownDocsFile(fileOfActivePage);
-
-    setTimeout(() => {
-        let markdown = translateMDtoHTMLDecupled(window.content);
-        document.querySelector("div.content-major > div.content")
-        .innerHTML = markdown;
-        batUpdateRules();
-    }, 10);
 
     const allMenus = pageBar.querySelectorAll(".menu");
 
     allMenus.forEach((element) => {
-        element.addEventListener("click", () => {
+        element.addEventListener("click", async () => {
             if (element.classList.contains("active")) return;
 
             pageBar.querySelectorAll(".menu.active").forEach((el) => {
@@ -65,21 +103,20 @@ function makePagebarAccurate() {
             element.classList.add("active");
 
             const file = element.dataset.file;
-            loadMarkdownDocsFile(file);
-
-            setTimeout(() => {
-                let markdown = translateMDtoHTMLDecupled(window.content);
-                document.querySelector("div.content-major > div.content")
-                    .innerHTML = markdown;
-                batUpdateRules();
-            }, 10);
+            await renderPage(file);
         });
     });
+
+    await renderPage(firstMenu.dataset.file);
 }
 
 async function loadMarkdownDocsFile(file) {
     return new Promise((resolve, reject) => {
+        const existing = document.querySelector('script[data-docs-page="true"]');
+        if (existing) existing.remove();
+
         const script = document.createElement('script');
+        script.dataset.docsPage = "true";
         script.src = `./docs/${file}`;
         script.onload = () => resolve();
         script.onerror = () => reject(new Error(`Failed to load ${file}`));

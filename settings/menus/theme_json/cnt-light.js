@@ -8,17 +8,17 @@ window.theme_cnt_light = {
 
                                 "grey-40": "#585b5e40",
                                 "grey-99": "#585b5e99",
-                                "--grey-ff": "#585b5eff",
+                                "grey-ff": "#585b5eff",
                             },
                             chungus: {
                                 "bg-color": "#ffffff",
                                 "fg-color": "#000000",
                                 "hard-outline-color": "#333333",
-                                "asset-acsent-color": "#2980b9",
+                                "asset-accent-color": "#2980b9",
                                 "dark-blue-hl": "#004c97",
                                 "light-blue-hl": "#007bff",
                                 "transparent-blue": "#007bff38",
-                                "denyal-red": "#da4453",
+                                "denial-red": "#da4453",
                                 "blue-outline": "#0068c0",
 
                                 "icon-filter": "brightness(1000) saturate(6%) hue-rotate(206deg) brightness(25%)",
@@ -63,9 +63,12 @@ window.theme_cnt_light = {
                                 "context-hover-bg": "#007bff20",
                                 "context-hover-fg": "#002a60",
                                 "context-active-bg": "#007bff60",
+
+                                "table-container-bg": "#ffffff",
                                 "table-header-bg": "#dcdcdc",
-                                "table-row-alt-bg": "#f3f3f3",
-                                "table-header-fg": "#000",
+                                "table-row-odd-bg": "#f3f3f3",
+                                "table-row-even-bg": "#ffffff",
+                                "table-header-fg": "#000000"
                             },
                             prism: {
                                 "prism-block-bg": "#f0f0f0",
@@ -166,7 +169,6 @@ window.theme_cnt_light = {
                                 "prism-property-font-style": "normal",
                                 "prism-property-font-weight": "400"
                             },
-
                             gitgraph: {
                                 "versioning-graph-bg": "#ffffff",
                                 "versioning-graph-right-border": "#66666640",
@@ -262,7 +264,7 @@ window.theme_cnt_light = {
                                 "topper-color": "#ffffff",
                                 "hard-outline-color": "#333333",
                                 "tab-inactive": "#f1f1f1",
-                                "dark-blue-hl": "#004c97",
+                                "dark-blue-hl": "#004c97bb",
                                 "lighter-blue-hl": "#007bff",
                                 "blue-outline": "#0057d8",
                                 "tab-inactive-blue": "#e0ebff",

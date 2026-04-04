@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 from __future__ import annotations
 
 import argparse
@@ -8,6 +7,7 @@ import sys
 import tempfile
 from pathlib import Path
 from shutil import rmtree, which
+import signal
 
 
 def _icons_root() -> Path:
@@ -201,4 +201,9 @@ def main(argv: list[str]) -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main(sys.argv[1:]))
+    try:
+        main(sys.argv[1:])
+    except KeyboardInterrupt:
+        script_path = Path(__file__).resolve()
+        script_dir= script_path.parent
+        _cleanup_local_venv(script_dir)

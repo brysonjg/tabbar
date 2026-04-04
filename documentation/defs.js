@@ -2,7 +2,7 @@ window.pagedefs = [
     {
         "name": "Welcome",
         "type": "page",
-        "file": "welcom.js"
+        "file": "welcome.js"
     },
     {
         "name": "Tab bar",
@@ -15,6 +15,6 @@ window.pagedefs = [
     {
         "name": "Welcome",
         "type": "page",
-        "file": "welcom.js"
+        "file": "welcome.js"
     }
 ];

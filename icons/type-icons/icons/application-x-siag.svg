@@ -1,1 +1,14 @@
-application-vnd.sun.xml.calc.template.svg
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="svg2" width="22" height="22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata id="metadata3874">
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g id="layer1" transform="translate(-326 -534.36)">
+  <path id="rect4376" transform="translate(326 534.36)" d="m3 3v16h16v-16h-16zm1 1h14v4h-14v-4zm0 5h4v4h-4v-4zm5 0h4v4h-4v-4zm5 0h4v4h-4v-4zm-10 5h4v4h-4v-4zm5 0h4v4h-4v-4zm5 0h4v4h-4v-4z" fill="#124c12" stroke-width="2"/>
+ </g>
+</svg>

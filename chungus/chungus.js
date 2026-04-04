@@ -1,5 +1,5 @@
 window.onload = async () => {
-    await fixThemeOverSettable(); // correct themedge
+    await fixThemeOverSettable(); // correcting theming
 
     // theme imports
     await fixThemeOverSettable("prism");
@@ -16,8 +16,7 @@ window.onload = async () => {
         accountData = accountData.account;
         window.account = accountData;
     } catch {
-        accountData = accountData;
-        window.account = accountData;
+        // nothing
     }
 
     const json = await getLocalJson();
@@ -28,23 +27,8 @@ window.onload = async () => {
     // Initialize VersionObject from stored data if it exists
     if (json.chat) {
         try {
-            if (Array.isArray(json.chat)) {
-                // Legacy array format - convert to VersionObject structure
-                const repo = VersionObject.newRepository();
-                json.chat.forEach((msg) => {
-                    repo[Object.keys(repo).filter(k => k !== 'active').length] = {
-                        parent: 0,
-                        content: [msg],
-                        children: []
-                    };
-                });
-                const chatObj = new VersionObject(repo);
-                messages = chatObj.compile() || [];
-            } else {
-                // Stored VersionObject data - initialize the class
-                const chatObj = new VersionObject(json.chat);
-                messages = chatObj.compile() || [];
-            }
+            const chatObj = new VersionObject(json.chat);
+            messages = chatObj.compile() || [];
         } catch (err) {
             console.warn("Failed to load chat messages:", err);
             messages = [];
@@ -55,13 +39,13 @@ window.onload = async () => {
     for (const message of messages) {
         if (message.role !== "system") {
             let username = "user";
-            let icon = "../icons/defualt-user.svg";
+            let icon = "../icons/default-user.svg";
 
             if (accountData && message.role === "user") {
                 username = accountData.displayname || accountData.username || "User";
-                icon = accountData.avatar || "../icons/defualt-user.svg";
+                icon = accountData.avatar || "../icons/default-user.svg";
             } else if (message.role === "assistant") {
-                icon = "../icons/ai-defult.svg";
+                icon = "../icons/ai-default.svg";
                 username = "assistant";
             }
 
@@ -69,26 +53,24 @@ window.onload = async () => {
         }
     }
 
-    let lastTitle = document.title;
+    const outerer = document.querySelector("div.chat-outerer");
+    if (outerer) {
+        outerer.scrollTop = outerer.scrollHeight;
+    }
 
     setTimeout(async () => {
-        let json = await getLocalJson();
-        if (json?.metadata?.title && json.metadata.title !== lastTitle) {
+        if (json?.metadata?.title) {
             setTabTitle(json.metadata.title);
-            lastTitle = json.metadata.title;
+        }
+        else {
+            setTabTitle("Untitled");
         }
     }, 0);
 
-    updateTitleButtonPosition();
-    scheduleBlameSpacerUpdate();
-};
-
-window.addEventListener("load", () => {
+    startBlameSpacerScheduler()
     setTimeout(updateTitleButtonPosition, 200);
-
-    startBlameSpacerScheduler();
-    setInterval(updateBlameSpacersFast, 100);
-});
+    updateTitleButtonPosition();
+};
 
 window.addEventListener("message", (event) => {
     if (!event.data || event.data.type !== "saveQuit") return;
@@ -150,12 +132,13 @@ function startBlameSpacerScheduler() {
     window.addEventListener("resize", scheduleBlameSpacerUpdate);
     window.addEventListener("click", scheduleBlameSpacerUpdate);
     window.addEventListener("keydown", scheduleBlameSpacerUpdate);
+    setInterval(updateBlameSpacersFast, 100);
     scheduleBlameSpacerUpdate();
 }
 
 function updateTitleButtonPosition() {
     const chatOuterer = document.querySelector('.chat-outerer');
-    const titleBtn = document.querySelector('div.aciton-groupe-bar');
+    const titleBtn = document.querySelector('div.action-group-bar');
 
     if (!chatOuterer || !titleBtn) return;
 
@@ -181,11 +164,11 @@ async function reTitleTab() {
         </div>
     `);
 
-    const titleBtn = document.querySelector('div.aciton-groupe-bar');
+    const titleBtn = document.querySelector('div.action-group-bar');
 
     titleBtn.style.top = 'calc(5px + 2px)'; // 2 pixels more than its typical
 
-    let topBarFlashForeRenameIneterval = setInterval(() => {
+    let topBarFlashForRenameInterval = setInterval(() => {
         if (document.querySelector("div.top-bar-flash-for-rename")) {
             if (hasVerticalScrollbar(chatOuterer)) {
                 document.querySelector("div.top-bar-flash-for-rename").classList.add("rightborder");
@@ -217,15 +200,15 @@ async function reTitleTab() {
         }
 
         setTimeout(() => renameBar.remove(), 250);
-        clearInterval(topBarFlashForeRenameIneterval);
+        clearInterval(topBarFlashForRenameInterval);
 
-        titleBtn.style.top = '5px';  // set height back to its defualt
+        titleBtn.style.top = '5px';  // set height back to its default
     };
 
     const cancelRename = () => {
         renameBar.classList.add("on-close");
         setTimeout(() => renameBar.remove(), 250);
-        clearInterval(topBarFlashForeRenameIneterval);
+        clearInterval(topBarFlashForRenameInterval);
     };
 
     submitBtn.addEventListener("click", closeBar);
@@ -299,7 +282,7 @@ function graphCompressionForSidePanel(repo) {
 
         const parent = nearestKeptAncestor(repo[id]?.parent);
         compressed[id].parent = parent;
-z
+
         if (compressed[parent] && !compressed[parent].children.includes(id)) {
             compressed[parent].children.push(id);
         }
@@ -354,13 +337,13 @@ async function toggleVersioningSidePanel() {
         for (const message of messages) {
             if (message.role !== "system") {
                 let username = "user";
-                let icon = "../icons/defualt-user.svg";
+                let icon = "../icons/default-user.svg";
 
                 if (window.account && message.role === "user") {
                     username = window.account.displayname || window.account.username || "User";
-                    icon = window.account.avatar || "../icons/defualt-user.svg";
+                    icon = window.account.avatar || "../icons/default-user.svg";
                 } else if (message.role === "assistant") {
-                    icon = "../icons/ai-defult.svg";
+                    icon = "../icons/ai-default.svg";
                     username = "assistant";
                 }
 
@@ -423,7 +406,7 @@ function attachModelItemListeners(container) {
         const type = element.getAttribute('type');
         if (type === 'setModel') {
             element.addEventListener('click', () => {
-                submisionModel = element.getAttribute('model');
+                submissionModel = element.getAttribute('model');
             });
         }
     });
@@ -460,14 +443,14 @@ async function updateRules() {
 
 function translateMDtoHTML(md) {
     md = md.split("\uF8FE\uF8FE%%%%%__USER_UPLOADED_FILES_AFTER_THIS__%%%%%\uF8FE\uF8FE")[0];
-    md = translateMDtoHTMLDecupled(md);
-    return "<br style=\"user-select: none;\">" + md;
+    md = translateMDtoHTMLDecoupled(md);
+    return "<br style=\"user-select: none; -webkit-user-select: none;\">" + md;
 }
 
-async function renderMD(md, username = "user", arbs = "", files = {}, doAnimations = true, useIcons=true, iconScript="../icons/defualt-user.svg") {
-    document.querySelectorAll("div.usr-input-master-container.befor-messages")
+async function renderMD(md, username = "user", arbs = "", files = {}, doAnimations = true, useIcons=true, iconScript="../icons/default-user.svg") {
+    document.querySelectorAll("div.usr-input-master-container.before-messages")
         .forEach((element) => {
-            element.classList.remove("befor-messages");
+            element.classList.remove("before-messages");
 
             if (doAnimations) {
                 element.classList.add("animation");
@@ -484,50 +467,61 @@ async function renderMD(md, username = "user", arbs = "", files = {}, doAnimatio
         });
 
     const container = document.getElementById("chat-container");
-    container.innerHTML += `
+    container.insertAdjacentHTML('beforeend', `
         <div id="message_" class="chat-message" ${arbs}>
         ${translateMDtoHTML(md)}
-        <div id="__file_feild__" class="message-file-feild"></div>
+        <div id="__file_field__" class="message-file-field"></div>
         </div>
-    `;
+    `);
 
-    const fileFeild = document.getElementById("__file_feild__");
+    const fileField = document.getElementById("__file_field__");
 
     // Display file names only in UI
+    const escapeHTML = (str) =>
+        str.replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+
+    let bufferFileField = "";
+
     Object.keys(files).forEach((file) => {
         const iconName = files[file].icon || getFileIconFileName(file, files[file].mimetype, null);
-        fileFeild.innerHTML += `<div class="message-file">
-                                    <img src="../icons/type-icons/icons/${iconName}" class="fname-icon" />
-                                    ${file}
-                                </div>`;
+        bufferFileField += `<div class="message-file">
+                                <img src="../icons/type-icons/icons/${iconName}" class="fname-icon" />
+                                ${escapeHTML(file)}
+                            </div>`;
     });
 
+    fileField.innerHTML = bufferFileField;
+
     const blame = document.getElementById("blameColumn");
-    blame.innerHTML += `
+    blame.insertAdjacentHTML('beforeend', `
     <div class="blm-spacer" id="blame_sp_"></div>
     <blm id="blame_mn_">
         ${username}
         ${useIcons ? `<img src="${iconScript}" class="user-icon"></img>` : ""}
     </blm>
-    `;
+    `);
 
-    const blameSpacer = document.getElementById(`blame_sp_`);
-    const blameMain = document.getElementById(`blame_mn_`);
-    const message = document.getElementById(`message_`);
+    const blameSpacer = document.getElementById("blame_sp_");
+    const blameMain = document.getElementById("blame_mn_");
+    const message = document.getElementById("message_");
 
-    [blameSpacer, blameMain, message, fileFeild].forEach((el) => el.removeAttribute("id"));
+    [blameSpacer, blameMain, message, fileField].forEach((el) => el.removeAttribute("id"));
 
     await updateRules();
     scheduleBlameSpacerUpdate();
 }
 
 function collectFiles() {
-    const fileFeild = document.getElementById("file-feild");
-    if (!fileFeild) return {};
+    const fileField = document.getElementById("file-field");
+    if (!fileField) return {};
 
     const fileStruct = {};
 
-    fileFeild.querySelectorAll("div.context").forEach((div) => {
+    fileField.querySelectorAll("div.context").forEach((div) => {
         const fileName = div.textContent.trim();
         const fileContent = div.dataset.content || "";
         const fileMimetype = div.dataset.mimetype || "";
@@ -546,7 +540,7 @@ function collectFiles() {
     return fileStruct;
 }
 
-let submisionModel = "arcee-ai/trinity-large-preview:free"; // default fallback
+let submissionModel = "arcee-ai/trinity-large-preview:free"; // default fallback
 
 (async () => {
     try {
@@ -554,7 +548,7 @@ let submisionModel = "arcee-ai/trinity-large-preview:free"; // default fallback
         if (settables?.models) {
             const { activeIndex, models } = settables.models;
             if (models?.[activeIndex]?.api_name) {
-                submisionModel = models[activeIndex].api_name;
+                submissionModel = models[activeIndex].api_name;
             }
         }
     } catch (err) {
@@ -563,13 +557,13 @@ let submisionModel = "arcee-ai/trinity-large-preview:free"; // default fallback
 })();
 
 
-async function handleSubmision() {
+async function handleSubmission() {
     const textArea = document.querySelector("textarea");
     const message = textArea.value.trim();
 
     if (message === "") return;
 
-    // indecate that the function is in execution
+    // indicate that the function is in execution
     setBlueDote(true);
 
     const fileStruct = collectFiles();
@@ -589,21 +583,21 @@ async function handleSubmision() {
         }
     }
 
-    let userIcon = "../icons/defualt-user.svg";
+    let userIcon = "../icons/default-user.svg";
 
     try {
         userIcon = window.account.avatar;
     } catch {
-        userIcon = "../icons/defualt-user.svg";
+        userIcon = "../icons/default-user.svg";
     }
 
     if (!userIcon) {
-        userIcon = "../icons/defualt-user.svg";
+        userIcon = "../icons/default-user.svg";
     }
 
-    await renderMD(message, userName, `usermeasage="${userMessageID}"`, fileStruct, true, true, userIcon);
+    await renderMD(message, userName, `usermessage="${userMessageID}"`, fileStruct, true, true, userIcon);
     textArea.value = "";
-    const userMessage = document.querySelector(`[usermeasage="${userMessageID}"]`);
+    const userMessage = document.querySelector(`[usermessage="${userMessageID}"]`);
     userMessage.scrollIntoView({ behavior: "smooth", block: "end" });
 
     // Load chat history
@@ -653,8 +647,8 @@ async function handleSubmision() {
 
     // Placeholder for streaming assistant response
     const streamId = "streaming_reply_" + Date.now();
-    await renderMD("", "assistant", `streamid="${streamId}"`, [], true, true, "../icons/ai-defult.svg");
-    const streamEl = document.querySelector(`[streamid=${streamId}]`);
+    await renderMD("", "assistant", `streamid="${streamId}"`, [], true, true, "../icons/ai-default.svg");
+    const streamEl = document.querySelector(`[streamid="${streamId}"]`);
 
     let fullReply = "";
 
@@ -665,33 +659,39 @@ async function handleSubmision() {
             globalOffStitch = true;
         };
 
-        document.getElementById("submitionIcon").src = "../icons/cancel-message.svg";
+        document.getElementById("submissionIcon").src = "../icons/cancel-message.svg";
 
-        document.getElementById("submitionIcon").addEventListener("click", submitIconAction);
+        document.getElementById("submissionIcon").addEventListener("click", submitIconAction);
 
         const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
             method: "POST",
             headers: {
-                Authorization: `Bearer ${gloablAPIKey}`,
+                Authorization: `Bearer ${globalAPIKey}`,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                model: submisionModel,
+                model: submissionModel,
                 messages: apiChat,
                 stream: true
             }),
         });
 
-        if (!response.ok || !response.body) throw new Error(`HTTP ${response.status}`);
+        if (!response.ok || !response.body) {
+            const err = new Error(response.statusText);
+            err.status = response.status;
+            throw err;
+        }
 
         const reader = response.body.getReader();
         const decoder = new TextDecoder("utf-8");
         let buffer = "";
 
         const chatOuterer = document.querySelector('.chat-outerer');
-        const actionButtons = document.querySelector('div.aciton-groupe-bar');
+        const actionButtons = document.querySelector('div.action-group-bar');
 
         if (!chatOuterer || !actionButtons) return;
+
+        let isItWorthCalculatingScrollbar = !hasVerticalScrollbar(chatOuterer);
 
         while (true) {
             const { value, done } = await reader.read();
@@ -713,14 +713,16 @@ async function handleSubmision() {
                     if (delta) {
                         fullReply += delta;
                         streamEl.innerHTML = translateMDtoHTML(fullReply);
-                        streamEl.scrollIntoView({ behavior: "smooth", block: "end" });
-
-                        if (hasVerticalScrollbar(chatOuterer)) {
-                            actionButtons.classList.add("scrollbar");
-                            bufferActionPassageFalse = false;
-                        }
-
                         await updateRules();
+
+                        streamEl.scrollIntoView({ behavior: "instant", block: "end" });
+
+                        if (isItWorthCalculatingScrollbar) {
+                            if (hasVerticalScrollbar(chatOuterer)) {
+                                actionButtons.classList.add("scrollbar");
+                                isItWorthCalculatingScrollbar = false;
+                            }
+                        }
 
                         await new Promise(requestAnimationFrame);
                     }
@@ -730,8 +732,8 @@ async function handleSubmision() {
             }
         }
 
-        document.getElementById("submitionIcon").src = "../icons/sendmessage.svg";
-        document.getElementById("submitionIcon").removeEventListener("click", submitIconAction);
+        document.getElementById("submissionIcon").src = "../icons/sendmessage.svg";
+        document.getElementById("submissionIcon").removeEventListener("click", submitIconAction);
 
         // Finalize assistant message
         streamEl.innerHTML = translateMDtoHTML(fullReply);
@@ -741,7 +743,7 @@ async function handleSubmision() {
         await setLocalJson({ ...json, chat: chatData });
         await updateRules();
 
-        // detertype whether the AI should rename the chat
+        // determine whether the AI should rename the chat
         let letAIRenameChat = false;
         let hasPassedAssistant = false;
 
@@ -753,147 +755,168 @@ async function handleSubmision() {
         });
 
         // if user already set a title, disable auto-title
-        try {
-            json.metadata.title;
+        if (json?.metadata?.title) {
             letAIRenameChat = false;
-        } catch {}
+        }
 
         if (letAIRenameChat) {
-            // append system request for title generation
-            const titleRequest = {
-                role: "user",
-                content:
-`(this message is generated by the ai interface, not the user, but is placed here on the behalf of the user inorder to automaticaly give they're chat a title)
+            try {
+                // append system request for title generation
+                const titleRequest = {
+                    role: "user",
+                    content:
+    `(this message is generated by the ai interface, not the user, but is placed here on the behalf of the user in order to automatically give they're chat a title)
 
-Please summarize the chat so far into a short, clear, and easily searchable title.
-The interface will the first section you provide in double quotes ("this is a title") as the chat title, make it concise and directly descriptive of the conversation.
-Avoid complex punctuation, unnecessary symbols, or formatting. The chat title sould sumerise the chat up to but not including this tittle request message.
-For the sake of the user please get to the title displaying quotes as soon as posible (while still strictly folowing the guidelines best you can) so that they wont have to wait much time their chat to get titled.
+    Please summarize the chat so far into a short, clear, and easily searchable title.
+    The interface will the first section you provide in double quotes ("this is a title") as the chat title, make it concise and directly descriptive of the conversation.
+    Avoid complex punctuation, unnecessary symbols, or formatting. The chat title should summarize the chat up to but not including this title request message.
+    For the sake of the user please get to the title displaying quotes as soon as possible (while still strictly following the guidelines best you can) so that they wont have to wait much time their chat to get titled.
 
-Follow these guidelines for good titles:
+    Follow these guidelines for good titles:
 
-A good title:
-    - Clearly reflects the main topic of the chat
-    - Uses simple, everyday words
-    - Is easy to read and remember
-    - Is short (ideally 4 to 7 words)
-    - Is syntactically meaningful (uses words like for and the to describe relationships instead of a pile of keywords)
-    - Gets to the main arguments of the conversavtion (e.g. if the conversation is talking about Microsoft stocks then the title should mention Micorsoft and Stocks somware it it, If the conversation is about say how much Fule needed to get moon, then it mentions Rocket fule and moon, if it is writing an Essay then it should clearly stat that in the title with "Essay on ...") and they should be recognisable from the text of the title alone
+    A good title:
+        - Clearly reflects the main topic of the chat
+        - Uses simple, everyday words
+        - Is easy to read and remember
+        - Is short (ideally 4 to 7 words)
+        - Is syntactically meaningful (uses words like for and the to describe relationships instead of a pile of keywords)
+        - Gets to the main arguments of the conversation (e.g. if the conversation is talking about Microsoft stocks then the title should mention Microsoft and Stocks somewhere in it, If the conversation is about say how much Fuel needed to get to the moon, then it mentions Rocket, fuel and moon, if it is writing an Essay then it should clearly state that in the title with "Essay on ...") and they should be recognizable from the text of the title alone (it gose without saying that if a conversation is not about the stock market or whatever do not mention it)
 
-A bad title:
-    - Is vague or generic (e.g., "Chat" or "Conversation")
-    - Uses complex punctuation, emojis, or symbols
-    - Includes irrelevant details
-    - Describes or implies details never mentioned
-    - Is overly long or difficult to scan quickly
-    - Uses markdown or other formating that is not plaintext (e.g. "**Bad Tittle**" or "# Uncool Tittle")
-    - Is stating that this is a sumery of the chat: "Chat Recap", "Overveiw of the Chat" etc.`
-            };
+    A bad title:
+        - Is vague or generic (e.g., "Chat" or "Conversation")
+        - Uses complex punctuation, emojis, or symbols
+        - Includes irrelevant details
+        - Describes or implies details never mentioned
+        - Is overly long or difficult to scan quickly
+        - Uses markdown or other formatting that is not plaintext (e.g. "**Bad Title**" or "# Uncool Title")
+        - Is stating that this is a summary of the chat: "Chat Recap", "Overview of the Chat", "Chat Summary", "Summary" etc.`
+                };
 
-            json.chat.commit([titleRequest]);
-            chatData = json.chat.json;
+                json.chat.commit([titleRequest]);
+                chatData = json.chat.json;
 
-            apiChat = json.chat.compile().map((msg) => {
-                if (msg.role === "user" && Object.keys(msg.files || {}).length > 0) {
-                    // Merge file content for AI only
-                    let merged = msg.content;
-                    for (const [fname, fcontent] of Object.entries(msg.files)) {
-                        const contentStr = (typeof fcontent === "string") ? fcontent : (fcontent?.content || "");
-                        merged += `\n\nFile: ${fname}\n\`\`\`\n${contentStr}\n\`\`\``;
+                apiChat = json.chat.compile().map((msg) => {
+                    if (msg.role === "user" && Object.keys(msg.files || {}).length > 0) {
+                        // Merge file content for AI only
+                        let merged = msg.content;
+                        for (const [fname, fcontent] of Object.entries(msg.files)) {
+                            const contentStr = (typeof fcontent === "string") ? fcontent : (fcontent?.content || "");
+                            merged += `\n\nFile: ${fname}\n\`\`\`\n${contentStr}\n\`\`\``;
+                        }
+                        return { ...msg, content: merged };
                     }
-                    return { ...msg, content: merged };
+                    return msg;
+                });
+
+                const abortControler = new AbortController();
+
+                const response4title = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${globalAPIKey}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        model: submissionModel,
+                        messages: apiChat,
+                        stream: true
+                    }),
+                    signal: abortControler.signal,
+                });
+
+                if (!response4title.ok || !response4title.body) {
+                    throw new Error(`HTTP (Title Request): OpenRouter ${response4title.status}`);
                 }
-                return msg;
-            });
 
-            const response4Tittle = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${gloablAPIKey}`,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    model: submisionModel,
-                    messages: apiChat,
-                    stream: true
-                }),
-            });
+                const reader = response4title?.body?.getReader();
+                const decoder = new TextDecoder();
 
-            const reader = response4Tittle.body?.getReader();
-            const decoder = new TextDecoder();
+                let buffer = "";
+                let responseText = "";
 
-            let buffer = "";
-            let responseText = "";
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
 
-            while (true) {
-                const { value, done } = await reader.read();
-                if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
 
-                buffer += decoder.decode(value, { stream: true });
+                    const parts = buffer.split("\n\n");
+                    buffer = parts.pop() || "";
 
-                const parts = buffer.split("\n\n");
-                buffer = parts.pop() || "";
+                    for (const part of parts) {
+                        if (!part.startsWith("data:")) continue;
 
-                for (const part of parts) {
-                    if (!part.startsWith("data:")) continue;
+                        const data = part.replace(/^data:\s*/, "").trim();
 
-                    const data = part.replace(/^data:\s*/, "").trim();
-
-                    if (data === "[DONE]") {
-                        break;
-                    }
-
-                    try {
-                        const json = JSON.parse(data);
-                        const delta = json?.choices?.[0]?.delta?.content || "";
-
-                        if (delta) {
-                            responseText += delta;
+                        if (data === "[DONE]") {
+                            break;
                         }
 
-                        let title =
-                            responseText.replace(/^["'\n\s]+|["'\n\s]+$/g, "").trim() || "Untitled";
+                        try {
+                            const json = JSON.parse(data);
+                            const delta = json?.choices?.[0]?.delta?.content || "";
 
-                        setTabTitle(title);
-                    } catch (err) {
-                        console.warn("Stream chunk parse error:", err);
+                            if (delta) {
+                                responseText += delta;
+                            }
+
+                            let title =
+                                responseText.replace(/^["'\n\s]+|["'\n\s]+$/g, "").trim() || "Untitled";
+
+                            setTabTitle(title);
+
+                            if (responseText.matches(/"(.+)"/)) {
+                                abortControler.abort();
+                                break;
+                            }
+                        } catch (err) {
+                            console.warn("Stream chunk parse error:", err);
+                        }
                     }
                 }
+
+                let title =
+                    responseText.replace(/^["'\n\s]+|["'\n\s]+$/g, "").trim() || "Untitled";
+
+                setTabTitle(title);
+
+                json = await getLocalJson() || {};
+                if (!json.metadata) json.metadata = {};
+                json.metadata.title = title;
+                await setLocalJson(json);
             }
+            catch (error) {
+                console.error(error.message);
+                setTabTitle("Untitled (Error State)");
 
-            let title =
-                responseText.replace(/^["'\n\s]+|["'\n\s]+$/g, "").trim() || "Untitled";
-
-            console.log(responseText);
-
-            setTabTitle(title);
-
-            json = await getLocalJson() || {};
-            if (!json.metadata) json.metadata = {};
-            json.metadata.title = title;
-            await setLocalJson(json);
+                json = await getLocalJson() || {};
+                if (!json.metadata) json.metadata = {};
+                delete json.metadata.title;
+                await setLocalJson(json);
+            }
         }
-    } catch (err) {
-        console.error("Streaming error:", err);
-        streamEl.innerHTML = `<p><b>Error:</b> ${err.message}</p>`;
+    } catch (error) {
+        console.error("Streaming error:", error);
+        streamEl.innerHTML = `<br style="user-select: none; -webkit-user-select: none;"><p><b>Error:</b><br>&nbsp;&nbsp;&nbsp;&nbsp;${error.message || "OpenRouter Error:"}${error.status != null ? `<br>&nbsp;&nbsp;&nbsp;&nbsp;${error.status}` : ""}</p>`;
+
     }
 
-    setBlueDote(false); // indecate that the function is no longer executing
+    setBlueDote(false); // indicate that the function is no longer executing
 
 }
 
 document.querySelector("textarea").addEventListener("keydown", async (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
         event.preventDefault();
-        await handleSubmision();
+        await handleSubmission();
         setBlueDote(false);
         await updateVpanel();
     }
 });
 
-document.getElementById("submitionIcon").addEventListener("click", async (event) => {
+document.getElementById("submissionIcon").addEventListener("click", async (event) => {
     event.preventDefault();
-    await handleSubmision();
+    await handleSubmission();
     setBlueDote(false);
     await updateVpanel();
 });
@@ -974,7 +997,7 @@ document.querySelectorAll(".menu .dropdown .menu-item, .menu .dropdown-nul .menu
     switch (type) {
         case "setModel":
             element.addEventListener( "click", () => {
-                submisionModel = element.getAttribute("model");
+                submissionModel = element.getAttribute("model");
             });
             break;
     }
@@ -1005,11 +1028,11 @@ async function getFilePreviewDataView(file, previewBytes = 256) {
 
 const addContextButton = document.querySelector(".context#add-context");
 const hiddenFileInput = document.querySelector("#hidden-file-input");
-const fileFeild = document.querySelector("#file-feild");
+const fileField = document.querySelector("#file-field");
 const fileLoadingIcon = "../icons/fileonload.svg";
 
 addContextButton?.addEventListener("mousedown", () => {
-    if (!hiddenFileInput || !fileFeild) return;
+    if (!hiddenFileInput || !fileField) return;
     hiddenFileInput.click();
 
     hiddenFileInput.addEventListener(
@@ -1039,19 +1062,19 @@ addContextButton?.addEventListener("mousedown", () => {
                     div.appendChild(iconImg);
                     div.appendChild(document.createTextNode(file.name));
 
-                    fileFeild.appendChild(div);
+                    fileField.appendChild(div);
 
                     div.addEventListener("click", () => {
                         div.remove();
                     });
 
                     div.addEventListener("mouseover", () => {
-                        div.classList.add("hovring");
+                        div.classList.add("hovering");
                         div.querySelector("img.fname-icon").src = "../icons/close-file.svg";
                     });
 
                     div.addEventListener("mouseleave", () => {
-                        div.classList.remove("hovring");
+                        div.classList.remove("hovering");
                         const currentIcon = div.dataset.icon;
                         div.querySelector("img.fname-icon").src =
                             currentIcon

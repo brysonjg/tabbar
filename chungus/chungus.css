@@ -59,16 +59,19 @@
     --context-active-bg: #1f485eab;
 
     /* Table */
+    --table-container-bg: #2a2e32;
     --table-header-bg: #585b5e90;
-    --table-row-alt-bg: #585b5e40;
+    --table-row-odd-bg: #2a2e32;
+    --table-row-even-bg: #585b5e40;
 
     --table-header-fg: #ffffff;
 
+    /* Versioning Panel */
     --right-sidepanel-width: max(225px, 25vw);
     --versioning-graph-bg: #2a2e32;
     --versioning-graph-right-border: #585b5e40;
 
-    /* the folowing "--versioning-graph-X" variables are to be accesed by js, the themeing system dosn't need to change for js only theming values */
+    /* the following "--versioning-graph-X" variables are to be accessed by js, the theming system doesn't need to change for js only theming values */
     --versioning-graph-0: #0dc5c5;
     --versioning-graph-1: #107df0;
     --versioning-graph-2: #7f0fbb;
@@ -117,6 +120,10 @@ body, html {
     overflow-x: hidden;
 }
 
+.chat-outerer:has(div.action-group-bar.scrollbar) {
+    padding-right: 22px;
+}
+
 .chat-outer {
     height: calc(100% - 7lh);
     width: calc(100% - 35px);
@@ -133,8 +140,7 @@ div.blame-column {
 
 #chat-container {
     padding: 10px;
-    padding-right: 20px;
-    padding-top: calc(var(--font-size) + 10px);
+    padding-top: 1lh;
     padding-bottom: 70px;
     width: calc(100% - 110px);
     max-width: max(69vw, 1200px);
@@ -210,126 +216,9 @@ img.user-icon {
     background: var(--grey-ff);
 }
 
-/* HEADERS */
-
-h1, h2, h3 {
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
-h {
-    color: var(--link-blue);
-    background-color: var(--bg-blue-dark);
-    padding: 0 2px;
-    border-radius: 3px;
-}
-
-/* LINKS */
-
-a {
-    text-decoration: none;
-}
-
-a:link {
-    color: var(--link-blue);
-}
-
-a:visited {
-    color: var(--link-purple);
-}
-
-a:active {
-    color: var(--link-active-red);
-}
-
-/* INLINE CODE */
-
-code {
-    background-color: var(--code-bg);
-    padding: 0 2px;
-    border-radius: 3px;
-}
-
-/* QUOTES / TABLES */
-
-blockquote {
-    margin: 10px 25px;
-    border-left: 1px solid var(--fg-color);
-    padding: 0 15px;
-}
-
-table {
-    border-collapse: collapse;
-    width: 100%;
-    border-radius: 3px;
-}
-
-td, th {
-    border: 1px solid var(--fg-color);
-    padding: 8px;
-    text-align: left;
-}
-
-th {
-    background-color: var(--table-header-bg);
-    color: var(--table-header-fg);
-}
-
-tr:nth-child(odd) td {
-    background-color: var(--table-row-alt-bg);
-}
-
-/* KaTeX */
-
-div.katexRender {
-    display: flex;
-    justify-content: center;
-    height: 20px;
-}
-
-/* CODE BLOCKS */
-
-pre.code {
-    border: 1px solid var(--fg-color);
-    border-radius: 4px;
-    padding: 12px;
-    position: relative;
-}
-
-pre.code div.copy-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    padding: 4px 8px;
-    width: fit-content;
-    font-size: 16px;
-    border: 1px solid var(--copy-border);
-    border-radius: 4px;
-    background: var(--copy-bg);
-    color: var(--copy-fg);
-    cursor: pointer;
-    user-select: none;
-}
-
-pre.code div.copy-btn:hover {
-    border: 1px solid var(--copy-border-hover);
-    background: var(--copy-bg-hover);
-}
-
-pre.code div.copy-btn:active {
-    border: 1px solid var(--copy-border-active);
-    background: var(--copy-bg-active);
-}
-
-pre.code div.copy-btn.copied {
-    border: 1px solid var(--copy-success-bd);
-    background: var(--copy-success-bg);
-    color: var(--copy-success-fg);
-}
-
 /* FILE CHIPS */
 
-.message-file-feild {
+.message-file-field {
     height: min-content;
     width: 100%;
     display: flex;
@@ -351,9 +240,13 @@ pre.code div.copy-btn.copied {
     height: 20px;
 }
 
+.chat-message img {
+    filter: none !important;
+}
+
 /* INPUT ZONE */
 
-@keyframes beforToAfterForUsrContainer {
+@keyframes beforeToAfterForUsrContainer {
     from {
         height: 100%;
         background-color: var(--bg-color);
@@ -365,7 +258,7 @@ pre.code div.copy-btn.copied {
     }
 }
 
-@keyframes beforToAfterForUsrContent {
+@keyframes beforeToAfterForUsrContent {
     from {
         max-width: max(60%, 1000px);
     }
@@ -392,7 +285,7 @@ body:has(div.right-sidepanel) div.usr-input-master-container {
     width: calc(100% - var(--right-sidepanel-width));
 }
 
-div.usr-input-master-container.befor-messages {
+div.usr-input-master-container.before-messages {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -402,7 +295,7 @@ div.usr-input-master-container.befor-messages {
 }
 
 div.usr-input-master-container.animation {
-    animation: beforToAfterForUsrContainer 0.2s ease-out forwards;
+    animation: beforeToAfterForUsrContainer 0.2s ease-out forwards;
 }
 
 div.usr-input-master-container div.initMessage {
@@ -424,13 +317,13 @@ div.usr-input-master {
     flex-direction: column;
 }
 
-div.usr-input-master-container.befor-messages div.usr-input-master {
+div.usr-input-master-container.before-messages div.usr-input-master {
     max-width: max(60vw, 1000px);
     animation: none;
 }
 
 div.usr-input-master.animation {
-    animation: beforToAfterForUsrContent 0.3s ease-out forwards;
+    animation: beforeToAfterForUsrContent 0.3s ease-out forwards;
 }
 
 div.usr-input-topper {
@@ -473,7 +366,7 @@ img.fname-icon {
     padding: 2px;
 }
 
-div.context.hovring img.fname-icon {
+div.context.hovering img.fname-icon {
     height: 65%;
     aspect-ratio: 1 / 1;
     margin: 0 calc(0.175lh + 5px) 0 0.175lh;
@@ -483,7 +376,7 @@ input#hidden-file-input {
     display: none;
 }
 
-div#file-feild {
+div#file-field {
     height: 100%;
     width: 100%;
     display: flex;
@@ -529,7 +422,7 @@ div.usr-input-right {
     width: fit-content;
 }
 
-img.submition-icon {
+img.submission-icon {
     height: 16px;
     width: 16px;
     user-select: none;
@@ -644,7 +537,7 @@ img#action-bar-action.active:active {
     filter: var(--action-btn-active-3) !important;
 }
 
-div.aciton-groupe-bar {
+div.action-group-bar {
     height: 20px;
     width: 20px;
     user-select: none;
@@ -655,15 +548,15 @@ div.aciton-groupe-bar {
     z-index: 2;
 }
 
-div.aciton-groupe-bar.scrollbar {
+div.action-group-bar.scrollbar {
     right: 20px;
 }
 
-body:has(> div.right-sidepanel) div.aciton-groupe-bar {
+body:has(> div.right-sidepanel) div.action-group-bar {
     right: calc(5px + var(--right-sidepanel-width));
 }
 
-body:has(> div.right-sidepanel) div.aciton-groupe-bar.scrollbar {
+body:has(> div.right-sidepanel) div.action-group-bar.scrollbar {
     right: calc(20px + var(--right-sidepanel-width));
 }
 
@@ -692,7 +585,7 @@ div.action-btn-wrapper:has( img#action-bar-action.active ) {
 
 /* TOP BAR ANIMATIONS */
 
-@keyframes topBarApperes {
+@keyframes topBarAppears {
     from {
         transform: translateY(-31px);
     }
@@ -703,7 +596,7 @@ div.action-btn-wrapper:has( img#action-bar-action.active ) {
 }
 
 div.top-bar-flash-for-rename {
-    animation: topBarApperes 0.15s ease forwards;
+    animation: topBarAppears 0.15s ease forwards;
     height: 30px;
     width: calc(100vw - 2px);
     position: fixed;
@@ -727,7 +620,7 @@ div.top-bar-flash-for-rename.rightborder {
     width: calc(100vw - 15px);
 }
 
-@keyframes topBarDisapperes {
+@keyframes topBarDisappears {
     from {
         transform: translateY(0);
     }
@@ -738,7 +631,7 @@ div.top-bar-flash-for-rename.rightborder {
 }
 
 div.top-bar-flash-for-rename.on-close {
-    animation: topBarDisapperes 0.15s ease forwards;
+    animation: topBarDisappears 0.15s ease forwards;
     height: 30px;
     width: 100vw;
     position: fixed;

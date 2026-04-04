@@ -1,1 +1,14 @@
-application-x-shockwave-flash.svg
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="svg2" width="22" height="22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata id="metadata3874">
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g id="layer1" transform="translate(-326 -534.36)">
+  <path id="path3727-6" transform="translate(326 534.36)" d="m17.406 3c-1.1686 0.017013-5.9619 0.50529-7.8809 7.2324-1.739 6.0968-5.1778 5.5327-5.1816 5.5352 0 0-0.34613-0.0249-0.34375-0.02733v3.2598l0.3457-2e-3c0.18064-0.03613 5.4052 0.60837 7.7598-6.3652h4.2285v-3.2187h-2.8379s0.8224-3.1335 4.1699-3.1895c0 0 0.34073-0.00407 0.33398-0.00586v-3.2187h-0.34375v0.00586c-0.0067-4.979e-4 -0.08933-0.0082-0.25-0.00586z" color="#000000" color-rendering="auto" fill="#db3333" image-rendering="auto" shape-rendering="auto" solid-color="#000000" style="filter-blend-mode:normal;filter-gaussianBlur-deviation:0;isolation:auto;mix-blend-mode:normal"/>
+ </g>
+</svg>
