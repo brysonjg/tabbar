@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg id="svg5" width="22" height="22" version="1.1" viewBox="0 0 5.8208 5.8208" xmlns="http://www.w3.org/2000/svg">
  <g id="layer1" transform="scale(.26458)">
-  <rect id="rect182" x="4.7625" y="4.3987" width="12.336" height="13.461" fill="#d4d4d4" stroke-width=".26458"/>
-  <rect id="rect2786" x="3" y="3" width="16" height="2.666" fill="#cb0000" stroke-width=".42833"/>
-  <rect id="rect2786-5" x="3" y="16.333" width="16" height="2.666" fill="#cb0000" stroke-width=".42833"/>
-  <rect id="rect2786-2" transform="rotate(90)" x="3" y="-5.666" width="16" height="2.666" fill="#cb0000" stroke-width=".42833"/>
-  <rect id="rect2786-2-4" transform="rotate(90)" x="3" y="-18.999" width="16" height="2.666" fill="#cb0000" stroke-width=".42833"/>
-  <rect id="rect2786-2-4-7" transform="rotate(90)" x="8.333" y="-13.666" width="9.6" height="2.666" fill="#cb0000" stroke-width=".33178"/>
+  <path id="path226" d="m3 3h16v16h-16z" fill="#cb0000"/>
+  <path id="path324" d="m5.6663 16.333 5.3338-1e-5v-8h2.667l2e-6 8.0001h2.666l2e-6 -10.666-10.667-3.962e-4z" fill="#e6e6e6"/>
  </g>
 </svg>

@@ -1,1 +1,11 @@
-../../places/22/folder.svg
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="svg6" version="1.1" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+ <defs id="defs3051">
+  <style id="current-color-scheme" type="text/css">.ColorScheme-Text {
+        color:#232629;
+      }</style>
+ </defs>
+ <path id="path4" class="ColorScheme-Text" d="m3 3v16h16v-14h-7l-2-2h-7zm1 1h5.6l1 1-4 4h-2.6v-5zm5 4h9v10h-14v-8h3l2-2z" fill="currentColor"/>
+ <path id="path5876" d="m4 10h3l2-2h9v10h-14z" fill="#3daee9" stroke-opacity=".61929"/>
+ <path id="path5878" d="m4 9h2.6l4-4-1-1h-5.6z" fill="#29759c" stroke-opacity=".61929"/>
+</svg>
