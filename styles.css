@@ -85,7 +85,7 @@ body.dragging-tabs div.tab:hover {
 }
 
 div.tab.active {
-    background-color: var(--topper-color);
+    background-color: var(--topper-color) !important;
     border-left: var(--hard-outline-width) solid var(--hard-outline-color);
     border-right: var(--hard-outline-width) solid var(--hard-outline-color);
     border-top-left-radius: var(--active-tab-topper-border);
