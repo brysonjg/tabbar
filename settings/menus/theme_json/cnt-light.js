@@ -264,7 +264,7 @@ window.theme_cnt_light = {
                                 "topper-color": "#ffffff",
                                 "hard-outline-color": "#333333",
                                 "tab-inactive": "#f1f1f1",
-                                "dark-blue-hl": "#004c97",
+                                "dark-blue-hl": "#004c97bb",
                                 "lighter-blue-hl": "#007bff",
                                 "blue-outline": "#0057d8",
                                 "tab-inactive-blue": "#e0ebff",

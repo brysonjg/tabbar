@@ -12,9 +12,7 @@ function hasExecutableExtension(ext) {
         case "cmd":
         case "com":
         case "csh":
-        case "dll":
         case "dmg":
-        case "exe":
         case "gadget":
         case "ipa":
         case "jar":
@@ -24,10 +22,7 @@ function hasExecutableExtension(ext) {
         case "pkg":
         case "run":
         case "scr":
-        case "sh":
-        case "bash":
         case "tcsh":
-        case "vbs":
         case "workflow":
         case "wsf":
             return true;
@@ -119,31 +114,30 @@ function getFileIconFileName(fname, fmime, fview) {
         case 'yml':
         case 'yaml': return 'text-yaml.svg';
         case 'lock': return 'lock.svg';
-        case 'jsx': return 'applacation-react-java.svg';
+	case 'tsx':
+        case 'jsx': return 'application-react-java.svg';
         case 'js': return 'application-x-javascript.svg';
+	case 'ts': return 'application-typescript.svg';
         case 'md': return 'text-x-markdown.svg';
         case 'c': return 'text-x-csrc.svg';
         case 'ps1': return 'application-x-powershell.svg';
-        case '3dmf': return '3d-3dmf.svg';
-        case '3ds': return '3d-3ds.svg';
-        case 'abc': return '3d-abc.svg';
-        case 'c4d': return '3d-c4d.svg';
-        case 'dae': return '3d-dae.svg';
-        case 'duf': return '3d-duf.svg';
-        case 'dwg': return '3d-dwg.svg';
-        case 'dxf': return '3d-dxf.svg';
-        case 'fbx': return '3d-fbx.svg';
+	case "ts": return "application-typescript.svg";
+        case '3dmf': case '3ds':
+        case 'abc': case 'c4d':
+        case 'dae': case 'duf':
+        case 'dwg': case 'dxf':
+        case 'iprop': case 'igs':
+	case 'max': case 'iges':
+	case 'glb': case 'gltf':
+	case 'ply': case 'sat':
+        case 'fbx': return "3d-other.svg";
         case 'fpp': return '3d-fpp.svg';
-        case 'glb':
-        case 'gltf': return '3d-glb.svg';
-        case 'igs':
-        case 'iges': return '3d-igs.svg';
-        case 'iprop': return '3d-iprop.svg';
-        case 'max': return '3d-max.svg';
         case 'obj': return '3d-obj.svg';
-        case 'ply': return '3d-ply.svg';
-        case 'sat': return '3d-sat.svg';
         case 'stl': return '3d-stl.svg';
+        case "bash":
+        case 'sh': return 'application-x-shellscript.svg';
+	case 'dll':
+        case "exe": return 'application-x-ms-dos-executable.svg';
         case 'usd':
         case 'usdz':
         case 'usdc': return '3d-usd.svg';
@@ -155,8 +149,8 @@ function getFileIconFileName(fname, fmime, fview) {
         case 'f': case 'for':
         case 'ftn': case 'f95':
         case 'f03': case 'f08':
-        case 'f18':
-            return 'text-fortran.svg';
+        case 'f18': return 'text-fortran.svg';
+	case 'vbs': return 'application-visual-basic.svg';
         case '':
             return `${(fmime || 'none').replace('/', '-')}.svg`;
         default:

@@ -9,14 +9,6 @@
   </rdf:RDF>
  </metadata>
  <g id="layer1" transform="translate(-326 -534.36)" fill="#0070ff">
-  <path id="rect5505" transform="translate(326 534.36)" d="m8 3v4h1v-4h-1zm2 1v3h1v-3h-1zm-4 1v2h1v-2h-1zm6 0v2h1v-2h-1zm-8 1v1h1v-1h-1zm10 0v1h1v-1h-1zm-11 2v6a4 3.9894 0 0 0 0 0.009766 4 3.9894 0 0 0 4 3.9902h-3v1h11v-1h-3a4 3.9894 0 0 0 4-3.9902 4 3.9894 0 0 0 0-0.009766h2c0.55401 0 1-0.44599 1-1v-3c0-0.55401-0.44599-1-1-1h-2v-1h-13zm1 1h11v5a3 3 0 0 1-3 3h-5a3 3 0 0 1-3-3v-5zm12 1h2v3h-2v-3z" stroke-width="6"/>
-  <rect id="rect405" x="334.12" y="543.36" width="1" height="1"/>
-  <rect id="rect405-3" x="335.12" y="544.35" width="1" height="1"/>
-  <rect id="rect405-3-6" x="334.13" y="545.35" width="1" height="1"/>
-  <rect id="rect405-3-6-7" x="335.12" y="546.35" width="1" height="1"/>
-  <rect id="rect405-3-6-5" x="334.13" y="546.35" width="1" height="1"/>
-  <rect id="rect516" x="334.13" y="546.23" width=".97266" height=".20312"/>
-  <rect id="rect518" x="335.04" y="546.36" width=".14453" height=".98047"/>
-  <rect id="rect1126" x="334.13" y="543.27" width=".96094" height=".10938"/>
+  <path id="rect5505" transform="translate(326,534.36)" d="m8 3v4h1v-4zm2 1v3h1v-3zm-4 1v2h1v-2zm6 0v2h1v-2zm-8 1v1h1v-1zm10 0v1h1v-1zm-11 2v6c-4e-6 0.0033-4e-6 0.0065 0 0.0098-4.619e-4 2.2036 1.7905 3.9902 4 3.9902h-3v1h11v-1h-3c2.2095 0 4.0005-1.7866 4-3.9902v-0.009766h2c0.55401 0 1-0.44599 1-1v-3c0-0.55401-0.44599-1-1-1h-2v-1zm1 1h4v1h1l-7.324e-4 1h-0.99927v2h2v-1h-1l7.294e-4 -1h0.99927v-1h-1v-1h6v5c0 1.6569-1.3431 3-3 3h-5c-1.6569 0-3-1.3431-3-3zm12 1h2v3h-2z"/>
  </g>
 </svg>

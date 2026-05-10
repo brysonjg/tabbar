@@ -138,9 +138,9 @@ div.content-major > div.content::-webkit-scrollbar {
     width: 15px;
 }
 
-div.content-major > div.content::-webkit-scrollbar-track {
     background: transparent;
     border-left: 1px solid var(--grey-40);
+div.content-major > div.content::-webkit-scrollbar-track {
 }
 
 div.content-major > div.content-bar::-webkit-scrollbar-track:hover {
