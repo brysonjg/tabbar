@@ -5,15 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>More Themes</title>
     <style>
-      @font-face {
-          font-family: 'font';
-          src: url('../../font.ttf') format('truetype');
-          font-weight: normal;
-          font-style: normal;
-      }
-
       :root {
-          --font: 'font';
+          --font: 'sourceCodePro';
           --bg-color: #2a2e32;
           --fg-color: #d4d4d4;
           --man-color: #000a;
@@ -25,6 +18,20 @@
           --icon-1: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%);
           --icon-2: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4);
           --icon-3: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2);
+      }
+
+      @font-face {
+          font-family: 'sourceCodePro';
+          src: url('../../font/SourceCodePro.ttf') format('truetype');
+          font-weight: normal;
+          font-style: normal;
+      }
+
+      @font-face {
+          font-family: 'sourceCodePro';
+          src: url('../../font/SourceCodePro-Italic.ttf') format('truetype');
+          font-weight: normal;
+          font-style: italic;
       }
 
       body, html {
@@ -231,7 +238,7 @@
         };
 
         document.getElementById("exitIcon").addEventListener("click", () => {
-            window.parent.postMessage({ type: "naviiframe", url: "./menus/appearance.html" }, "*");
+            window.parent.postMessage({ type: "naviiframe", url: "./menus/themesettings.html" }, "*");
         });
 
         document.querySelectorAll("div.theme-img-wrapper").forEach((element) => {

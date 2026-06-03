@@ -191,7 +191,7 @@ window.theme_cnt_light = {
                                 "fg-color": "#000000",
                                 "menu-hover": "#007bff33"
                             },
-                            appearance: {
+                            themesettings: {
                                 "fg-color": "#000000",
                                 "man-color": "#fff8",
 
@@ -222,7 +222,7 @@ window.theme_cnt_light = {
                                 "icon-2": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(35%)",
                                 "icon-3": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(25%)"
                             },
-                            morefonts: {
+                            fontconfig: {
                                 "bg-color": "#ffffff",
                                 "fg-color": "#000000",
 

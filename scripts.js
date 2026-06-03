@@ -939,7 +939,7 @@ window.addEventListener("message", (event) => {
             newTab.classList.add("tab");
             newTab.innerHTML = `\nIndex\n<div class="close">&nbsp;</div>`;
             newTab.setAttribute('tabid', "0");
-            newTab.setAttribute('data-url', "./chungus/chungus.html");
+            newTab.setAttribute('data-url', "./index/indx.html");
             if (tabbar.firstChild) {
                 tabbar.insertBefore(newTab, tabbar.firstChild);
             } else {

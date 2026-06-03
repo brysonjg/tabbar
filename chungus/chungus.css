@@ -9,7 +9,7 @@
     --light-blue-hl: #3daee9;
     --transparent-blue: #3daee938;
     --blue-outline: #587180;
-    --font: font;
+    --font: 'sourceCodePro';
 
     /* icons */
     --icon-filter: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%);
@@ -87,10 +87,17 @@
 }
 
 @font-face {
-    font-family: 'font';
-    src: url('../font.ttf') format('truetype');
+    font-family: 'sourceCodePro';
+    src: url('../font/SourceCodePro.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
+}
+
+@font-face {
+    font-family: 'sourceCodePro';
+    src: url('../font/SourceCodePro-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
 }
 
 body, html {

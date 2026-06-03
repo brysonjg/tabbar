@@ -1,38 +1,143 @@
-async function loadGoogleFontForThemingSettables(fontName) {
-    const formatted = fontName.replace(/ /g, "+");
-    const url = `https://fonts.googleapis.com/css2?family=${formatted}:wght@400;700&display=swap`;
+const DEFAULT_FONT = "sourceCodePro";
 
-    if (fontName === "font") {
-        // the font is default
+const LOCAL_FONT_FAMILIES = [
+    { name: "Bitter", title: "Bitter", regular: "Bitter.ttf", italic: "Bitter-Italic.ttf" },
+    { name: "ComicNeue", title: "Comic Neue", regular: "ComicNeue.ttf", italic: "ComicNeue-Italic.ttf" },
+    { name: "Inter", title: "Inter", regular: "Inter.ttf", italic: "Inter-Italic.ttf" },
+    { name: "JacquardaBastard", title: "Jacquarda Bastard", regular: "JacquardaBastard.ttf", italic: "none" },
+    { name: "JetBrainsMono", title: "Jet Brains Mono", regular: "JetBrainsMono.ttf", italic: "JetBrainsMono-Italic.ttf" },
+    { name: "Lora", title: "Lora", regular: "Lora.ttf", italic: "Lora-Italic.ttf" },
+    { name: "MozillaText", title: "Mozilla Text", regular: "MozillaText.ttf", italic: "none" },
+    { name: "NovaScript", title: "Nova Script", regular: "NovaScript-Regular.ttf", italic: "none" },
+    { name: "Oswald", title: "Oswald", regular: "Oswald.ttf", italic: "none" },
+    { name: "Poppins", title: "Poppins", regular: "Poppins.ttf", italic: "Poppins-Italic.ttf" },
+    { name: "Raleway", title: "Raleway", regular: "Raleway.ttf", italic: "Raleway-Italic.ttf" },
+    { name: "RedactedScript", title: "Redacted Script", regular: "RedactedScript.ttf", italic: "none" },
+    { name: "SourceCodePro", title: "Source Code Pro", regular: "SourceCodePro.ttf", italic: "SourceCodePro-Italic.ttf" },
+    { name: "SourceSans3", title: "Source Sans 3", regular: "SourceSans3.ttf", italic: "none" },
+    { name: "SpaceGrotesk", title: "Space Grotesk", regular: "SpaceGrotesk.ttf", italic: "none" },
+];
+
+let fontBaseUrl;
+
+function getFontBaseUrl() {
+    if (fontBaseUrl) {
+        return fontBaseUrl;
+    }
+
+    const script =
+        document.currentScript ||
+        [...document.scripts].find((entry) => /reftheme\.js(?:\?|$)/.test(entry.src));
+
+    if (script?.src) {
+        fontBaseUrl = new URL("../font/", script.src).href;
+        return fontBaseUrl;
+    }
+
+    if (location.pathname.includes("/settings/menus/")) {
+        fontBaseUrl = new URL("../../font/", location.href).href;
+    } else if (/\/(chungus|documentation|index)\//.test(location.pathname)) {
+        fontBaseUrl = new URL("../font/", location.href).href;
+    } else {
+        fontBaseUrl = new URL("./font/", location.href).href;
+    }
+
+    return fontBaseUrl;
+}
+
+function normalizeFontName(fontName) {
+    if (!fontName || fontName === "font") {
+        return DEFAULT_FONT;
+    }
+    return fontName;
+}
+
+function getLocalFontFamily(fontName) {
+    const name = normalizeFontName(fontName);
+    return LOCAL_FONT_FAMILIES.find((family) => family.name === name) || null;
+}
+
+function getLocalFontFamilies() {
+    return LOCAL_FONT_FAMILIES.slice();
+}
+
+function buildLocalFontFaceCss(family) {
+    const rules = [];
+    const familyName = family.name.replace(/'/g, "\\'");
+
+    if (family.regular) {
+        rules.push(
+            `@font-face {`,
+            `    font-family: '${familyName}';`,
+            `    src: url('${new URL(family.regular, getFontBaseUrl()).href}') format('truetype');`,
+            `    font-weight: normal;`,
+            `    font-style: normal;`,
+            `}`
+        );
+    }
+
+    if (family.italic && family.italic !== "none") {
+        rules.push(
+            `@font-face {`,
+            `    font-family: '${familyName}';`,
+            `    src: url('${new URL(family.italic, getFontBaseUrl()).href}') format('truetype');`,
+            `    font-weight: normal;`,
+            `    font-style: italic;`,
+            `}`
+        );
+    }
+
+    return rules.join("\n");
+}
+
+function injectLocalFontFaces(fontName) {
+    const family = getLocalFontFamily(fontName);
+    if (!family) {
+        return null;
+    }
+
+    const normalized = family.name;
+    const marker = `data-local-font="${normalized}"`;
+    if (document.querySelector(`style[${marker}]`)) {
+        return family;
+    }
+
+    const style = document.createElement("style");
+    style.setAttribute("data-local-font", normalized);
+    style.textContent = buildLocalFontFaceCss(family);
+    document.head.appendChild(style);
+
+    return family;
+}
+
+async function loadFontForThemingSettables(fontName) {
+    const normalized = normalizeFontName(fontName);
+
+    if (normalized === DEFAULT_FONT) {
         return true;
     }
 
-    if ([...document.fonts].some(font => font.family === fontName)) {
-        return true;
+    const family = injectLocalFontFaces(normalized);
+    if (!family) {
+        console.warn(`Font "${fontName}" not found in local font directory.`);
+        return false;
     }
 
     try {
-        const res = await fetch(url);
-
-        if (!res.ok) {
-            console.warn(`Font "${fontName}" not found on Google Fonts.`);
-            return false;
+        await document.fonts.load(`1rem "${family.name}"`);
+        if (family.italic) {
+            await document.fonts.load(`italic 1rem "${family.name}"`);
         }
-
-        const link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = url;
-
-        document.head.appendChild(link);
-
-        await document.fonts.load(`1rem "${fontName}"`);
-
         return true;
-
     } catch (err) {
         console.error("Font loading error:", err);
         return false;
     }
+}
+
+/** @deprecated Use loadFontForThemingSettables */
+async function loadGoogleFontForThemingSettables(fontName) {
+    return loadFontForThemingSettables(fontName);
 }
 
 const THEME_STORAGE_KEY = "__tabbar_theme_master";
@@ -50,7 +155,7 @@ async function fixThemeOverSettable(name = null) {
     customProps.forEach(prop => {
       stylesRoot.style.removeProperty(prop);
     });
-  } catch {
+  } catch (e) {
     console.warn("fixThemeOverSettable gitgraph style removal error:", e);
   }
 
@@ -91,10 +196,11 @@ async function fixThemeOverSettable(name = null) {
     }
 
     if (settables && settables.font) {
-      loadGoogleFontForThemingSettables(settables.font.font);
+      const fontName = normalizeFontName(settables.font.font);
+      loadFontForThemingSettables(fontName);
       document.documentElement.style.setProperty(
         `--font`,
-        settables.font.font || "font"
+        fontName
       );
     }
   } catch (e) {
@@ -135,9 +241,9 @@ async function fixThemeSchemaAtTopLevel() {
 
     try {
         if (!settables || !settables.font || !settables.font.font) return;
-        const fontName = settables.font.font;
+        const fontName = normalizeFontName(settables.font.font);
 
-        await loadGoogleFontForThemingSettables(fontName);
+        await loadFontForThemingSettables(fontName);
 
         document.documentElement.style.setProperty(`--font`, fontName);
         try {

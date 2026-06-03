@@ -13,7 +13,7 @@
     --active-tab-topper-border: 3px;
     --tab-inactive-blue: #296A8C;
     --tab-hover-fg-color: var(--fg-color);
-    --font: 'font';
+    --font: 'sourceCodePro';
 
     --tab-close-1: brightness(0) saturate(100%) invert(56.9%) saturate(2.8%) hue-rotate(210deg);
     --tab-close-2: brightness(1) saturate(75%) hue-rotate(340deg) brightness(100%);
@@ -25,10 +25,17 @@
 }
 
 @font-face {
-    font-family: 'font';
-    src: url('./font.ttf') format('truetype');
+    font-family: 'sourceCodePro';
+    src: url('./font/SourceCodePro.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
+}
+
+@font-face {
+    font-family: 'sourceCodePro';
+    src: url('./font/SourceCodePro-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
 }
 
 body, html {
@@ -222,5 +229,5 @@ img.actionBtn:active {
     color: var(--lighter-blue-hl);
     vertical-align: middle;
     line-height: 1;
-    font-family: font;
+    font-family: var(--font);
 }

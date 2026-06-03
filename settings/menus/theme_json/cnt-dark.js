@@ -198,7 +198,7 @@ window.theme_cnt_dark = {
 
                                 "light-blue-hl": "#00baff",
                             },
-                            morethemes: {
+                            themesettings: {
                                 "bg-color": "#111214",
                                 "fg-color": "#f0f0f0",
                                 "man-color": "#000a",
@@ -219,7 +219,7 @@ window.theme_cnt_dark = {
                                 "icon-2": "brightness(1000) saturate(40%) hue-rotate(200deg) brightness(90%)",
                                 "icon-3": "brightness(1000) saturate(40%) hue-rotate(200deg) brightness(120%)",
                             },
-                            morefonts: {
+                            fontconfig: {
                                 "bg-color": "#111214",
                                 "fg-color": "#f0f0f0",
 

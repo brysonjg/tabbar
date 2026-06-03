@@ -865,7 +865,7 @@ async function handleSubmission() {
 
                             setTabTitle(title);
 
-                            if (responseText.matches(/"(.+)"/)) {
+                            if (responseText.match(/"(.+)"/)[0] !== "") {
                                 abortControler.abort();
                                 break;
                             }
@@ -898,7 +898,7 @@ async function handleSubmission() {
     } catch (error) {
         console.error("Streaming error:", error);
         streamEl.innerHTML = `<br style="user-select: none; -webkit-user-select: none;"><p><b>Error:</b><br>&nbsp;&nbsp;&nbsp;&nbsp;${error.message || "OpenRouter Error:"}${error.status != null ? `<br>&nbsp;&nbsp;&nbsp;&nbsp;${error.status}` : ""}</p>`;
-
+        streamEl.scrollIntoView({ behavior: "instant", block: "end" });
     }
 
     setBlueDote(false); // indicate that the function is no longer executing

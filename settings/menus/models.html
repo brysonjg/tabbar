@@ -5,15 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Model Customisations</title>
     <style>
-        @font-face {
-            font-family: 'font';
-            src: url('../../font.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-
         :root {
-            --font: 'font';
+            --font: 'sourceCodePro';
             --bg-color: #2a2e32;
             --fg-color: #d4d4d4;
             --table-waght: #35383c;
@@ -37,6 +30,20 @@
             --act-defult: brightness(0) invert(83%);
             --act-active: invert(44%) sepia(89%) saturate(375%) hue-rotate(92deg) brightness(94%) contrast(91%);
             --act-active: invert(60%) sepia(70%) saturate(358%) hue-rotate(97deg) brightness(94%) contrast(88%);
+        }
+
+        @font-face {
+            font-family: 'sourceCodePro';
+            src: url('../../font/SourceCodePro.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'sourceCodePro';
+            src: url('../../font/SourceCodePro-Italic.ttf') format('truetype');
+            font-weight: normal;
+            font-style: italic;
         }
 
         body, html {

@@ -1,7 +1,7 @@
 TODO:
       add more good themes
       fix the user interface for keybindings and models
-      add good documentation
+      add good documentation (that is not a placeholder)
 
 Known Issues:
       In chungus, error handling sucks tremendously
@@ -12,3 +12,8 @@ Known Issues:
       The default models are probably outdated and don't work
       When attaching files after enough of them they go off screen (chungus)
       the markdown parser sucks
+      chungus.html has duplicate id="action-bar-action" on rename and history buttons
+      OpenRouter API key is only configurable by hand-editing chungus/api-key.js (not in settings)
+      emptydesk.html is bare when all tabs are closed (no prompt to open Index or a new tab)
+      Version history side panel compresses the graph before display so real branch topology is lost
+      UI typos: "Clsoe Tab", "Veiw History", doqumentation.svg, default model labels (Llamma, Misteral)

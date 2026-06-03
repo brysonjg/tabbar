@@ -1,14 +1,7 @@
 /* PrismJS 1.30.0 — semantic variable architecture */
 
-@font-face {
-    font-family: 'font';
-    src: url('../../font.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
 :root {
-    --font: font;
+    --font: 'sourceCodePro';
 
     --prism-line-height: 1.5;
 
@@ -125,6 +118,20 @@
     --prism-italic-font-weight: 400;
     --prism-property-font-style: normal;
     --prism-property-font-weight: 400;
+}
+
+@font-face {
+    font-family: 'sourceCodePro';
+    src: url('../../font/SourceCodePro.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'sourceCodePro';
+    src: url('../../font/SourceCodePro-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
 }
 
 code[class*=language-],

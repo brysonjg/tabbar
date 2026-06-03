@@ -4,13 +4,13 @@ Chat Index is a tabbed AI workspace for people who want to manage chats like act
 
 It is built around a simple idea: AI chat tools should support parallel work, fast navigation, clean organization, and bulk management without making you click through five unrelated panels just to find or delete something.
 
-The interface takes a lot of inspiration from traditional desktop workflows and KDE-style UI design. The result is a browser-hosted chat client that feels closer to a workspace than a toy.
+The interface takes a lot of inspiration from traditional desktop workflows and desktop-style UI design. The result is a browser-hosted chat client that feels closer to a workspace than a toy.
 
 ## Why Use It
 
 - Real tabs for parallel chats
 - Fast switching between active conversations
-- An index view for browsing and searching saved chats
+- An index view for browsing and searching through saved chats
 - Bulk-style management tools for renaming, reopening, and deleting chats
 - A cleaner, more desktop-like interface than the usual AI web app sludge
 - Theming, fonts, keybindings, model selection, and account settings
@@ -80,7 +80,7 @@ Then open the local URL shown by Python and start using the app.
 1. Open a new tab with the plus button or by double-clicking the tab bar.
 2. Type a prompt into the chat input.
 3. Press `Enter` or click the send button.
-4. Use the index page to reopen, search, rename, or purge old chats.
+4. Use the index page to reopen, search, rename, or delete old chats.
 5. Use settings to configure appearance, models, and keybindings.
 
 If you get an error like `Error: HTTP 567`, check the in-app documentation and your OpenRouter configuration first.

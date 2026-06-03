@@ -6,7 +6,7 @@
     --menu-border: #3daee9;
     --menu-width: 200px;
     --border-color: #64686b;
-    --font: font;
+    --font: 'sourceCodePro';
 
     --grey-40: #585b5e40;
     --grey-50: #585b5e50;
@@ -18,10 +18,17 @@
 }
 
 @font-face {
-    font-family: 'font';
-    src: url('../font.ttf') format('truetype');
+    font-family: 'sourceCodePro';
+    src: url('../font/SourceCodePro.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
+}
+
+@font-face {
+    font-family: 'sourceCodePro';
+    src: url('../font/SourceCodePro-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
 }
 
 body, html {

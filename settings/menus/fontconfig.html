@@ -1,19 +1,12 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>More Font Customisations</title>
+    <title>Font Display</title>
     <style>
-      @font-face {
-          font-family: 'font';
-          src: url('../../font.ttf') format('truetype');
-          font-weight: normal;
-          font-style: normal;
-      }
-
       :root {
-          --font: 'font';
+          --font: 'sourceCodePro';
           --bg-color: #2a2e32;
           --fg-color: #d4d4d4;
 
@@ -26,6 +19,20 @@
           --icon-1: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%);
           --icon-2: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4);
           --icon-3: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2);
+      }
+
+      @font-face {
+          font-family: 'sourceCodePro';
+          src: url('../../font/SourceCodePro.ttf') format('truetype');
+          font-weight: normal;
+          font-style: normal;
+      }
+
+      @font-face {
+          font-family: 'sourceCodePro';
+          src: url('../../font/SourceCodePro-Italic.ttf') format('truetype');
+          font-weight: normal;
+          font-style: italic;
       }
 
       body, html {
@@ -47,15 +54,13 @@
 
       div.section {
           height: fit-content;
-          width: calc(100vw - 35px);
-          padding-left: 10px;
-          margin-right: 10px;
+          width: calc(100% - 20px);
       }
 
       div.section div.title {
           position: sticky;
           top: -25px;
-          width: calc(100% - 32px);
+          width: 100%;
           border-bottom: 1px solid var(--fg-color);
           font-size: 25px;
           z-index: 999;
@@ -65,32 +70,15 @@
       div.section div.body {
           width: 100%;
           font-size: 20px;
-          padding-top: 1em;
+          margin-top: 10px;
           display: flex;
           flex-wrap: wrap;
       }
 
-      img.exitIcon {
-          width: 20px;
-          height: 20px;
-          position: fixed;
-          top: 10px;
-          left: 5px;
-          filter: var(--icon-1);
-      }
-
-      img.exitIcon:hover {
-          filter: var(--icon-2);
-      }
-
-      img.exitIcon:active {
-          filter: var(--icon-3);
-      }
-
       div.master-cont {
           width: 100%;
-          padding-top: 25px;
-          padding-left: 32.5px;
+          padding-top: 15px;
+          padding-left: 20px;
           overflow-y: auto;
           overflow-x: hidden;
       }
@@ -133,12 +121,10 @@
       div.body > div {
           display: flex;
           align-items: center;
-          height: 1lh;
-          width: calc(100% - 83px);
-          margin-left: 40px;
+          height: fit-content;
+          height: fit-content;
+          width: calc(100% - 12px);
           padding-left: 10px;
-          padding-top: 0.10em;
-          padding-bottom: 0.20em;
           border: 1px solid transparent;
           border-radius: 3px;
       }
@@ -154,25 +140,25 @@
       }
 
       .body div > .main {
-          min-width: 400px;
-          border-right: 1px solid var(--fg-color);
-          padding: 0.5rem 1rem;
-          flex-shrink: 0;
+          min-width: 250px;
+          height: calc(100% + 0.3rem);
+          padding: 0 0.5rem;
+          display: flex;
+          align-items: flex-start;
       }
 
       .body div > .font {
           flex-grow: 1;
-          padding: 0.5rem 1rem;
+          padding: 0.15rem 0.5rem;
       }
 
     </style>
   </head>
   <body>
-    <img class="exitIcon" src="../../icons/go-up-settings-lvl.svg" id="exitIcon"></img>
     <div class="master-cont">
       <div class="section">
         <div class="title">
-          More Fonts
+          Font Display
         </div>
         <div class="body"></div>
       </div>
@@ -183,58 +169,34 @@
     <script src="../../utils/reftheme.js"></script>
     <script src="../../utils/kbutils.js"></script>
     <script>
-      document.getElementById("exitIcon").addEventListener("click", () => {
-          window.parent.postMessage({ type: "naviiframe", url: "./menus/appearance.html" }, "*");
-      });
-
       document.addEventListener("DOMContentLoaded", async () => {
           try { await fixThemeOverSettable(); } catch {}
 
           try {
-              const res = await fetch(
-                  "https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyDASQyd_8GW17EeUTuapGHCpvmN4rAWf0Q"
-              );
-              if (!res.ok) throw new Error(`API error: ${res.status}`);
-
-              const data = await res.json();
+              const fonts = getLocalFontFamilies();
               const bodyDiv = document.querySelector("div.body");
 
-              // Insert placeholder preview blocks
-              data.items.forEach(font => {
+              fonts.forEach(font => {
                   const container = document.createElement("div");
                   container.innerHTML = `
-                      <div class="main">${font.family}</div>
-                      <div class="font" data-font="${font.files.regular}" data-name="${font.family}">
+                      <div class="main">${font.title}</div>
+                      <div class="font" data-name="${font.name}">
                           The Quick Brown Fox jumps over the Lazy Dog
                       </div>
                   `;
                   bodyDiv.appendChild(container);
               });
 
-              // Lazy-load fonts with observer + buffer margins
               const fontObserver = new IntersectionObserver((entries, observer) => {
                   entries.forEach(entry => {
                       if (!entry.isIntersecting) return;
 
                       const fontDiv = entry.target;
-                      const fontURL = fontDiv.dataset.font;
                       const fontName = fontDiv.dataset.name;
 
-                      // Inject font
-                      const style = document.createElement('style');
-                      style.textContent = `
-                          @font-face {
-                              font-family: "${fontName}";
-                              src: url("${fontURL}") format('truetype');
-                              font-weight: normal;
-                              font-style: normal;
-                          }
-                      `;
-                      document.head.appendChild(style);
-
+                      injectLocalFontFaces(fontName);
                       fontDiv.style.fontFamily = `"${fontName}", var(--font)`;
 
-                    
                       observer.unobserve(fontDiv);
                   });
               }, {
@@ -260,7 +222,7 @@
               });
 
           } catch (err) {
-              console.error("Failed to fetch fonts:", err);
+              console.error("Failed to load local fonts:", err);
           }
       });
 

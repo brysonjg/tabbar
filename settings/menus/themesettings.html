@@ -6,7 +6,7 @@
     <title>Settings &gt; Appearance</title>
     <style>
       :root {
-          --font: "font";
+          --font: 'sourceCodePro';
           --bg-color: transparent;
           --fg-color: #d4d4d4;
           --man-color: #000a;
@@ -19,10 +19,17 @@
       }
 
       @font-face {
-          font-family: 'font';
-          src: url('../../font.ttf') format('truetype');
+          font-family: 'sourceCodePro';
+          src: url('../../font/SourceCodePro.ttf') format('truetype');
           font-weight: normal;
           font-style: normal;
+      }
+
+      @font-face {
+          font-family: 'sourceCodePro';
+          src: url('../../font/SourceCodePro-Italic.ttf') format('truetype');
+          font-weight: normal;
+          font-style: italic;
       }
 
       body, html {
@@ -39,9 +46,10 @@
 
       div.section {
           height: fit-content;
-          width: calc(100vw - 20px);
-          padding-left: 10px;
-          margin-right: 10px;
+          width: calc(100vw - 40px);
+          padding-left: 20px;
+          margin-right: 20px;
+          margin-top: 15px;
       }
 
       div.section div.title {
@@ -51,14 +59,13 @@
       }
 
       div.section div.body {
-          padding-left: 5em;
           width: 100%;
           font-size: 20px;
           position: relative;
       }
 
       div.theme-container {
-          width: calc(100vw - 5em - 21px - 10px);
+          width: calc(100vw - 51px);
           margin-top: 10px;
           border: 1px solid var(--fg-color);
           border-radius: 3px;
@@ -79,7 +86,6 @@
       .theme-img-wrapper {
           position: relative;
           display: inline-block;
-          margin-right: 10px;
       }
 
       .theme-img-wrapper:hover::after {
@@ -90,7 +96,7 @@
           right: 1px;
           background-color: var(--man-color);
           color: var(--fg-color);
-          padding: 2px 4px;
+          padding: 2px 2px;
           border-radius: 2px;
           white-space: nowrap;
           z-index: 1;
@@ -116,54 +122,11 @@
       img.theme-showcase:active {
           filter: var(--card-3-filter);
       }
-
-      div.buffer {
-          height: 10px;
-          width: 100%;
-          display: block;
-      }
-
-      h1.font {
-          margin: 0;
-          width: calc(100% - 100px);
-          position: relative;
-      }
-
-      h1.font:after {
-          position: absolute;
-          content: "";
-          right: 0;
-      }
-
-      div.section.font {
-          width: calc(100vw - 130px);
-      }
-
-      div#morefonts {
-          position: absolute;
-          right: 100px;
-          bottom: 0px;
-
-          border: 1px solid var(--fg-color);
-          width: fit-content;
-          padding: 0 0.5em;
-          border-radius: 3px;
-          color: var(--fg-color);
-      }
-
-      div.section div.body:has(div#morefonts) {
-          height: 220px;
-      }
-
-      #morefonts:hover {
-          border: 1px solid var(--light-blue-hl);
-          color: var(--light-blue-hl);
-      }
     </style>
   </head>
   <body>
     <div class="section">
-        <div class="title">Themes</div>
+        <div class="title">Appication Theming</div>
         <div class="body">
           <div class="theme-container">
             <div class="theme-cont-left">
@@ -185,30 +148,6 @@
             </div>
           </div>
         </div>
-    </div>
-    <br />
-    <div class="section">
-      <div class="title">Fonts</div>
-      <div class="body">
-        <div class="section font">
-        <br />
-        <div class="title">Default Font</div>
-          <div class="body">
-            <h1 class="font" data-font="font">
-              Thing In Font
-            </h1>
-          </div>
-        </div>
-        <div class="section font">
-          <div class="title">Comic Sans</div>
-          <div class="body">
-            <h1 class="font" data-font="Comic Relief">
-              Thing In Font
-            </h1>
-          </div>
-        </div>
-        <div id="morefonts">MoreFonts</div>
-      </div>
     </div>
 
     <script src="../../controlcommands.js"></script>
@@ -272,13 +211,9 @@
       fontSelectors.forEach( async (element) => {
           const font = element.dataset.font;
           if (font) {
-              await loadGoogleFontForThemingSettables(font);
+              await loadFontForThemingSettables(font);
               element.style.fontFamily = font;
           }
-      });
-
-      document.getElementById("morefonts").addEventListener("click", () => {
-          window.parent.postMessage({ type: "naviiframe", url: "./menus/morefonts.html" }, "*");
       });
 
     </script>

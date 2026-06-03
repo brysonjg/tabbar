@@ -78,7 +78,7 @@ window.theme_brz_dark = {
                                 "fg-color": "#d4d4d4",
                                 "menu-hover": "#1f485e",
                             },
-                            appearance:
+                            themesettings:
                             {
                                 "fg-color": "#d4d4d4",
                                 "man-color": "#000a",
@@ -229,7 +229,7 @@ window.theme_brz_dark = {
                                 "versioning-graph-a": "#10d016",
                                 "versioning-graph-b": "#1abc9c",
                             },
-                            morefonts:
+                            fontconfig:
                             {
                                 "bg-color": "#2a2e32",
                                 "fg-color": "#d4d4d4",

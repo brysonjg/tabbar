@@ -191,7 +191,7 @@ window.theme_brz_light = {
                                 "fg-color": "#232629",
                                 "menu-hover": "#9dd5f299",
                             },
-                            appearance:
+                            themesettings:
                             {
                                 "fg-color": "#232629",
                                 "man-color": "#fffa",
@@ -224,7 +224,7 @@ window.theme_brz_light = {
                                 "icon-2": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(50%)",
                                 "icon-3": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(30%)",
                             },
-                            morefonts: {
+                            fontconfig: {
                                 "bg-color": "#eff0f1",
                                 "fg-color": "#232629",
 

@@ -198,7 +198,7 @@ window.theme_temp =
 
         "light-blue-hl": "" <color>,
     },
-    morethemes: {
+    themesettings: {
         "bg-color": "" <color>,
         "fg-color": "" <color>,
         "man-color": "" <color>,
@@ -219,7 +219,7 @@ window.theme_temp =
         "icon-2": "" <filter>,
         "icon-3": "" <filter>,
     },
-    morefonts: {
+    fontconfig: {
         "bg-color": "" <color>,
         "fg-color": "" <color>,
 
