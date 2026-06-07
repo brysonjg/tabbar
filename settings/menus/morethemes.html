@@ -141,6 +141,7 @@
           display: inline-block;
           margin-right: 10px;
           margin-bottom: 10px;
+          cursor: pointer;
       }
 
       .theme-img-wrapper:hover::after {
@@ -164,18 +165,17 @@
           border: 1px solid var(--fg-color);
           border-radius: 3px;
           position: relative;
-          cursor: pointer;
           user-select: none;
           -webkit-user-select: none;
           filter: var(--card-1);
       }
 
-      img.theme-showcase:hover {
-          filter: var(--card-2);
+      .theme-img-wrapper:hover img.theme-showcase {
+          filter: var(--card-2-filter);
       }
 
-      img.theme-showcase:active {
-          filter: var(--card-3);
+      .theme-img-wrapper:active img.theme-showcase {
+          filter: var(--card-3-filter);
       }
     </style>
   </head>

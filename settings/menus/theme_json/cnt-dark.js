@@ -189,7 +189,7 @@ window.theme_cnt_dark = {
                                 "fg-color": "#f0f0f0",
                                 "menu-hover": "#00baff33"
                             },
-                            appearance: {
+                            themesettings: {
                                 "fg-color": "#f0f0f0",
                                 "man-color": "#000a",
                                 "card-1-filt": "brightness(0.9)",
@@ -198,7 +198,7 @@ window.theme_cnt_dark = {
 
                                 "light-blue-hl": "#00baff",
                             },
-                            themesettings: {
+                            morethemes: {
                                 "bg-color": "#111214",
                                 "fg-color": "#f0f0f0",
                                 "man-color": "#000a",

@@ -267,36 +267,3 @@ async function fixThemeSchemaAtTopLevel() {
         } catch (ignore) {}
     }
 }
-
-async function getIconPackage() {
-  const isTopLevel = window.top === window;
-  let settingsJson = null;
-
-  if (isTopLevel) {
-    try {
-      await localDB.ensureOpen();
-      settingsJson = await localDB.getSettables();
-    } catch (err) {
-      console.warn("getIconPackage getSettables failed:", err);
-      return {};
-    }
-  } else {
-    settingsJson = await getSettablesAsJson();
-    if (settingsJson === null) return {};
-  }
-
-  if (!settingsJson) return {};
-  return settingsJson.ipack || {};
-}
-
-function normalizeIconPath(value) {
-  if (!value || typeof value !== "string") return "";
-  const sanitized = value.replace(/\\/g, "/").split(/[?#]/)[0];
-
-  try {
-    const resolved = new URL(sanitized, document.baseURI);
-    return resolved.pathname.replace(/^\/+/, "");
-  } catch {
-    return sanitized.replace(/^(?:\.\.\/|\.\/)+/, "").replace(/^\/+/, "");
-  }
-}

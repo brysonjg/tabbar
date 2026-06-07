@@ -86,6 +86,7 @@
       .theme-img-wrapper {
           position: relative;
           display: inline-block;
+          cursor: pointer;
       }
 
       .theme-img-wrapper:hover::after {
@@ -109,17 +110,16 @@
           border: 1px solid var(--fg-color);
           border-radius: 3px;
           position: relative;
-          cursor: pointer;
           user-select: none;
           -webkit-user-select: none;
           filter: var(--card-1-filter);
       }
 
-      img.theme-showcase:hover {
+      .theme-img-wrapper:hover img.theme-showcase {
           filter: var(--card-2-filter);
       }
 
-      img.theme-showcase:active {
+      .theme-img-wrapper:active img.theme-showcase {
           filter: var(--card-3-filter);
       }
     </style>
