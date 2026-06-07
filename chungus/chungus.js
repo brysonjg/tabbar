@@ -865,10 +865,7 @@ async function handleSubmission() {
 
                             setTabTitle(title);
 
-                            if (responseText.match(/"(.+)"/)[0] !== "") {
-                                abortControler.abort();
-                                break;
-                            }
+                            await new Promise(requestAnimationFrame);
                         } catch (err) {
                             console.warn("Stream chunk parse error:", err);
                         }
@@ -1027,11 +1024,15 @@ async function getFilePreviewDataView(file, previewBytes = 256) {
 }
 
 const addContextButton = document.querySelector(".context#add-context");
-const hiddenFileInput = document.querySelector("#hidden-file-input");
+let   hiddenFileInput = document.querySelector("#hidden-file-input");
 const fileField = document.querySelector("#file-field");
 const fileLoadingIcon = "../icons/fileonload.svg";
 
 addContextButton?.addEventListener("mousedown", () => {
+    const clonehiddenFileInput = hiddenFileInput.cloneNode(false);
+    hiddenFileInput.parentNode.replaceChild(clonehiddenFileInput, hiddenFileInput);
+    hiddenFileInput = document.querySelector("#hidden-file-input");
+
     if (!hiddenFileInput || !fileField) return;
     hiddenFileInput.click();
 

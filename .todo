@@ -5,7 +5,6 @@ TODO:
 
 Known Issues:
       In chungus, error handling sucks tremendously
-      If you open the account settings and do nothing then open chungus it suddenly does not work
       There are no software checks to make shore there are not any bugs
       When tab bars grow to long they go off the page
       When git graph commits on a single row grow too long the lines leading up to them and from them are indistinguishable

@@ -500,12 +500,12 @@
                   else {
                       if (settables && (typeof settables == "object")) {
                           settables.account = currentAccountData;
-                          setSettablesAsJson(settables);
+                          setSettablesByJson(settables);
                       }
                       else {
                           settables = {};
                           settables.account = currentAccountData;
-                          setSettablesAsJson(settables);
+                          setSettablesByJson(settables);
                       }
 
                       callStackSize++;
