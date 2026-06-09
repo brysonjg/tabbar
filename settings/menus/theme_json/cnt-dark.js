@@ -33,12 +33,14 @@ window.theme_cnt_dark = {
                                 "action-btn-active-2": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4) brightness(140%)",
                                 "action-btn-active-3": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2) brightness(160%)",
 
-                                "grey-40": "#5555",
-                                "grey-50": "#5558",
-                                "grey-80": "#555c",
-                                "grey-ff": "#555",
+                                "grey-40": "#585b5e40",
+                                "grey-50": "#585b5e50",
+                                "grey-80": "#585b5e80",
+                                "grey-90": "#585b5e90",
+                                "grey-99": "#585b5e99",
+                                "grey-ff": "#585b5eff",
+                                "grey-solid": "#585b5e",
 
-                                "grey-solid": "#555",
                                 "link-blue": "#00baff",
                                 "link-purple": "#c100ff",
                                 "link-active-red": "#ff3b3b",
@@ -102,6 +104,7 @@ window.theme_cnt_dark = {
                                 "prism-atrule": "#c100ff",
                                 "prism-deleted": "#ff3b3b",
                                 "prism-inserted": "#00ff99",
+
                                 "prism-comment-font-style": "oblique",
                                 "prism-comment-font-weight": "400",
                                 "prism-block-comment-font-style": "oblique",
@@ -128,6 +131,8 @@ window.theme_cnt_dark = {
                                 "prism-operator-font-weight": "400",
                                 "prism-url-font-style": "normal",
                                 "prism-url-font-weight": "400",
+                                "prism-property-font-style": "normal",
+                                "prism-property-font-weight": "400",
                                 "prism-symbol-font-style": "normal",
                                 "prism-symbol-font-weight": "400",
                                 "prism-char-font-style": "normal",
@@ -165,7 +170,7 @@ window.theme_cnt_dark = {
                                 "prism-italic-font-style": "italic",
                                 "prism-italic-font-weight": "400",
                                 "prism-property-font-style": "normal",
-                                "prism-property-font-weight": "400"
+                                "prism-property-font-weight": "400",
                             },
                             gitgraph: {
                                 "versioning-graph-bg": "#111214",
@@ -192,6 +197,7 @@ window.theme_cnt_dark = {
                             themesettings: {
                                 "fg-color": "#f0f0f0",
                                 "man-color": "#000a",
+
                                 "card-1-filt": "brightness(0.9)",
                                 "card-2-filt": "brightness(1.4)",
                                 "card-3-filt": "brightness(2)",
@@ -252,7 +258,6 @@ window.theme_cnt_dark = {
                                 "mv-filter": "invert(62%) sepia(92%) saturate(1934%) hue-rotate(171deg) brightness(99%) contrast(84%)",
 
                                 "act-defult": "brightness(0) invert(94%)",
-                                "act-active": "invert(44%) sepia(89%) saturate(375%) hue-rotate(92deg) brightness(94%) contrast(91%)",
                                 "act-active": "invert(60%) sepia(70%) saturate(358%) hue-rotate(97deg) brightness(94%) contrast(88%)",
                             },
                             master: {

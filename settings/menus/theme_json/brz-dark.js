@@ -1,6 +1,5 @@
 window.theme_brz_dark = {
-                            indx:
-                            {
+                            indx: {
                                 "bg-color": "#2a2e32",
                                 "fg-color": "#d4d4d4",
 
@@ -9,10 +8,9 @@ window.theme_brz_dark = {
 
                                 "grey-40": "#585b5e40",
                                 "grey-99": "#585b5e99",
-                                "--grey-ff": "#585b5eff",
+                                "grey-ff": "#585b5eff",
                             },
-                            chungus:
-                            {
+                            chungus: {
                                 "bg-color": "#2a2e32",
                                 "fg-color": "#d4d4d4",
                                 "hard-outline-color": "#64686b",
@@ -41,8 +39,8 @@ window.theme_brz_dark = {
                                 "grey-90": "#585b5e90",
                                 "grey-99": "#585b5e99",
                                 "grey-ff": "#585b5eff",
-
                                 "grey-solid": "#585b5e",
+
                                 "link-blue": "#0da9f5",
                                 "link-purple": "#a0a",
                                 "link-active-red": "#f00",
@@ -71,46 +69,6 @@ window.theme_brz_dark = {
                                 "table-row-odd-bg": "#36393d",
                                 "table-row-even-bg": "#2a2e32",
                                 "table-header-fg": "#ffffff",
-                            },
-                            settings:
-                            {
-                                "bg-color": "#2a2e32",
-                                "fg-color": "#d4d4d4",
-                                "menu-hover": "#1f485e",
-                            },
-                            themesettings:
-                            {
-                                "fg-color": "#d4d4d4",
-                                "man-color": "#000a",
-
-                                "card-1-filt": "brightness(1)",
-                                "card-2-filt": "brightness(1.25)",
-                                "card-3-filt": "brightness(2)",
-
-                                "light-blue-hl": "#3daee9",
-                            },
-                            morethemes:
-                            {
-                                "bg-color": "#2a2e32",
-                                "fg-color": "#d4d4d4",
-                                "man-color": "#000a",
-
-                                "card-1": "brightness(1)",
-                                "card-2": "brightness(1.75)",
-                                "card-3": "brightness(2)",
-
-                                "icon-1": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%)",
-                                "icon-2": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4)",
-                                "icon-3": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2)",
-                            },
-                            customthemes:
-                            {
-                                "bg-color": "#2a2e32",
-                                "fg-color": "#d4d4d4",
-
-                                "icon-1": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%)",
-                                "icon-2": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4)",
-                                "icon-3": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2)",
                             },
                             prism: {
                                 "prism-block-bg": "#31353990",
@@ -146,6 +104,7 @@ window.theme_brz_dark = {
                                 "prism-atrule": "#cc99cd",
                                 "prism-deleted": "#e2777a",
                                 "prism-inserted": "#00d000",
+
                                 "prism-comment-font-style": "oblique",
                                 "prism-comment-font-weight": "400",
                                 "prism-block-comment-font-style": "oblique",
@@ -209,10 +168,11 @@ window.theme_brz_dark = {
                                 "prism-bold-font-style": "normal",
                                 "prism-bold-font-weight": "700",
                                 "prism-italic-font-style": "italic",
-                                "prism-italic-font-weight": "400"
+                                "prism-italic-font-weight": "400",
+                                "prism-property-font-style": "normal",
+                                "prism-property-font-weight": "400",
                             },
-                            gitgraph:
-                            {
+                            gitgraph: {
                                 "versioning-graph-bg": "#2a2e32",
                                 "versioning-graph-right-border": "#585b5e40",
 
@@ -229,8 +189,43 @@ window.theme_brz_dark = {
                                 "versioning-graph-a": "#10d016",
                                 "versioning-graph-b": "#1abc9c",
                             },
-                            fontconfig:
-                            {
+                            settings: {
+                                "bg-color": "#2a2e32",
+                                "fg-color": "#d4d4d4",
+                                "menu-hover": "#1f485e",
+                            },
+                            themesettings: {
+                                "fg-color": "#d4d4d4",
+                                "man-color": "#000a",
+
+                                "card-1-filt": "brightness(1)",
+                                "card-2-filt": "brightness(1.25)",
+                                "card-3-filt": "brightness(2)",
+
+                                "light-blue-hl": "#3daee9",
+                            },
+                            morethemes: {
+                                "bg-color": "#2a2e32",
+                                "fg-color": "#d4d4d4",
+                                "man-color": "#000a",
+
+                                "card-1": "brightness(1)",
+                                "card-2": "brightness(1.75)",
+                                "card-3": "brightness(2)",
+
+                                "icon-1": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%)",
+                                "icon-2": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4)",
+                                "icon-3": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2)",
+                            },
+                            customthemes: {
+                                "bg-color": "#2a2e32",
+                                "fg-color": "#d4d4d4",
+
+                                "icon-1": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%)",
+                                "icon-2": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4)",
+                                "icon-3": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2)",
+                            },
+                            fontconfig: {
                                 "bg-color": "#2a2e32",
                                 "fg-color": "#d4d4d4",
 
@@ -243,8 +238,7 @@ window.theme_brz_dark = {
                                 "icon-2": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4)",
                                 "icon-3": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2)",
                             },
-                            models:
-                            {
+                            models: {
                                 "bg-color": "#2a2e32",
                                 "fg-color": "#d4d4d4",
                                 "table-waght": "#35383c",
@@ -266,8 +260,7 @@ window.theme_brz_dark = {
                                 "act-defult": "brightness(0) invert(83%)",
                                 "act-active": "invert(60%) sepia(70%) saturate(358%) hue-rotate(97deg) brightness(94%) contrast(88%)",
                             },
-                            master:
-                            {
+                            master: {
                                 "bg-color": "#232629",
                                 "fg-color": "#d4d4d4",
                                 "topper-color": "#2a2e32",

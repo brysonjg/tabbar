@@ -39,8 +39,8 @@ window.theme_cnt_light = {
                                 "grey-90": "#66666690",
                                 "grey-99": "#66666699",
                                 "grey-ff": "#666666ff",
-
                                 "grey-solid": "#666666",
+
                                 "link-blue": "#0057d8",
                                 "link-purple": "#6a00a8",
                                 "link-active-red": "#cc0000",
@@ -104,6 +104,7 @@ window.theme_cnt_light = {
                                 "prism-atrule": "#a6278f",
                                 "prism-deleted": "#c62828",
                                 "prism-inserted": "#006a00",
+
                                 "prism-comment-font-style": "oblique",
                                 "prism-comment-font-weight": "400",
                                 "prism-block-comment-font-style": "oblique",
@@ -130,6 +131,8 @@ window.theme_cnt_light = {
                                 "prism-operator-font-weight": "400",
                                 "prism-url-font-style": "normal",
                                 "prism-url-font-weight": "400",
+                                "prism-property-font-style": "normal",
+                                "prism-property-font-weight": "400",
                                 "prism-symbol-font-style": "normal",
                                 "prism-symbol-font-weight": "400",
                                 "prism-char-font-style": "normal",
@@ -167,7 +170,7 @@ window.theme_cnt_light = {
                                 "prism-italic-font-style": "italic",
                                 "prism-italic-font-weight": "400",
                                 "prism-property-font-style": "normal",
-                                "prism-property-font-weight": "400"
+                                "prism-property-font-weight": "400",
                             },
                             gitgraph: {
                                 "versioning-graph-bg": "#ffffff",
@@ -255,7 +258,6 @@ window.theme_cnt_light = {
                                 "mv-filter": "invert(62%) sepia(92%) saturate(1934%) hue-rotate(171deg) brightness(99%) contrast(84%)",
 
                                 "act-defult": "brightness(0)",
-                                "act-active": "invert(44%) sepia(89%) saturate(375%) hue-rotate(92deg) brightness(94%) contrast(91%)",
                                 "act-active": "invert(60%) sepia(70%) saturate(358%) hue-rotate(97deg) brightness(94%) contrast(88%)",
                             },
                             master: {

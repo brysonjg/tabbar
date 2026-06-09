@@ -71,8 +71,8 @@ window.theme_brz_light = {
                                 "table-header-fg": "#131619"
                             },
                             prism: {
-                                "prism-block-bg": "#aeeef69",
-                                "prism-inline-bg": "#aeeef69",
+                                "prism-block-bg": "#eff0f1",
+                                "prism-inline-bg": "#eff0f1",
                                 "prism-text-color": "#1f1c1b",
                                 "prism-comment": "#7a8185",
                                 "prism-block-comment": "#7a8185",
@@ -104,6 +104,7 @@ window.theme_brz_light = {
                                 "prism-atrule": "#a6278f",
                                 "prism-deleted": "#c62828",
                                 "prism-inserted": "#0a7c4a",
+
                                 "prism-comment-font-style": "oblique",
                                 "prism-comment-font-weight": "400",
                                 "prism-block-comment-font-style": "oblique",
@@ -130,6 +131,8 @@ window.theme_brz_light = {
                                 "prism-operator-font-weight": "400",
                                 "prism-url-font-style": "normal",
                                 "prism-url-font-weight": "400",
+                                "prism-property-font-style": "normal",
+                                "prism-property-font-weight": "400",
                                 "prism-symbol-font-style": "normal",
                                 "prism-symbol-font-weight": "400",
                                 "prism-char-font-style": "normal",
@@ -167,7 +170,7 @@ window.theme_brz_light = {
                                 "prism-italic-font-style": "italic",
                                 "prism-italic-font-weight": "400",
                                 "prism-property-font-style": "normal",
-                                "prism-property-font-weight": "400"
+                                "prism-property-font-weight": "400",
                             },
                             gitgraph: {
                                 "versioning-graph-bg": "#eff0f1",
@@ -191,8 +194,7 @@ window.theme_brz_light = {
                                 "fg-color": "#232629",
                                 "menu-hover": "#9dd5f299",
                             },
-                            themesettings:
-                            {
+                            themesettings: {
                                 "fg-color": "#232629",
                                 "man-color": "#fffa",
 
@@ -202,8 +204,7 @@ window.theme_brz_light = {
 
                                 "light-blue-hl": "#3daee9",
                             },
-                            morethemes:
-                            {
+                            morethemes: {
                                 "bg-color": "#eff0f1",
                                 "fg-color": "#232629",
                                 "man-color": "#fffa",
@@ -257,7 +258,6 @@ window.theme_brz_light = {
                                 "mv-filter": "invert(62%) sepia(92%) saturate(1934%) hue-rotate(171deg) brightness(99%) contrast(84%)",
 
                                 "act-defult": "brightness(0) invert(17%)",
-                                "act-active": "invert(44%) sepia(89%) saturate(375%) hue-rotate(92deg) brightness(94%) contrast(91%)",
                                 "act-active": "invert(60%) sepia(70%) saturate(358%) hue-rotate(97deg) brightness(94%) contrast(88%)",
                             },
                             master: {

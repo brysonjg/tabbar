@@ -186,6 +186,9 @@ function cleanupLowZFrames() {
 }
 
 (async () => {
+    await fixThemeSchemaAtTopLevel();
+    await new Promise(requestAnimationFrame);
+
     startCorrectTabChecksumSchedule(100);
 
     const savedTabs = localStorage.getItem("tabArray");
@@ -225,8 +228,6 @@ function cleanupLowZFrames() {
         settables.theme = window.theme_brz_dark;
         await localDB.setSettables(settables);
     }
-
-    fixThemeSchemaAtTopLevel();
 })();
 
 applyAriaAttributesToTabbar();
