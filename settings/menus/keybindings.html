@@ -20,15 +20,15 @@
       let sub = document.querySelector("button");
 
       sub.addEventListener("click", async () => {
-        let json = await getSettablesAsJson();
+          let json = await getSettablesAsJson();
 
-        try {
-          json.kbshortcuts = JSON.parse(txa.value);
-        } catch {
-          return;
-        } 
+          try {
+              json.kbshortcuts = JSON.parse(txa.value);
+          } catch {
+              return;
+          }
 
-        setSettablesByJson(json);
+          setSettablesByJson(json);
       });
 
     </script>

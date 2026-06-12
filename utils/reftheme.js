@@ -138,7 +138,7 @@ async function loadFontForThemingSettables(fontName) {
 const THEME_STORAGE_KEY = "__tabbar_theme_master";
 const THEME_FONT_STORAGE_KEY = "__tabbar_theme_font";
 
-async function fixThemeOverSettable(name = null) {
+async function fixThemeOverSettable(name=null) {
   try {
     const stylesRoot = document.documentElement;
     const styles = getComputedStyle(stylesRoot);

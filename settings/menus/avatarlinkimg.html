@@ -84,7 +84,7 @@
 
       window.addEventListener("message", (event) => {
           if (event.data.type == "submitAvatar") {
-            window.parent.postMessage({type: "avatar", content: fileURL}, "*");
+              window.parent.postMessage({type: "avatar", content: fileURL}, "*");
           }
       });
 

@@ -15,7 +15,6 @@ function hasExecutableExtension(ext) {
         case "dmg":
         case "gadget":
         case "ipa":
-        case "jar":
         case "ksh":
         case "msi":
         case "out":
@@ -114,29 +113,29 @@ function getFileIconFileName(fname, fmime, fview) {
         case 'yml':
         case 'yaml': return 'text-yaml.svg';
         case 'lock': return 'lock.svg';
-	case 'tsx':
+        case 'tsx':
         case 'jsx': return 'application-react-java.svg';
         case 'js': return 'application-x-javascript.svg';
-	case 'ts': return 'application-typescript.svg';
+        case 'ts': return 'application-typescript.svg';
         case 'md': return 'text-x-markdown.svg';
         case 'c': return 'text-x-csrc.svg';
         case 'ps1': return 'application-x-powershell.svg';
-	case "ts": return "application-typescript.svg";
+        case "ts": return "application-typescript.svg";
         case '3dmf': case '3ds':
         case 'abc': case 'c4d':
         case 'dae': case 'duf':
         case 'dwg': case 'dxf':
         case 'iprop': case 'igs':
-	case 'max': case 'iges':
-	case 'glb': case 'gltf':
-	case 'ply': case 'sat':
+        case 'max': case 'iges':
+        case 'glb': case 'gltf':
+        case 'ply': case 'sat':
         case 'fbx': return "3d-other.svg";
         case 'fpp': return '3d-fpp.svg';
         case 'obj': return '3d-obj.svg';
         case 'stl': return '3d-stl.svg';
         case "bash":
         case 'sh': return 'application-x-shellscript.svg';
-	case 'dll':
+        case 'dll':
         case "exe": return 'application-x-ms-dos-executable.svg';
         case 'usd':
         case 'usdz':
@@ -150,7 +149,8 @@ function getFileIconFileName(fname, fmime, fview) {
         case 'ftn': case 'f95':
         case 'f03': case 'f08':
         case 'f18': return 'text-fortran.svg';
-	case 'vbs': return 'application-visual-basic.svg';
+        case 'vbs': return 'application-visual-basic.svg';
+        case 'jar': return 'application-java-archive.svg';
         case '':
             return `${(fmime || 'none').replace('/', '-')}.svg`;
         default:

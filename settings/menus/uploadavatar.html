@@ -7,11 +7,11 @@
     <style>
 
       :root {
-        --font: 'sourceCodePro';
-        --bg-color: #2a2e32;
-        --fg-color: #d4d4d4;
+          --font: 'sourceCodePro';
+          --bg-color: #2a2e32;
+          --fg-color: #d4d4d4;
 
-        --grey-40: #585b5e40;
+          --grey-40: #585b5e40;
       }
 
       @font-face {
@@ -95,32 +95,32 @@
 
       window.addEventListener("message", (event) => {
           if (event.data.type == "submitAvatar") {
-            window.parent.postMessage({type: "avatar", content: fileURL}, "*");
+              window.parent.postMessage({type: "avatar", content: fileURL}, "*");
           }
       });
 
       document.querySelector("input").addEventListener('change', (event) => {
-        const selectedFiles = event.target.files;
+          const selectedFiles = event.target.files;
 
-        if (selectedFiles.length > 0) {
-            const file = selectedFiles[0];
+          if (selectedFiles.length > 0) {
+              const file = selectedFiles[0];
 
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                fileURL = e.target.result;
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                  fileURL = e.target.result;
 
-                if (!document.querySelector("body > img")) {
-                    let img = document.createElement("img");
-                    document.body.appendChild(img);
-                }
+                  if (!document.querySelector("body > img")) {
+                      let img = document.createElement("img");
+                      document.body.appendChild(img);
+                  }
 
-                document.querySelector("body > img").src = fileURL;
-            };
-            reader.readAsDataURL(file);
-        } else {
-            fileURL = null;
-        }
-    });
+                  document.querySelector("body > img").src = fileURL;
+              };
+              reader.readAsDataURL(file);
+          } else {
+              fileURL = null;
+          }
+      });
 
       window.addEventListener("contextmenu", (event) => {
           event.preventDefault();

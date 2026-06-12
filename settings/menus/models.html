@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Model Customisations</title>
+    <title>Model Customizations</title>
     <style>
         :root {
             --font: 'sourceCodePro';
             --bg-color: #2a2e32;
             --fg-color: #d4d4d4;
-            --table-waght: #35383c;
+            --table-wight: #35383c;
 
             /* Accent Colors */
             --hl-blue-1: #3daee9;
@@ -17,17 +17,17 @@
 
             /* Filters */
             --row-filter: brightness(0) invert(83%);
-            --filt-hover: #fff1;
-            --filt-raw: #fff3;
+            --filter-hover: #fff1;
+            --filter-raw: #fff3;
 
-            --rm-action-defult: brightness(0) invert(83%);
+            --rm-action-default: brightness(0) invert(83%);
             --rm-action-hover: brightness(0) saturate(100%) invert(14%) sepia(83%) saturate(2200%) hue-rotate(330deg) brightness(150%) contrast(124%);
             --rm-action-active: brightness(0) saturate(100%) invert(14%) sepia(83%) saturate(2200%) hue-rotate(330deg) brightness(200%) contrast(124%);
 
-            --mv-defult: brightness(0) invert(83%);
+            --mv-default: brightness(0) invert(83%);
             --mv-filter: invert(62%) sepia(92%) saturate(1934%) hue-rotate(171deg) brightness(99%) contrast(84%);
 
-            --act-defult: brightness(0) invert(83%);
+            --act-default: brightness(0) invert(83%);
             --act-active: invert(44%) sepia(89%) saturate(375%) hue-rotate(92deg) brightness(94%) contrast(91%);
             --act-active: invert(60%) sepia(70%) saturate(358%) hue-rotate(97deg) brightness(94%) contrast(88%);
         }
@@ -145,13 +145,13 @@
             position: sticky;
             top: -1px;
             z-index: 999;
-            background-color: var(--table-waght);
+            background-color: var(--table-wight);
 
-            box-shadow: -1.5px 0 0 var(--table-waght), 1.5px 0 0 var(--table-waght);
+            box-shadow: -1.5px 0 0 var(--table-wight), 1.5px 0 0 var(--table-wight);
         }
 
         table tr:first-child td {
-            border: 1px solid var(--table-waght);
+            border: 1px solid var(--table-wight);
             z-index: 9999;
         }
 
@@ -161,8 +161,8 @@
         }
 
         table:hover tr:first-child td {
-            border-left: 1px solid var(--table-waght);
-            border-right: 1px solid var(--table-waght);
+            border-left: 1px solid var(--table-wight);
+            border-right: 1px solid var(--table-wight);
             border-bottom: 1.25px solid var(--hl-blue-1);
         }
 
@@ -171,7 +171,7 @@
         }
 
         tr:nth-child(odd) td {
-            background-color: var(--table-waght);
+            background-color: var(--table-wight);
         }
 
         body:not(.mov) tr:nth-child(odd):not(:first-child):hover {
@@ -221,7 +221,7 @@
 
 
         table:hover tr:not(:first-child):hover td:first-child img.del {
-            filter: var(--rm-action-defult);
+            filter: var(--rm-action-default);
         }
 
         table:hover tr:not(:first-child):hover td:first-child img.del:hover {
@@ -244,7 +244,7 @@
         }
 
         table:hover tr:not(:first-child):hover td:first-child img.mov {
-            filter: var(--mv-defult);
+            filter: var(--mv-default);
         }
 
         table:hover tr:not(:first-child):hover td:first-child img.mov:hover {
@@ -267,7 +267,7 @@
         }
 
         table:hover tr:not(:first-child):hover td:first-child img.act {
-            filter: var(--act-defult);
+            filter: var(--act-default);
         }
 
         table:hover tr:not(:first-child):hover td:first-child img.act:hover {
@@ -322,11 +322,11 @@
         }
 
         img.new-row-to-table:hover {
-            background-color: var(--filt-hover);
+            background-color: var(--filter-hover);
         }
 
         img.new-row-to-table:active {
-            background-color: var(--filt-raw);
+            background-color: var(--filter-raw);
         }
 
         td[contenteditable]:focus,
@@ -340,7 +340,7 @@
     <div class="master-cont">
       <div class="section">
         <div class="title">
-          Model Customisations
+          Model Customizations
         </div>
         <div class="body">
           <table>
@@ -351,12 +351,12 @@
             </tr>
             <tr>
               <td data-editable="false"><img src="../../icons/modelkeyactive.svg" class="act aft"><img src="../../icons/removetablerow.svg" class="del"><img src="../../icons/moverow.svg" class="mov"></td>
-              <td data-editable="true">Meta Llamma 3 (free)</td>
+              <td data-editable="true">Meta Llama 3 (free)</td>
               <td data-editable="true">meta-llama/llama-3.2-3b-instruct:free</td>
             </tr>
             <tr>
               <td data-editable="false"><img src="../../icons/modelkeyactive.svg" class="act"><img src="../../icons/removetablerow.svg" class="del"><img src="../../icons/moverow.svg" class="mov"></td>
-              <td data-editable="true">Misteral 2512 (free)</td>
+              <td data-editable="true">Mistral 2512 (free)</td>
               <td data-editable="true">mistralai/devstral-2512:free</td>
             </tr>
             <tr>

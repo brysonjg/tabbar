@@ -366,15 +366,15 @@ document.getElementById("select-all-btn").addEventListener("contextmenu", (event
                     updateSelectAllButtonImage()
                     break;
                 case "invert":
-                    const invertablesDeselectables = document.querySelectorAll(
+                    const invertedDeselectables = document.querySelectorAll(
                         'div.selectable:has(img#selectImage:not([src="../icons/select-active.svg"]))'
                     );
 
-                    const invertablesSelectables = document.querySelectorAll(
+                    const invertedSelectables = document.querySelectorAll(
                         'div.selectable:has(img#selectImage[src="../icons/select-active.svg"])'
                     );
 
-                    invertablesSelectables.forEach((element) => {
+                    invertedSelectables.forEach((element) => {
                         const index = selectedList.indexOf(element.dataset.id);
 
                         if (index !== -1) {
@@ -387,7 +387,7 @@ document.getElementById("select-all-btn").addEventListener("contextmenu", (event
                         selectImg.src = "../icons/selectall.svg";
                     });
 
-                    invertablesDeselectables.forEach((element) => {
+                    invertedDeselectables.forEach((element) => {
                         selectedList.push(element.dataset.id);
 
                         const selectImg = element.querySelector("img.action#selectImage");

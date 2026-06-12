@@ -55,8 +55,8 @@ A full copy of the OFL is provided at:
 
     (project root)/.github/ofl-1.1.md
 
-For this project, HTML, CSS, and JS refrences or links to the used fontfaces\
-are under the project MIT licence. Only the bundled font files are consiterd under\
+For this project, HTML, CSS, and JS references or links to the used fontfaces\
+are under the project MIT license. Only the bundled font files are considered under\
 the OFL license.
 
 Regular masters — per-family copyright:

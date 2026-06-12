@@ -16,16 +16,17 @@ This document tells contributors how to style their code so the project stays re
 5. Comments should explain *why* a block exists, not restate what the code already makes obvious. It may also *denote the location of a code segment*. Generaly it should be the human reading the code not the human reading the comments.
 6. The project root should stay clean: keep licensing, documentation, and tooling files in their designated folders (e.g., `.github/`, `docs/`). Avoid dumping build artifacts or personal files in the root.
 7. Python is the only language allowed for build/utility scripts; target the latest stable Python 3 release and keep dependencies minimal. Scripts may depend on external libraries only when the script itself bootstraps that dependency (e.g., installs it or vendors it) before use.
+8. Rather than a "dont repeat yourself" coding philosiphy note that you can repeat yourself but if you find your writing the same code more than 3 times you should refactor it especialy if that code is long
 
 ## HTML formatting
 - Indent HTML with two spaces. Any embedded JavaScript still uses four spaces inside `<script>` elements, with the `<script>` tag itself indented two spaces. (they will be indented with a 2 space ofset from the html document)
-- Use multiline formatting for elements with children or content that would otherwise exceed about 120 characters. Single-line form is fine for self-closing or empty elements.
+- Use multiline formatting for elements with children or content that would otherwise exceed about 200 characters. Single-line form is fine for self-closing or empty elements.
 - Keep `<!DOCTYPE html>` uppercase and at the very top. Do not indent the document root (`<html>`, `<head>`, `<body>`), but indent their interior contents.
 - Do not introduce blank lines between a `<style>` tag and its opening content; however, `<script>` tags should always contain a blank line before and after their JavaScript to visually separate it from markup.
 - Close every tag explicitly (no optional closing). When listing attributes, wrap the tag across multiple lines if it improves readability.
 
 ## CSS formatting
-- Indent selectors and declarations with four spaces. Blank lines should separate logical blocks of selector groups.
+- Indent declarations with four spaces. Blank lines should separate logical blocks of selector groups.
 - List selectors with either all on one line (`selector, selector, selector`) or one per line with the comma trailing each line except the last. Keep the opening brace on the same line as the last selector.
 - There must be exactly one space between selectors and the opening brace; there are no blank lines between selectors and `{`.
 - Keep each rule set within 50 lines. If a selector’s declarations grow beyond that, consider splitting it into smaller, more specific pieces.
@@ -35,18 +36,19 @@ This document tells contributors how to style their code so the project stays re
 ## JavaScript formatting
 - Prefer `const` for value bindings and fall back to `let` only when reassignment is necessary. Never use `var`.
 - Arrow functions must always include parentheses: `(event) => { ... }` even for single-argument signatures.
+- When passing an arrow function into function (e.g. `forEach`) there should be no whitespace between the clause and the arrow function (e.g. bad: `func( () => {})`, better: `func(() => {})`) this rule dose not apply when the arrow function is not the first input to the function
 - Global helpers (top-level `const`/`let` declarations, `function` statements, `addEventListener` attachments, immediate-run arrow expressions like `(() => {})()`, and `window.onload = …`) should be the only things visible when the file is fully folded in an editor.
 - Favor array iteration helpers (`array.forEach(...)`) over explicit `for` loops when iterating a known array. Numeric loops are acceptable for ranged iteration, but readability is the main goal.
-- Use `document.querySelector(...)` instead of `document.getElementById(...)` for consistency with CSS selectors.
 - Avoid deeply nested `try`/`catch` blocks (or any other error checking metheds). If you must check for a DOM node, prefer a guard clause (`if (!thing) return;`) over wrapping the remaining logic in an `if` block.
 - Always include semicolons at line endings. Omitting them is considered a syntax violation.
 - When attaching event listeners, omit the third `options` argument unless you specifically need capturing or passive behavior; do not supply `false`, `null`, or empty objects—simply call `.addEventListener(type, handler)`.
+- Only use the loose equality oporator when it makes for cleaner code compaired to the strict equality oporator
 - Use the ternary operator only for expressions that comfortably fit on a single line (typically when rendering short values in template strings).
 - Generate unique identifiers with sufficient entropy so that collisions are astronomically unlikely; document their format if they are referenced elsewhere.
 - Think about future extensibility: structure your code so new features can be added without massive rewrites.
 
 ## Python formatting
-- Follow [PEP 8](https://peps.python.org/pep-0008/) with line lengths capped at 88 characters and four-space indentation.
+- Follow [PEP 8](https://peps.python.org/pep-0008/) with line lengths capped at *94* characters and four-space indentation.
 - Keep helper functions short and descriptive. Use docstrings for public functions and modules.
 - Avoid unused imports, and run `python -m compileall` before committing to catch syntax errors early.
 

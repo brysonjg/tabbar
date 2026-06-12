@@ -432,7 +432,7 @@ let copyButtonGlobalListenersAttached = false;
 let copyButtonVisibilityObserver = null;
 let copyButtonVisibilityMarginPx = 256;
 let copyButtonObservedParents = new WeakMap();
-let copyButtonUpdateSpeed = 20; // 20 milliseconds per fraim or about 50 fraims per second (good enough for this perpose)
+let copyButtonUpdateSpeed = 20;
 let _copyButtonsDoCopyMarkdowns = false;
 
 function ensureCopyButtonVisibilityObserver() {
@@ -506,7 +506,7 @@ function attachCopyButtonGlobalListeners() {
     window.addEventListener("scroll", scheduleCopyButtonUpdate, { passive: true });
     window.addEventListener("resize", scheduleCopyButtonUpdate);
 
-    setInterval(scheduleCopyButtonUpdate, 20);
+    setInterval(scheduleCopyButtonUpdate, copyButtonUpdateSpeed);
 
     const observer = new MutationObserver(scheduleCopyButtonUpdate);
     observer.observe(document.body, { attributes: true, childList: true, subtree: true });

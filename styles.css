@@ -6,7 +6,7 @@
     --hard-outline-color: #64686b;
     --hard-outline-width: 1px;
     --tab-inactive: #23262a;
-    --tab-horz-padding: 10px;
+    --tab-horizontal-padding: 10px;
     --dark-blue-hl: #1f485e;
     --lighter-blue-hl: #3daee9;
     --blue-outline: #587180;
@@ -71,7 +71,7 @@ div.tab {
     height: var(--topper-height);
     display: inline-flex;
     align-items: center;
-    padding: 0 var(--tab-horz-padding);
+    padding: 0 var(--tab-horizontal-padding);
     user-select: none;
     cursor: default;
     color: var(--fg-color);
@@ -161,14 +161,14 @@ div.overlay {
 
 div.tab div.close {
     font-size: 1px;
-    margin-left: calc(var(--tab-horz-padding) / 2);
+    margin-left: calc(var(--tab-horizontal-padding) / 2);
 }
 
 div.tab div.close::after {
     content: '';
     display: block;
-    width: calc(var(--topper-height) - var(--tab-horz-padding) / 2);
-    height: calc(var(--topper-height) - var(--tab-horz-padding) / 2);
+    width: calc(var(--topper-height) - var(--tab-horizontal-padding) / 2);
+    height: calc(var(--topper-height) - var(--tab-horizontal-padding) / 2);
 
     background-image: url(./icons/tabclose1.svg);
     filter: var(--tab-close-1);
@@ -204,9 +204,9 @@ div.tab div.close:active::after {
 }
 
 img.actionBtn {
-    width: calc(var(--topper-height) - var(--tab-horz-padding));
-    height: calc(var(--topper-height) - var(--tab-horz-padding));
-    margin-right: calc(var(--tab-horz-padding) / 2);
+    width: calc(var(--topper-height) - var(--tab-horizontal-padding));
+    height: calc(var(--topper-height) - var(--tab-horizontal-padding));
+    margin-right: calc(var(--tab-horizontal-padding) / 2);
     user-select: none;
     filter: var(--action-btn-1);
     user-drag: none;

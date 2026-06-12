@@ -198,9 +198,9 @@ window.theme_cnt_dark = {
                                 "fg-color": "#f0f0f0",
                                 "man-color": "#000a",
 
-                                "card-1-filt": "brightness(0.9)",
-                                "card-2-filt": "brightness(1.4)",
-                                "card-3-filt": "brightness(2)",
+                                "card-1-filter": "brightness(0.9)",
+                                "card-2-filter": "brightness(1.4)",
+                                "card-3-filter": "brightness(2)",
 
                                 "light-blue-hl": "#00baff",
                             },
@@ -241,23 +241,23 @@ window.theme_cnt_dark = {
                             models: {
                                 "bg-color": "#0e0f10",
                                 "fg-color": "#f0f0f0",
-                                "table-waght": "#171c1f",
+                                "table-wight": "#171c1f",
 
                                 "hl-blue-1": "#3daee9",
                                 "hl-blue-2": "#1a3746",
 
                                 "row-filter": "brightness(0) invert(94%)",
-                                "filt-hover": "#fff2",
-                                "filt-raw": "#fff4",
+                                "filter-hover": "#fff2",
+                                "filter-raw": "#fff4",
 
-                                "rm-action-defult": "brightness(0) invert(94%)",
+                                "rm-action-default": "brightness(0) invert(94%)",
                                 "rm-action-hover": "brightness(0) saturate(100%) invert(14%) sepia(83%) saturate(2200%) hue-rotate(330deg) brightness(150%) contrast(124%)",
                                 "rm-action-active": "brightness(0) saturate(100%) invert(14%) sepia(83%) saturate(2200%) hue-rotate(330deg) brightness(200%) contrast(124%)",
 
-                                "mv-defult": "brightness(0) invert(94%)",
+                                "mv-default": "brightness(0) invert(94%)",
                                 "mv-filter": "invert(62%) sepia(92%) saturate(1934%) hue-rotate(171deg) brightness(99%) contrast(84%)",
 
-                                "act-defult": "brightness(0) invert(94%)",
+                                "act-default": "brightness(0) invert(94%)",
                                 "act-active": "invert(60%) sepia(70%) saturate(358%) hue-rotate(97deg) brightness(94%) contrast(88%)",
                             },
                             master: {

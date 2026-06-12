@@ -9,82 +9,84 @@
     <script src="../../chungus/prism/prism.js"></script>
 
     <style>
+
       :root {
-        --font: 'sourceCodePro';
-        --bg-color: #2a2e32;
-        --fg-color: #d4d4d4;
+          --font: 'sourceCodePro';
+          --bg-color: #2a2e32;
+          --fg-color: #d4d4d4;
 
-        --icon-1: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%);
-        --icon-2: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4);
-        --icon-3: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2);
+          --icon-1: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%);
+          --icon-2: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4);
+          --icon-3: brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2);
 
-        --btn-active-border: #3daee9;
-        --btn-active-bg: #3daee9;
+          --btn-active-border: #3daee9;
+          --btn-active-bg: #3daee9;
 
-        --context-hover-bg: #3daee920;
+          --context-hover-bg: #3daee920;
       }
 
       @font-face {
-        font-family: 'sourceCodePro';
-        src: url('../../font/SourceCodePro.ttf') format('truetype');
-        font-weight: normal;
-        font-style: normal;
+          font-family: 'sourceCodePro';
+          src: url('../../font/SourceCodePro.ttf') format('truetype');
+          font-weight: normal;
+          font-style: normal;
       }
 
       @font-face {
-        font-family: 'sourceCodePro';
-        src: url('../../font/SourceCodePro-Italic.ttf') format('truetype');
-        font-weight: normal;
-        font-style: italic;
+          font-family: 'sourceCodePro';
+          src: url('../../font/SourceCodePro-Italic.ttf') format('truetype');
+          font-weight: normal;
+          font-style: italic;
       }
 
       html, body {
-        margin: 0;
-        padding: 0;
-        color: var(--fg-color);
-        background: var(--bg-color);
-        font-family: var(--font);
-        font-size: 14px;
-        height: 100vh;
-        width: 100vw;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
+          margin: 0;
+          padding: 0;
+          color: var(--fg-color);
+          background: var(--bg-color);
+          font-family: var(--font);
+          font-size: 14px;
+          height: 100vh;
+          width: 100vw;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          overflow: hidden;
       }
 
       img.exitIcon {
-        width: 20px;
-        height: 20px;
-        position: fixed;
-        top: 10px;
-        left: 5px;
-        filter: var(--icon-1);
-        cursor: pointer;
+          width: 20px;
+          height: 20px;
+          position: fixed;
+          top: 10px;
+          left: 5px;
+          filter: var(--icon-1);
+          cursor: pointer;
 
-        user-select: none;
-        -webkit-user-select: none;
+          user-select: none;
+          -webkit-user-select: none;
       }
+
       img.exitIcon:hover { filter: var(--icon-2); }
       img.exitIcon:active { filter: var(--icon-3); }
 
       .master-cont {
-        width: 100%;
-        height: 100%;
-        padding: 35px 30px;
-        display: flex;
-        box-sizing: border-box;
+          width: 100%;
+          height: 100%;
+          padding: 35px 30px;
+          display: flex;
+          box-sizing: border-box;
       }
 
       .editor {
-        flex-grow: 1;
-        border: 1px solid var(--fg-color);
-        border-radius: 3px;
-        overflow: auto;
-        padding: 10px;
-        white-space: pre;
-        background: transparent;
-        outline: none;
+          flex-grow: 1;
+          border: 1px solid var(--fg-color);
+          border-radius: 3px;
+          overflow: auto;
+          padding: 10px;
+          white-space: pre;
+          background: transparent;
+          outline: none;
       }
 
 
@@ -129,30 +131,31 @@
       }
 
       .save-btn {
-        position: fixed;
-        bottom: 10px;
-        right: 15px;
-        padding: 0 7px;
-        border-radius: 3px;
-        font-size: 20px;
+          position: fixed;
+          bottom: 10px;
+          right: 15px;
+          padding: 0 7px;
+          border-radius: 3px;
+          font-size: 20px;
 
-        user-select: none;
-        -webkit-user-select: none;
+          user-select: none;
+          -webkit-user-select: none;
 
-        background-color: transparent;
-        border: 1px solid var(--fg-color);
+          background-color: transparent;
+          border: 1px solid var(--fg-color);
       }
 
       .save-btn:hover {
-        background-color: var(--context-hover-bg);
-        border: 1px solid var(--btn-active-border);
+          background-color: var(--context-hover-bg);
+          border: 1px solid var(--btn-active-border);
       }
 
       .save-btn:active {
-        background-color: var(--btn-active-bg);
-        border: 1px solid var(--btn-active-border);
-        color: var(--bg-color);
+          background-color: var(--btn-active-bg);
+          border: 1px solid var(--btn-active-border);
+          color: var(--bg-color);
       }
+
     </style>
   </head>
 
@@ -170,6 +173,7 @@
     <script src="../../utils/kbutils.js"></script>
     <script src="./theme_json/template.js"></script>
     <script>
+
       window.onload = async () => {
           await fixThemeOverSettable("chungus"); // import more theming
           await fixThemeOverSettable(); // correcting theming
@@ -182,57 +186,57 @@
       const exitIcon = document.getElementById("exitIcon");
 
       exitIcon.addEventListener("click", () => {
-        window.parent.postMessage({ type: "naviiframe", url: "./menus/themesettings.html" }, "*");
+          window.parent.postMessage({ type: "naviiframe", url: "./menus/themesettings.html" }, "*");
       });
 
       // --- Prism re-highlighting helper ---
       function highlightEditable(el) {
-        const pos = saveSelection(el);
-        Prism.highlightElement(el);
-        restoreSelection(el, pos);
+          const pos = saveSelection(el);
+          Prism.highlightElement(el);
+          restoreSelection(el, pos);
       }
 
       // --- Selection helpers ---
       function saveSelection(containerEl) {
-        const sel = window.getSelection();
-        if (sel.rangeCount === 0) return { start: 0, end: 0 };
-        const range = sel.getRangeAt(0);
-        const preRange = range.cloneRange();
-        preRange.selectNodeContents(containerEl);
-        preRange.setEnd(range.startContainer, range.startOffset);
-        const start = preRange.toString().length;
-        return { start, end: start + range.toString().length };
+          const sel = window.getSelection();
+          if (sel.rangeCount === 0) return { start: 0, end: 0 };
+          const range = sel.getRangeAt(0);
+          const preRange = range.cloneRange();
+          preRange.selectNodeContents(containerEl);
+          preRange.setEnd(range.startContainer, range.startOffset);
+          const start = preRange.toString().length;
+          return { start, end: start + range.toString().length };
       }
 
       function restoreSelection(containerEl, savedSel) {
-        let charIndex = 0, range = document.createRange();
-        range.setStart(containerEl, 0);
-        range.collapse(true);
+          let charIndex = 0, range = document.createRange();
+          range.setStart(containerEl, 0);
+          range.collapse(true);
 
-        const nodeStack = [containerEl];
-        let node, foundStart = false, stop = false;
+          const nodeStack = [containerEl];
+          let node, foundStart = false, stop = false;
 
-        while (!stop && (node = nodeStack.pop())) {
-          if (node.nodeType === 3) {
-            const nextCharIndex = charIndex + node.length;
-            if (!foundStart && savedSel.start >= charIndex && savedSel.start <= nextCharIndex) {
-              range.setStart(node, savedSel.start - charIndex);
-              foundStart = true;
-            }
-            if (foundStart && savedSel.end >= charIndex && savedSel.end <= nextCharIndex) {
-              range.setEnd(node, savedSel.end - charIndex);
-              stop = true;
-            }
-            charIndex = nextCharIndex;
-          } else {
-            let i = node.childNodes.length;
-            while (i--) nodeStack.push(node.childNodes[i]);
+          while (!stop && (node = nodeStack.pop())) {
+              if (node.nodeType === 3) {
+                  const nextCharIndex = charIndex + node.length;
+                  if (!foundStart && savedSel.start >= charIndex && savedSel.start <= nextCharIndex) {
+                      range.setStart(node, savedSel.start - charIndex);
+                      foundStart = true;
+                  }
+                  if (foundStart && savedSel.end >= charIndex && savedSel.end <= nextCharIndex) {
+                      range.setEnd(node, savedSel.end - charIndex);
+                      stop = true;
+                  }
+                  charIndex = nextCharIndex;
+              } else {
+                  let i = node.childNodes.length;
+                  while (i--) nodeStack.push(node.childNodes[i]);
+              }
           }
-        }
 
-        const sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
       }
 
       // --- Editing logic ---
@@ -272,62 +276,62 @@
       }
 
       editor.addEventListener('keydown', (e) => {
-        if (e.key === 'Tab') {
-          e.preventDefault();
+          if (e.key === 'Tab') {
+              e.preventDefault();
 
-          const sel = window.getSelection();
-          if (!sel.rangeCount) return;
+              const sel = window.getSelection();
+              if (!sel.rangeCount) return;
 
-          const range = sel.getRangeAt(0);
+              const range = sel.getRangeAt(0);
 
-          // Get full text and selection offsets
-          const pre = range.cloneRange();
-          pre.selectNodeContents(editor);
-          pre.setEnd(range.startContainer, range.startOffset);
-          const startOffset = pre.toString().length;
+              // Get full text and selection offsets
+              const pre = range.cloneRange();
+              pre.selectNodeContents(editor);
+              pre.setEnd(range.startContainer, range.startOffset);
+              const startOffset = pre.toString().length;
 
-          const post = range.cloneRange();
-          post.selectNodeContents(editor);
-          post.setEnd(range.endContainer, range.endOffset);
-          const endOffset = post.toString().length;
+              const post = range.cloneRange();
+              post.selectNodeContents(editor);
+              post.setEnd(range.endContainer, range.endOffset);
+              const endOffset = post.toString().length;
 
-          const text = editor.innerText;
+              const text = editor.innerText;
 
-          // Find line boundaries
-          const lineStart = text.lastIndexOf('\n', startOffset - 1) + 1;
-          const lineEnd = text.indexOf('\n', endOffset);
-          const finalEnd = lineEnd === -1 ? text.length : lineEnd;
+              // Find line boundaries
+              const lineStart = text.lastIndexOf('\n', startOffset - 1) + 1;
+              const lineEnd = text.indexOf('\n', endOffset);
+              const finalEnd = lineEnd === -1 ? text.length : lineEnd;
 
-          const before = text.slice(0, lineStart);
-          const selected = text.slice(lineStart, finalEnd);
-          const after = text.slice(finalEnd);
+              const before = text.slice(0, lineStart);
+              const selected = text.slice(lineStart, finalEnd);
+              const after = text.slice(finalEnd);
 
-          const lines = selected.split('\n');
+              const lines = selected.split('\n');
 
-          let newLines;
-          if (e.shiftKey) {
-              // UNINDENT
-              newLines = lines.map(line => {
-                  if (line.startsWith(TAB)) return line.slice(TAB.length);
-                  if (line.startsWith('\t')) return line.slice(1);
-                  return line;
-              });
-          } else {
-              // INDENT
-              newLines = lines.map(line => TAB + line);
+              let newLines;
+              if (e.shiftKey) {
+                  // UNINDENT
+                  newLines = lines.map(line => {
+                      if (line.startsWith(TAB)) return line.slice(TAB.length);
+                      if (line.startsWith('\t')) return line.slice(1);
+                      return line;
+                  });
+              } else {
+                  // INDENT
+                  newLines = lines.map(line => TAB + line);
+              }
+
+              const newText = before + newLines.join('\n') + after;
+              editor.textContent = newText;
+
+              // Restore selection
+              const newStart = startOffset + (e.shiftKey ? -TAB.length : TAB.length);
+              const newEnd = endOffset + (e.shiftKey ? -TAB.length * lines.length : TAB.length * lines.length);
+
+              setCaretPosition(editor, newStart, newEnd);
+
+              highlightEditable(editor);
           }
-
-          const newText = before + newLines.join('\n') + after;
-          editor.textContent = newText;
-
-          // Restore selection
-          const newStart = startOffset + (e.shiftKey ? -TAB.length : TAB.length);
-          const newEnd = endOffset + (e.shiftKey ? -TAB.length * lines.length : TAB.length * lines.length);
-
-          setCaretPosition(editor, newStart, newEnd);
-
-          highlightEditable(editor);
-        }
 
         else if (e.key === 'Enter') {
             e.preventDefault();
@@ -373,17 +377,17 @@
       editor.addEventListener("input", () => highlightEditable(editor));
 
       document.getElementById("saveBtn").addEventListener("click", async () => {
-        let themeJson = thone.parse(editor.textContent);
+          let themeJson = thone.parse(editor.textContent);
 
-        let json = await getSettablesAsJson() || {};
-        json.theme = themeJson;
+          let json = await getSettablesAsJson() || {};
+          json.theme = themeJson;
 
-        setSettablesByJson(json);
+          setSettablesByJson(json);
 
-        updateTopLevelTheme();
-        await fixThemeOverSettable("chungus"); // import more theming
-        await fixThemeOverSettable(); // correcting theming
-        await fixThemeOverSettable("prism"); // import prism theming
+          updateTopLevelTheme();
+          await fixThemeOverSettable("chungus"); // import more theming
+          await fixThemeOverSettable(); // correcting theming
+          await fixThemeOverSettable("prism"); // import prism theming
       });
 
       document.addEventListener("contextmenu", (event) => {

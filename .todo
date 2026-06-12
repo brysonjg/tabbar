@@ -14,4 +14,3 @@ Known Issues:
       OpenRouter API key is only configurable by hand-editing chungus/api-key.js (not in settings)
       emptydesk.html is bare when all tabs are closed (no prompt to open Index or a new tab)
       Version history side panel compresses the graph before display so real branch topology is lost
-      UI typos: "Clsoe Tab", "Veiw History", doqumentation.svg, default model labels (Llamma, Misteral)

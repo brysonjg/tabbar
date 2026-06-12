@@ -199,9 +199,9 @@ window.theme_temp =
         "fg-color": "" <color>,
         "man-color": "" <color>,
 
-        "card-1-filt": "" <filter>,
-        "card-2-filt": "" <filter>,
-        "card-3-filt": "" <filter>,
+        "card-1-filter": "" <filter>,
+        "card-2-filter": "" <filter>,
+        "card-3-filter": "" <filter>,
 
         "light-blue-hl": "" <color>,
     },
@@ -242,23 +242,23 @@ window.theme_temp =
     models: {
         "bg-color": "" <color>,
         "fg-color": "" <color>,
-        "table-waght": "" <color>,
+        "table-wight": "" <color>,
 
         "hl-blue-1": "" <color>,
         "hl-blue-2": "" <color>,
 
         "row-filter": "" <filter>,
-        "filt-hover": "" <color>,
-        "filt-raw": "" <color>,
+        "filter-hover": "" <color>,
+        "filter-raw": "" <color>,
 
-        "rm-action-defult": "" <filter>,
+        "rm-action-default": "" <filter>,
         "rm-action-hover": "" <filter>,
         "rm-action-active": "" <filter>,
 
-        "mv-defult": "" <filter>,
+        "mv-default": "" <filter>,
         "mv-filter": "" <filter>,
 
-        "act-defult": "" <filter>,
+        "act-default": "" <filter>,
         "act-active": "" <filter>,
     },
     master: {

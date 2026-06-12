@@ -1,20 +1,20 @@
 function getKeybindingStringOfEvent(event) {
-    let stdstr = "";
+    let keyString = "";
 
-    if (event.ctrlKey) stdstr += "Ctrl ";
-    if (event.shiftKey) stdstr += "Shift ";
-    if (event.altKey) stdstr += "Alt ";
-    if (event.metaKey) stdstr += "Meta ";
-    if (event.key) stdstr += event.key.toLowerCase();
+    if (event.ctrlKey) keyString += "Ctrl ";
+    if (event.shiftKey) keyString += "Shift ";
+    if (event.altKey) keyString += "Alt ";
+    if (event.metaKey) keyString += "Meta ";
+    if (event.key) keyString += event.key.toLowerCase();
 
-    return stdstr;
+    return keyString;
 }
 
 async function registerRunKeyboardShortcutFunction(kbs) {
     const AsyncFunction =
         Object.getPrototypeOf(async function () {}).constructor;
 
-    const asynchronous = (String(kbs.asyncfn) == "true") || false;
+    const asynchronous = Boolean(kbs.asyncfn);
 
     if (asynchronous) {
         const fun = new AsyncFunction(kbs.callback);
