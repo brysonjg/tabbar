@@ -534,23 +534,23 @@ img:not(.user-icon):active {
     filter: var(--icon-active);
 }
 
-img.submit-title-btn:hover, img#action-bar-action:hover {
+img.submit-title-btn:hover, img.action-bar-action:hover {
     filter: var(--action-btn-2) !important;
 }
 
-img.submit-title-btn:active, img#action-bar-action:active {
+img.submit-title-btn:active, img.action-bar-action:active {
     filter: var(--action-btn-3) !important;
 }
 
-img#action-bar-action.active {
+img.action-bar-action.active {
     filter: var(--action-btn-active-1) !important;
 }
 
-img#action-bar-action.active:hover {
+img.action-bar-action.active:hover {
     filter: var(--action-btn-active-2) !important;
 }
 
-img#action-bar-action.active:active {
+img.action-bar-action.active:active {
     filter: var(--action-btn-active-3) !important;
 }
 
@@ -577,7 +577,7 @@ body:has(> div.right-sidepanel) div.action-group-bar.scrollbar {
     right: calc(20px + var(--right-sidepanel-width));
 }
 
-img#action-bar-action {
+img.action-bar-action {
     height: 20px;
     width: 20px;
     user-select: none;
@@ -587,7 +587,7 @@ img#action-bar-action {
     display: block;
 }
 
-div.action-btn-wrapper:has( img#action-bar-action ) {
+div.action-btn-wrapper:has( img.action-bar-action ) {
     width: min-content;
     height: min-content;
     margin-bottom: 2.75px;
@@ -595,7 +595,7 @@ div.action-btn-wrapper:has( img#action-bar-action ) {
     border-radius: 3px;
 }
 
-div.action-btn-wrapper:has( img#action-bar-action.active ) {
+div.action-btn-wrapper:has( img.action-bar-action.active ) {
     background-color: var(--transparent-blue);
     border-color: var(--light-blue-hl);
 }

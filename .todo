@@ -10,7 +10,6 @@ Known Issues:
       When git graph commits on a single row grow too long the lines leading up to them and from them are indistinguishable
       The default models are probably outdated and don't work
       the markdown parser sucks
-      chungus.html has duplicate id="action-bar-action" on rename and history buttons
       OpenRouter API key is only configurable by hand-editing chungus/api-key.js (not in settings)
       emptydesk.html is bare when all tabs are closed (no prompt to open Index or a new tab)
       Version history side panel compresses the graph before display so real branch topology is lost

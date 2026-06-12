@@ -407,7 +407,7 @@ function graphCompressionForSidePanel(repo) {
 }
 
 async function toggleVersioningSidePanel() {
-    let chatHistoryButton = document.querySelector("img#action-bar-action.chat-history-btn");
+    let chatHistoryButton = document.querySelector("img.action-bar-action.chat-history-btn");
     chatHistoryButton.classList.toggle("active");
 
     let hasRightSidePanel = document.querySelector("body > div.right-sidepanel") !== null;
@@ -481,7 +481,7 @@ async function updateVpanel() {
     if (window._updateVpanelA) await window._updateVpanelA();
 }
 
-document.querySelector("img#action-bar-action.chat-history-btn")
+document.querySelector("img.action-bar-action.chat-history-btn")
     .addEventListener("click", toggleVersioningSidePanel);
 
 
