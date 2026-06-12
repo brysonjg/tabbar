@@ -1,5 +1,6 @@
 :root {
     /* Core tokens */
+    --usr-input-offset: 6.5lh;
     --font-size: 16px;
     --bg-color: #2a2e32;
     --fg-color: #d4d4d4;
@@ -118,7 +119,7 @@ body, html {
 .chat-outerer {
     flex: 1 1 auto;
     width: 100vw;
-    height: calc(100% - 7lh);
+    height: calc(100% - var(--usr-input-offset));
     overflow-y: auto;
     box-sizing: border-box;
     padding: 10px;
@@ -132,7 +133,7 @@ body, html {
 }
 
 .chat-outer {
-    height: calc(100% - 7lh);
+    height: calc(100% - var(--usr-input-offset));
     width: calc(100% - 35px);
     max-width: calc(85px + max(1200px, 60vw));
     box-sizing: border-box;
@@ -148,7 +149,7 @@ div.blame-column {
 #chat-container {
     padding: 10px;
     padding-top: 1lh;
-    padding-bottom: 70px;
+    padding-bottom: 1em;
     width: calc(100% - 110px);
     max-width: max(69vw, 1200px);
     margin: 0 auto;
@@ -226,8 +227,9 @@ img.user-icon {
 /* FILE CHIPS */
 
 .message-file-field {
-    height: min-content;
+    height: fit-content;
     width: 100%;
+    flex-wrap: wrap;
     display: flex;
     align-items: left;
     flex-direction: row;
@@ -237,9 +239,10 @@ img.user-icon {
     cursor: default;
     display: flex;
     align-items: center;
-    min-width: fit-content;
+    width: fit-content;
     border-radius: 3px;
     padding: 0 5px;
+    margin-bottom: 3px;
     margin-right: 5px;
     border: 1px solid var(--fg-color);
     -webkit-user-select: none;
@@ -252,18 +255,6 @@ img.user-icon {
 }
 
 /* INPUT ZONE */
-
-@keyframes beforeToAfterForUsrContainer {
-    from {
-        height: 100%;
-        background-color: var(--bg-color);
-    }
-
-    to {
-        height: calc(7.25lh);
-        background-color: transparent;
-    }
-}
 
 @keyframes beforeToAfterForUsrContent {
     from {
@@ -280,12 +271,14 @@ div.usr-input-master-container {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 7.25lh;
+    margin-bottom: 7px;
+    height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     box-sizing: border-box;
+    z-index: 5;
 }
 
 body:has(div.right-sidepanel) div.usr-input-master-container {
@@ -295,14 +288,14 @@ body:has(div.right-sidepanel) div.usr-input-master-container {
 div.usr-input-master-container.before-messages {
     position: absolute;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     background: transparent;
     animation: none;
     transform: translateY(-60px);
 }
 
-div.usr-input-master-container.animation {
-    animation: beforeToAfterForUsrContainer 0.2s ease-out forwards;
+body:has(div.usr-input-master-container.animation) {
+    --usr-input-offset: 0px;
 }
 
 div.usr-input-master-container div.initMessage {
@@ -315,13 +308,13 @@ div.usr-input-master-container div.initMessage {
 div.usr-input-master {
     width: calc(100% - 20px);
     max-width: max(80%, 1300px);
-    max-height: 7.25lh;
-    height: 90%;
+    height: auto;
     background-color: var(--bg-color);
     border-radius: 3px;
     border: 1px solid var(--fg-color);
     display: flex;
     flex-direction: column;
+    overflow: visible;
 }
 
 div.usr-input-master-container.before-messages div.usr-input-master {
@@ -334,10 +327,11 @@ div.usr-input-master.animation {
 }
 
 div.usr-input-topper {
-    height: 1.5lh;
+    height: auto;
+    flex-shrink: 0;
     display: flex;
-    align-items: center;
-    padding: 0;
+    align-items: flex-start;
+    padding-top: 0.2lh;
 }
 
 div.context {
@@ -348,6 +342,7 @@ div.context {
     height: 1lh;
     border-radius: 3px;
     padding: 0 5px;
+    margin-bottom: 3px;
     margin-left: 5px;
     border: 1px solid var(--fg-color);
     -webkit-user-select: none;
@@ -384,25 +379,34 @@ input#hidden-file-input {
 }
 
 div#file-field {
-    height: 100%;
+    height: auto;
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
+    align-content: flex-start;
     padding: 0;
 }
 
+div#add-context {
+    flex-shrink: 0;
+}
+
 div.usr-input-body {
-    flex-grow: 1;
+    flex-shrink: 0;
     display: flex;
-    overflow: none;
-    align-items: center;
+    align-items: stretch;
 }
 
 textarea#text-input {
-    flex-grow: 1;
+    field-sizing: content;
     resize: none;
-    height: 100%;
-    width: calc(100% - 32px);
+    height: auto;
+    min-height: 3.5lh;
+    max-height: 7lh;
+    overflow-y: auto;
+    width: 100%;
+    padding: 0 5px;
     font-size: 16px;
     border: none;
     background-color: var(--bg-color);
@@ -412,7 +416,10 @@ textarea#text-input {
 }
 
 div.usr-input-bottom {
-    height: 1.5lh;
+    height: 1.4lh;
+    max-height: 1.4lh;
+    flex-shrink: 0;
+    overflow: visible;
     display: flex;
     align-items: center;
     padding-right: 10px;
@@ -423,6 +430,7 @@ div.usr-input-left {
     width: 100%;
     display: flex;
     flex-direction: row;
+    overflow: visible;
 }
 
 div.usr-input-right {
@@ -451,6 +459,7 @@ div.menu {
     border: 1px solid var(--fg-color);
     -webkit-user-select: none;
     user-select: none;
+    overflow: visible;
 }
 
 div.menu:hover {
@@ -475,6 +484,7 @@ div.menu:has(> div.dropdown) {
     color: var(--light-blue-hl);
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
+    z-index: 2;
 }
 
 div.menu > div.dropdown {
@@ -482,7 +492,7 @@ div.menu > div.dropdown {
     position: absolute;
     bottom: 100%;
     left: -1px;
-    z-index: 1000;
+    z-index: 1001;
     background-color: var(--bg-color);
     border: 1px solid var(--light-blue-hl);
     min-width: 100px;

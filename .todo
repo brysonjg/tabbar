@@ -9,7 +9,6 @@ Known Issues:
       When tab bars grow to long they go off the page
       When git graph commits on a single row grow too long the lines leading up to them and from them are indistinguishable
       The default models are probably outdated and don't work
-      When attaching files after enough of them they go off screen (chungus)
       the markdown parser sucks
       chungus.html has duplicate id="action-bar-action" on rename and history buttons
       OpenRouter API key is only configurable by hand-editing chungus/api-key.js (not in settings)

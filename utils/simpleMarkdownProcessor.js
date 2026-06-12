@@ -64,7 +64,7 @@ function translateMDtoHTMLDecoupled(md) {
         let safeLang = lang.replace(/[^\w#+-]/g, "");
 
         if (Prism && !(safeLang in Prism.languages)) {
-            safeLang = "none";
+            safeLang = "plaintext";
         }
 
         fencedCodeBlocks.set(

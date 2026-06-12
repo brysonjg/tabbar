@@ -112,7 +112,7 @@ function setBlueDote(type) {
 async function getBlueDote(type) {
     return new Promise((resolve) => {
         function handleBlueDoteMessage(event) {
-            if (event.data && event.data.type === 'fetchTabIDResponse') {
+            if (event.data && event.data.type === 'getBlueDotReturn') {
                 window.removeEventListener('message', handleBlueDoteMessage);
                 resolve(event.data.result);
             }

@@ -4,8 +4,8 @@ const thone = {
 
         str = str
             .replace(/\/\/.*$/gm, "")       // // comments
-            .replace(/\\\*(.*)\*\\/gm, "")  // /* */ comments
-            .replace(/\<(.*)\>/gm, "")  // <...> type tags
+            .replace(/\/\*[\s\S]*?\*\//g, "")  // /* */ comments
+            .replace(/\<(.*?)\>/gm, "")  // <...> type tags
 
         str = str.replace(/,\s*([}\]])/g, "$1");
 

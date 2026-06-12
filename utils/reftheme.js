@@ -135,11 +135,6 @@ async function loadFontForThemingSettables(fontName) {
     }
 }
 
-/** @deprecated Use loadFontForThemingSettables */
-async function loadGoogleFontForThemingSettables(fontName) {
-    return loadFontForThemingSettables(fontName);
-}
-
 const THEME_STORAGE_KEY = "__tabbar_theme_master";
 const THEME_FONT_STORAGE_KEY = "__tabbar_theme_font";
 
@@ -197,7 +192,7 @@ async function fixThemeOverSettable(name = null) {
 
     if (settables && settables.font) {
       const fontName = normalizeFontName(settables.font.font);
-      loadFontForThemingSettables(fontName);
+      await loadFontForThemingSettables(fontName);
       document.documentElement.style.setProperty(
         `--font`,
         fontName
@@ -208,7 +203,39 @@ async function fixThemeOverSettable(name = null) {
   }
 }
 
-// Always get settables from IndexedDB to match the scripts.js / localDB flow.
+
+async function applyThemeAtTopLevel(settables) {
+    const theme = settables?.theme?.master;
+    if (!theme) return;
+
+    for (const key in theme) {
+        document.documentElement.style.setProperty(`--${key.trim()}`, theme[key]);
+    }
+
+    try {
+        localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(theme));
+    } catch (e) {
+        console.warn("theme cache failed", e);
+    }
+}
+
+async function applyFontAtTopLevel(settables) {
+    const fontNameRaw = settables?.font?.font;
+    if (!fontNameRaw) return;
+
+    const fontName = normalizeFontName(fontNameRaw);
+
+    await loadFontForThemingSettables(fontName);
+
+    document.documentElement.style.setProperty(`--font`, fontName);
+
+    try {
+        localStorage.setItem(THEME_FONT_STORAGE_KEY, fontName);
+    } catch (e) {
+        console.warn("font cache failed", e);
+    }
+}
+
 async function fixThemeSchemaAtTopLevel() {
     let settables;
     try {
@@ -219,41 +246,8 @@ async function fixThemeSchemaAtTopLevel() {
         return;
     }
 
-    try {
-        if (!settables || !settables.theme || !settables.theme.master) return;
-
-        const vars = settables.theme.master;
-
-        Object.keys(vars).forEach(themeVar => {
-            document.documentElement.style.setProperty(
-                `--${themeVar.trim()}`,
-                vars[themeVar]
-            );
-        });
-        try {
-            localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(vars));
-        } catch (err) {
-            console.warn("fixThemeSchemaAtTopLevel: Unable to cache theme vars", err);
-        }
-    } catch (e) {
-        console.warn("Top-level theme error:", e);
-    }
-
-    try {
-        if (!settables || !settables.font || !settables.font.font) return;
-        const fontName = normalizeFontName(settables.font.font);
-
-        await loadFontForThemingSettables(fontName);
-
-        document.documentElement.style.setProperty(`--font`, fontName);
-        try {
-            localStorage.setItem(THEME_FONT_STORAGE_KEY, fontName);
-        } catch (err) {
-            console.warn("fixThemeSchemaAtTopLevel: Unable to cache theme font", err);
-        }
-    } catch (e) {
-        console.warn("Top-level font error:", e);
-    }
+    await applyThemeAtTopLevel(settables);
+    await applyFontAtTopLevel(settables);
 
     if (!settables || !settables.theme || !settables.theme.master) {
         try {

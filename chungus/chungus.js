@@ -67,7 +67,8 @@ window.onload = async () => {
         }
     }, 0);
 
-    startBlameSpacerScheduler()
+    startBlameSpacerScheduler();
+    startUsrInputOffsetObserver();
     setTimeout(updateTitleButtonPosition, 200);
     updateTitleButtonPosition();
 };
@@ -82,6 +83,119 @@ function hasVerticalScrollbar(element) {
 }
 
 let blameSpacerRafId = 0;
+let usrInputOffsetRafId = 0;
+
+function isUsrInputContainerAnimating() {
+    return document.querySelector("div.usr-input-master-container.animation") !== null;
+}
+
+const USR_INPUT_POSITION_ANIM_MS = 200;
+
+function animateUsrInputContainerTransition(element) {
+    const master = element.querySelector(".usr-input-master");
+    if (!master) return;
+
+    const firstRect = master.getBoundingClientRect();
+
+    element.classList.remove("before-messages");
+    const initMessage = element.querySelector(".initMessage");
+    if (initMessage) initMessage.remove();
+
+    element.classList.add("animation");
+
+    const lastRect = master.getBoundingClientRect();
+    const deltaY = firstRect.top - lastRect.top;
+
+    master.classList.add("animation");
+
+    const finish = () => {
+        element.style.transform = "";
+        element.style.transition = "";
+        element.classList.remove("animation");
+        master.classList.remove("animation");
+        scheduleUsrInputOffsetUpdate();
+    };
+
+    if (Math.abs(deltaY) < 1) {
+        setTimeout(finish, USR_INPUT_POSITION_ANIM_MS);
+        return;
+    }
+
+    element.style.transform = `translateY(${deltaY}px)`;
+    element.offsetHeight;
+    element.style.transition = `transform ${USR_INPUT_POSITION_ANIM_MS}ms ease-out`;
+
+    const onTransitionEnd = (event) => {
+        if (event.target !== element || event.propertyName !== "transform") return;
+        element.removeEventListener("transitionend", onTransitionEnd);
+        finish();
+    };
+    element.addEventListener("transitionend", onTransitionEnd);
+
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            element.style.transform = "";
+        });
+    });
+
+    setTimeout(() => {
+        if (element.classList.contains("animation")) {
+            element.removeEventListener("transitionend", onTransitionEnd);
+            finish();
+        }
+    }, USR_INPUT_POSITION_ANIM_MS + 50);
+}
+
+function updateUsrInputOffset() {
+    if (isUsrInputContainerAnimating()) return;
+
+    const container = document.querySelector("div.usr-input-master-container");
+    const master = container?.querySelector(".usr-input-master");
+    if (!container || !master) return;
+
+    const offset = container.classList.contains("before-messages")
+        ? "0px"
+        : `${Math.ceil(master.getBoundingClientRect().height + 7)}px`;
+
+    document.documentElement.style.setProperty("--usr-input-offset", offset);
+}
+
+function scheduleUsrInputOffsetUpdate() {
+    if (usrInputOffsetRafId) return;
+    usrInputOffsetRafId = requestAnimationFrame(() => {
+        usrInputOffsetRafId = 0;
+        updateUsrInputOffset();
+        scheduleBlameSpacerUpdate();
+        updateTitleButtonPosition();
+    });
+}
+
+function startUsrInputOffsetObserver() {
+    if (window._usrInputOffsetObserverStarted) return;
+    window._usrInputOffsetObserverStarted = true;
+
+    const container = document.querySelector("div.usr-input-master-container");
+    if (!container) return;
+
+    const resizeObserver = new ResizeObserver(() => scheduleUsrInputOffsetUpdate());
+    resizeObserver.observe(container);
+
+    const master = container.querySelector(".usr-input-master");
+    if (master) resizeObserver.observe(master);
+
+    new MutationObserver(() => scheduleUsrInputOffsetUpdate()).observe(container, {
+        attributes: true,
+        attributeFilter: ["class"],
+    });
+
+    const textarea = document.querySelector("textarea#text-input");
+    if (textarea) {
+        textarea.addEventListener("input", scheduleUsrInputOffsetUpdate);
+    }
+
+    window.addEventListener("resize", scheduleUsrInputOffsetUpdate);
+    scheduleUsrInputOffsetUpdate();
+}
 
 function scheduleBlameSpacerUpdate() {
     if (blameSpacerRafId) return;
@@ -450,20 +564,13 @@ function translateMDtoHTML(md) {
 async function renderMD(md, username = "user", arbs = "", files = {}, doAnimations = true, useIcons=true, iconScript="../icons/default-user.svg") {
     document.querySelectorAll("div.usr-input-master-container.before-messages")
         .forEach((element) => {
-            element.classList.remove("before-messages");
-
             if (doAnimations) {
-                element.classList.add("animation");
-                setTimeout( () => {
-                    element.classList.remove("animation");
-                }, 200);
-                element.querySelector(".usr-input-master").classList.add("animation");
-                setTimeout( () => {
-                    element.querySelector(".usr-input-master").classList.remove("animation");
-                }, 300);
+                animateUsrInputContainerTransition(element);
+            } else {
+                element.classList.remove("before-messages");
+                element.querySelector(".initMessage")?.remove();
+                scheduleUsrInputOffsetUpdate();
             }
-
-            element.removeChild(element.querySelector(".initMessage"));
         });
 
     const container = document.getElementById("chat-container");
@@ -521,7 +628,7 @@ function collectFiles() {
 
     const fileStruct = {};
 
-    fileField.querySelectorAll("div.context").forEach((div) => {
+    fileField.querySelectorAll("div.context.file-chip").forEach((div) => {
         const fileName = div.textContent.trim();
         const fileContent = div.dataset.content || "";
         const fileMimetype = div.dataset.mimetype || "";
@@ -716,6 +823,7 @@ async function handleSubmission() {
                         await updateRules();
 
                         streamEl.scrollIntoView({ behavior: "instant", block: "end" });
+                        chatOuterer.scrollTop = chatOuterer.scrollHeight;
 
                         if (isItWorthCalculatingScrollbar) {
                             if (hasVerticalScrollbar(chatOuterer)) {
@@ -741,7 +849,6 @@ async function handleSubmission() {
         json.chat.commit([{ role: "assistant", content: fullReply, type: null }]);
         let chatData = json.chat.json;
         await setLocalJson({ ...json, chat: chatData });
-        await updateRules();
 
         // determine whether the AI should rename the chat
         let letAIRenameChat = false;
@@ -919,8 +1026,7 @@ document.getElementById("submissionIcon").addEventListener("click", async (event
 });
 
 window.addEventListener("resize", () => {
-    updateTitleButtonPosition();
-    scheduleBlameSpacerUpdate();
+    scheduleUsrInputOffsetUpdate();
 });
 
 let menuToggled = false;
@@ -1051,7 +1157,7 @@ addContextButton?.addEventListener("mousedown", () => {
                     }
 
                     const div = document.createElement("div");
-                    div.classList.add("context");
+                    div.classList.add("context", "file-chip");
                     div.dataset.mimetype = "";
                     div.dataset.content = "";
                     div.dataset.icon = "";
