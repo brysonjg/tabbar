@@ -42,7 +42,7 @@ window.onload = async () => {
             let icon = "../icons/default-user.svg";
 
             if (accountData && message.role === "user") {
-                username = accountData.displayname || accountData.username || "User";
+                username = accountData.displayname || "User";
                 icon = accountData.avatar || "../icons/default-user.svg";
             } else if (message.role === "assistant") {
                 icon = "../icons/ai-default.svg";
@@ -454,7 +454,7 @@ async function toggleVersioningSidePanel() {
                 let icon = "../icons/default-user.svg";
 
                 if (window.account && message.role === "user") {
-                    username = window.account.displayname || window.account.username || "User";
+                    username = window.account.displayname || "User";
                     icon = window.account.avatar || "../icons/default-user.svg";
                 } else if (message.role === "assistant") {
                     icon = "../icons/ai-default.svg";
@@ -678,29 +678,8 @@ async function handleSubmission() {
     // Render user message + file names
     const userMessageID = "user_message_" + Date.now() + Math.random();
 
-    let userName = "User";
-
-    try {
-        userName = window.account.displayname;
-    } catch {
-        try {
-                userName = window.account.username;
-        } catch {
-            userName = "User";
-        }
-    }
-
-    let userIcon = "../icons/default-user.svg";
-
-    try {
-        userIcon = window.account.avatar;
-    } catch {
-        userIcon = "../icons/default-user.svg";
-    }
-
-    if (!userIcon) {
-        userIcon = "../icons/default-user.svg";
-    }
+    const userName = window.account.displayname || "User";
+    const userIcon = window.account.avatar || "../icons/default-user.svg";
 
     await renderMD(message, userName, `usermessage="${userMessageID}"`, fileStruct, true, true, userIcon);
     textArea.value = "";

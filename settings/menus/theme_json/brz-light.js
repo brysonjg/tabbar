@@ -225,6 +225,14 @@ window.theme_brz_light = {
                                 "icon-2": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(50%)",
                                 "icon-3": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(30%)",
                             },
+                            profile: {
+                                "bg-color": "#eff0f1",
+                                "fg-color": "#232629",
+                                "hl-blue": "#3daee9",
+                                "h-color": "#eff0f1",
+                                "h-filter": "brightness(1)",
+                                "h-border": "#232629",
+                            },
                             fontconfig: {
                                 "bg-color": "#eff0f1",
                                 "fg-color": "#232629",
@@ -279,4 +287,4 @@ window.theme_brz_light = {
                                 "action-btn-2": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(50%)",
                                 "action-btn-3": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(30%)",
                             }
-                        }
+                        };

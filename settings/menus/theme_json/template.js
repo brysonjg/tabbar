@@ -226,6 +226,14 @@ window.theme_temp =
         "icon-2": "" <filter>,
         "icon-3": "" <filter>,
     },
+    profile: {
+        "bg-color": "" <color>,
+        "fg-color": "" <color>,
+        "hl-blue": "" <color>,
+        "h-color": "" <color>,
+        "h-filter": "" <filter>,
+        "h-border": "" <color>,
+    },
     fontconfig: {
         "bg-color": "" <color>,
         "fg-color": "" <color>,

@@ -225,6 +225,14 @@ window.theme_brz_dark = {
                                 "icon-2": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4)",
                                 "icon-3": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(2)",
                             },
+                            profile: {
+                                "bg-color": "#2a2e32",
+                                "fg-color": "#d4d4d4",
+                                "hl-blue": "#3daee9",
+                                "h-color": "#161616",
+                                "h-filter": "brightness(1.5)",
+                                "h-border": "#8d8d8d",
+                            },
                             fontconfig: {
                                 "bg-color": "#2a2e32",
                                 "fg-color": "#d4d4d4",

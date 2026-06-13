@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Customization</title>
+    <style>
+
+      :root {
+          --font: 'sourceCodePro';
+          --bg-color: #2a2e32;
+          --fg-color: #d4d4d4;
+          --hl-blue: #3daee9;
+          --h-color: #161616;
+          --h-filter: brightness(1.5);
+          --h-border: #8d8d8d;
+      }
+
+      @font-face {
+          font-family: 'sourceCodePro';
+          src: url('../../font/SourceCodePro.ttf') format('truetype');
+          font-weight: normal;
+          font-style: normal;
+      }
+
+      @font-face {
+          font-family: 'sourceCodePro';
+          src: url('../../font/SourceCodePro-Italic.ttf') format('truetype');
+          font-weight: normal;
+          font-style: italic;
+      }
+
+      html, body {
+          height: 100vh;
+          width: 100vw;
+          padding: 0;
+          margin: 0;
+          background-color: var(--bg-color);
+          color: var(--fg-color);
+          font-family: var(--font);
+          font-size: 16px;
+          overflow: hidden;
+      }
+
+      div.master-container {
+          width: calc(100% - 40px);
+          height: calc(100% - 30px);
+          margin: 15px 20px;
+      }
+
+      div.section-header {
+          font-size: 25px;
+          border-bottom: 1px solid var(--fg-color);
+          margin-bottom: 10px;
+          user-select: none;
+          -webkit-user-select: none;
+      }
+
+      div.section-body {
+          width: 100%;
+          height: fit-content;
+          display: flex;
+          flex-direction: row;
+          gap: 10px;
+      }
+
+      div.user-icon {
+          width: 80px;
+          height: 80px;
+          border: 1px solid var(--fg-color);
+          border-radius: 3px;
+          display: inline-block;
+          user-select: none;
+          -webkit-user-select: none;
+          position: relative;
+      }
+
+      div.user-icon:hover::after {
+          content: "";
+          width: 20px;
+          height: 20px;
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          border-top-left-radius: 3px;
+          border-bottom-right-radius: 3px;
+          background-color: var(--h-color);
+          background-image: url("../../icons/document-edit.svg");
+          filter: var(--h-filter);
+          border-top: 1px solid var(--h-border);
+          border-left: 1px solid var(--h-border);
+      }
+
+      div.user-icon img {
+          height: 79px;
+          width: 79px;
+          user-drag: none;
+          -webkit-user-drag: none;
+      }
+
+      input.username {
+          font-size: 25px;
+          height: 2rem;
+          width: 100%;
+          background-color: var(--bg-color);
+          color: var(--fg-color);
+          font-family: var(--font);
+          border: 1px solid transparent;
+          margin-top: 5px;
+      }
+
+      input.username:focus {
+          outline: none;
+          border: 1px solid var(--hl-blue);
+          border-radius: 3px;
+      }
+
+      input.username::selection {
+          background-color: var(--hl-blue);
+          color: var(--bg-color);
+      }
+
+      input.hidden[type='file'] {
+          display: hidden;
+      }
+
+    </style>
+  </head>
+  <body>
+
+  <div class="master-container">
+    <div class="section-header">
+      Profile Customization
+    </div>
+    <div class="section-body">
+      <div class="user-icon">
+        <img src="../../icons/default-user.svg" />
+      </div>
+      <input class="username" value="User" spellcheck="false" />
+    </div>
+  </div>
+
+  <input type="file" class="hidden" accept="image/*" />
+
+  <script src="../../controlcommands.js"></script>
+  <script src="../../utils/quickyQuery.js"></script>
+  <script src="../../utils/reftheme.js"></script>
+  <script src="../../utils/kbutils.js"></script>
+  <script src="../../utils/doDenyTabScroll.js"></script>
+  <script>
+
+    window.onload = async () => {
+        await fixThemeOverSettable(); // correcting theming
+
+        const settables = await getSettablesAsJson();
+        const avatarImg = settables?.account?.avatar;
+
+        if (avatarImg) {
+            document.querySelector("img").src = avatarImg;
+        }
+
+        const displayname = settables?.account?.displayname;
+
+        if (displayname) {
+            document.querySelector("input.username").value = displayname;
+        }
+    };
+
+    const hiddenFileInput = document.querySelector("input.hidden[type='file']");
+    const userAvatar = document.querySelector("img");
+
+    userAvatar.addEventListener("click", () => {
+        hiddenFileInput.value = ""; // reset so same file can be reselected
+        hiddenFileInput.click();
+    });
+
+    hiddenFileInput.addEventListener("change", async () => {
+        if (!hiddenFileInput.files || hiddenFileInput.files.length === 0) return;
+
+        const file = hiddenFileInput.files[0];
+
+        const dataUrl = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+
+        let settables = await getSettablesAsJson();
+        settables.account ??= {};
+
+        settables.account.avatar = dataUrl;
+        userAvatar.src = dataUrl;
+
+        setSettablesByJson(settables);
+    });
+
+    const username = document.querySelector("input.username");
+
+    username.addEventListener("change", async () => {
+        let settables = await getSettablesAsJson();
+        settables.account ??= {};
+
+        settables.account.displayname = username.value;
+
+        setSettablesByJson(settables);
+    });
+
+    username.addEventListener("focus", () => {
+        username.select();
+        username.initialValue = username.value;
+    });
+
+    username.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            username.blur()
+        }
+        else if (event.key === "Escape") {
+            username.value = username.initialValue;
+            username.blur()
+        }
+    });
+
+  </script>
+  </body>
+</html>
