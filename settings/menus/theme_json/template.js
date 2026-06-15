@@ -250,24 +250,24 @@ window.theme_temp =
     models: {
         "bg-color": "" <color>,
         "fg-color": "" <color>,
-        "table-wight": "" <color>,
+
+        "table-container-bg": "" <color>,
+        "table-header-bg": "" <color>,
+        "table-row-odd-bg": "" <color>,
+        "table-row-even-bg": "" <color>,
+
+        "location-selection": "" <color>,
 
         "hl-blue-1": "" <color>,
         "hl-blue-2": "" <color>,
+        "hl-blue-3": "" <color>,
+        "hl-blue-4": "" <color>,
 
-        "row-filter": "" <filter>,
-        "filter-hover": "" <color>,
-        "filter-raw": "" <color>,
+        "tr-img-filer-na": "" <filter>,
 
-        "rm-action-default": "" <filter>,
-        "rm-action-hover": "" <filter>,
-        "rm-action-active": "" <filter>,
-
-        "mv-default": "" <filter>,
-        "mv-filter": "" <filter>,
-
-        "act-default": "" <filter>,
-        "act-active": "" <filter>,
+        "newmodel-img-filter-1": "" <filter>,
+        "newmodel-img-filter-2": "" <filter>,
+        "newmodel-img-filter-3": "" <filter>,
     },
     master: {
         "bg-color": "" <color>,

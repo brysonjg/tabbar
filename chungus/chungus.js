@@ -454,7 +454,7 @@ async function toggleVersioningSidePanel() {
                 let icon = "../icons/default-user.svg";
 
                 if (window.account && message.role === "user") {
-                    username = window.account.displayname || "User";
+                    username = window?.account?.displayname || "User";
                     icon = window.account.avatar || "../icons/default-user.svg";
                 } else if (message.role === "assistant") {
                     icon = "../icons/ai-default.svg";
@@ -647,7 +647,7 @@ function collectFiles() {
     return fileStruct;
 }
 
-let submissionModel = "arcee-ai/trinity-large-preview:free"; // default fallback
+let submissionModel = "openai/gpt-oss-120b:free"; // default fallback
 
 (async () => {
     try {
@@ -678,8 +678,8 @@ async function handleSubmission() {
     // Render user message + file names
     const userMessageID = "user_message_" + Date.now() + Math.random();
 
-    const userName = window.account.displayname || "User";
-    const userIcon = window.account.avatar || "../icons/default-user.svg";
+    const userName = window?.account?.displayname || "User";
+    const userIcon = window?.account?.avatar || "../icons/default-user.svg";
 
     await renderMD(message, userName, `usermessage="${userMessageID}"`, fileStruct, true, true, userIcon);
     textArea.value = "";

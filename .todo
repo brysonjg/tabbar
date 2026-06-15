@@ -8,7 +8,6 @@ Known Issues:
       There are no software checks to make shore there are not any bugs
       When tab bars grow to long they go off the page
       When git graph commits on a single row grow too long the lines leading up to them and from them are indistinguishable
-      The default models are probably outdated and don't work
       the markdown parser sucks
       OpenRouter API key is only configurable by hand-editing chungus/api-key.js (not in settings)
       emptydesk.html is bare when all tabs are closed (no prompt to open Index or a new tab)

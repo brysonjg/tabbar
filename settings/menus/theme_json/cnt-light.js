@@ -249,24 +249,24 @@ window.theme_cnt_light = {
                             models: {
                                 "bg-color": "#ffffff",
                                 "fg-color": "#000000",
-                                "table-wight": "#d3e0ed",
 
-                                "hl-blue-1": "#007bff",
-                                "hl-blue-2": "#bfdeff",
+                                "table-container-bg": "#ffffff",
+                                "table-header-bg": "#dcdcdc",
+                                "table-row-odd-bg": "#f3f3f3",
+                                "table-row-even-bg": "#ffffff",
 
-                                "row-filter": "brightness(0)",
-                                "filter-hover": "#0003",
-                                "filter-raw": "#0005",
+                                "location-selection": "#3daee9",
 
-                                "rm-action-default": "brightness(0)",
-                                "rm-action-hover": "brightness(0) saturate(100%) invert(14%) sepia(83%) saturate(2200%) hue-rotate(330deg) brightness(150%) contrast(124%)",
-                                "rm-action-active": "brightness(0) saturate(100%) invert(14%) sepia(83%) saturate(2200%) hue-rotate(330deg) brightness(200%) contrast(124%)",
+                                "hl-blue-1": "#3daee9",
+                                "hl-blue-2": "#3daee922",
+                                "hl-blue-3": "#2eb7ff",
+                                "hl-blue-4": "#2eb7ff40",
 
-                                "mv-default": "brightness(0)",
-                                "mv-filter": "invert(62%) sepia(92%) saturate(1934%) hue-rotate(171deg) brightness(99%) contrast(84%)",
+                                "tr-img-filer-na": "brightness(100) grayscale(1) brightness(20%)",
 
-                                "act-default": "brightness(0)",
-                                "act-active": "invert(60%) sepia(70%) saturate(358%) hue-rotate(97deg) brightness(94%) contrast(88%)",
+                                "newmodel-img-filter-1": "brightness(0)",
+                                "newmodel-img-filter-2": "brightness(0) saturate(100%) invert(53%) sepia(80%) saturate(1074%) hue-rotate(175deg) brightness(103%) contrast(104%)",
+                                "newmodel-img-filter-3": "brightness(100)",
                             },
                             master: {
                                 "bg-color": "#ffffff",
