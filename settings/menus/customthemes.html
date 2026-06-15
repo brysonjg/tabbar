@@ -308,12 +308,13 @@
 
               const lines = selected.split('\n');
 
+              const shouldFirstLineShort = lines[0].startsWith(TAB);
+
               let newLines;
               if (e.shiftKey) {
                   // UNINDENT
                   newLines = lines.map(line => {
                       if (line.startsWith(TAB)) return line.slice(TAB.length);
-                      if (line.startsWith('\t')) return line.slice(1);
                       return line;
                   });
               } else {
@@ -322,14 +323,21 @@
               }
 
               const newText = before + newLines.join('\n') + after;
+              const oldText = editor.textContent;
               editor.textContent = newText;
 
               // Restore selection
-              const newStart = startOffset + (e.shiftKey ? -TAB.length : TAB.length);
-              const newEnd = endOffset + (e.shiftKey ? -TAB.length * lines.length : TAB.length * lines.length);
+              let linesModified = 0;
+              const oldLLines = oldText.split("\n");
+              const newLLines = newText.split("\n");
+              for (i = 0; i in newLLines; i++) {
+                  if (oldLLines[i] !== newLLines[i]) linesModified++;
+              }
+
+              const newStart = startOffset + (e.shiftKey ? (shouldFirstLineShort ? -TAB.length : 0) : TAB.length);
+              const newEnd = endOffset + (e.shiftKey ? -TAB.length * linesModified : TAB.length * linesModified);
 
               setCaretPosition(editor, newStart, newEnd);
-
               highlightEditable(editor);
           }
 
