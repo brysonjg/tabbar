@@ -55,6 +55,8 @@
           font-size: 16px;
           user-select: none;
           -webkit-user-select: none;
+          overflow-x: hidden;
+          position: relative;
       }
 
       div.master-container {
@@ -72,7 +74,7 @@
 
       div.container-body {
           width: 100%;
-          height: 100%;
+          height: fit-content;
       }
 
       div.table-container {
@@ -134,6 +136,10 @@
           -webkit-user-select: none;
       }
 
+      img[type="moveHandle"] {
+          cursor: grab;
+      }
+
       tr:not(:hover) img {
           opacity: 0;
       }
@@ -193,6 +199,45 @@
           filter: var(--newmodel-img-filter-3);
       }
 
+      tr.placeholder td {
+          border: none;
+          color: transparent;
+      }
+
+      tr.placeholder td img {
+          display: none;
+      }
+
+      body.is-dragging {
+          cursor: grabbing;
+      }
+
+      div.draggingRow {
+          position: fixed;
+          z-index: 9999;
+          pointer-events: none;
+          overflow: hidden;
+          background-color: var(--bg-color);
+          border-left: 1px solid var(--fg-color);
+          border-bottom: 1px solid var(--fg-color);
+          border-right: 1px solid var(--fg-color);
+      }
+
+      div.draggingRow table {
+          width: 100%;
+          border-collapse: collapse;
+          table-layout: fixed;
+      }
+
+      div.draggingRow img {
+          opacity: 1 !important;
+          filter: none !important;
+      }
+
+      body.is-dragging img:not(.active):not(.newRow img) {
+          opacity: 0;
+      }
+
     </style>
   </head>
   <body>
@@ -228,16 +273,13 @@
           await readInTable();
 
           document.querySelector("div.newRow").addEventListener("click", async () => {
-              await saveModels();
-
-              let modelJSON = await getModelJSON();
+              let modelJSON = getModelJson();
               modelJSON.models.push({
                   userspace_name: "New Model",
                   api_name: "provider/model-name",
               });
 
-              readInTableAsJSON(modelJSON);
-
+              await readInTableAsJSON(modelJSON);
               await saveModels();
           });
       };
@@ -245,7 +287,7 @@
       async function readInTable() {
           const modelJSON = await getModelJSON();
 
-          readInTableAsJSON(modelJSON);
+          await readInTableAsJSON(modelJSON);
       }
 
       async function getModelJSON() {
@@ -266,7 +308,7 @@
           return settables.models;
       }
 
-      function readInTableAsJSON(modelJSON) {
+      async function readInTableAsJSON(modelJSON) {
           const tbody = document.querySelector("tbody");
 
           tbody.innerHTML = "";
@@ -293,7 +335,7 @@
                   element.dataset.oldValue = element.textContent;
               });
 
-              element.addEventListener("keydown", (event) => {
+              element.addEventListener("keydown", async (event) => {
                   if (event.key === "Escape") {
                       event.preventDefault();
                       element.textContent = element.dataset.oldValue;
@@ -303,6 +345,8 @@
                       event.preventDefault();
                       element.blur();
                   }
+
+                  await saveModels()
               });
 
               element.addEventListener("blur", saveModels);
@@ -319,11 +363,14 @@
 
                   row.remove();
 
-                  if (!wasActive) return;
+                  if (wasActive) {
+                      const rowsAfter = Array.from(tbody.querySelectorAll("tr"));
+                      const newIndex = Math.min(rowIndex, rowsAfter.length - 1);
 
-                  const rowsAfter = Array.from(tbody.querySelectorAll("tr"));
-                  const newIndex = Math.min(rowIndex, rowsAfter.length - 1);
-                  rowsAfter[newIndex].querySelector("img[type='activate']").classList.add("active");
+                      rowsAfter[newIndex]
+                          .querySelector("img[type='activate']")
+                          .classList.add("active");
+                  }
 
                   await saveModels();
               });
@@ -341,10 +388,140 @@
           });
 
           document.querySelectorAll("img[type='moveHandle']").forEach((element) => {
-              element.addEventListener("click", () => {
-                  // TODO: drag and drop for the table rows to change their order
-              });
+              element.addEventListener("mousedown", startRowDrag);
+              element.addEventListener("dragstart", (event) => event.preventDefault());
           });
+      }
+
+      let dragState = null;
+      let dragCommitPending = false;
+
+      function startRowDrag(event) {
+          if (event.button !== 0 || dragState || dragCommitPending) return;
+
+          event.preventDefault();
+          event.stopPropagation();
+
+          const handle = event.currentTarget;
+          const row = handle.closest("tr");
+          const tbody = row.closest("tbody");
+          const table = row.closest("table");
+          const rowRect = row.getBoundingClientRect();
+          const tableRect = table.getBoundingClientRect();
+          const cellWidths = Array.from(row.children).map((cell) => cell.getBoundingClientRect().width);
+
+          const draggingRow = document.createElement("div");
+          draggingRow.className = "draggingRow";
+          draggingRow.style.left = `${tableRect.left - 1}px`; // account for the tables
+          draggingRow.style.top = `${rowRect.top}px`;
+          draggingRow.style.width = `${tableRect.width}px`;
+          draggingRow.style.height = `${rowRect.height}px`;
+
+          const dragTable = document.createElement("table");
+          const dragTbody = document.createElement("tbody");
+          const cloneRow = row.cloneNode(true);
+          cloneRow.classList.remove("placeholder");
+
+          Array.from(cloneRow.children).forEach((cell, index) => {
+              const sourceCell = row.children[index];
+              const sourceStyle = getComputedStyle(sourceCell);
+
+              cell.style.width = `${cellWidths[index]}px`;
+              cell.style.boxSizing = "border-box";
+          });
+
+          dragTbody.appendChild(cloneRow);
+          dragTable.appendChild(dragTbody);
+          draggingRow.appendChild(dragTable);
+          document.body.appendChild(draggingRow);
+
+          row.classList.add("placeholder");
+          document.body.classList.add("is-dragging");
+
+          dragState = {
+              row,
+              tbody,
+              draggingRow,
+              offsetY: event.clientY - rowRect.top,
+          };
+
+          document.addEventListener("mousemove", onRowDragMove);
+          document.addEventListener("mouseup", onRowDragEnd, { once: true });
+
+          onRowDragMove(event);
+      }
+
+      function onRowDragMove(event) {
+          if (!dragState) return;
+
+          dragState.draggingRow.style.top = `${event.clientY - dragState.offsetY}px`;
+
+          placePlaceholderForY(event.clientY);
+      }
+
+      function onRowDragEnd() {
+          if (!dragState) return;
+
+          const { row, draggingRow } = dragState;
+
+          document.removeEventListener("mousemove", onRowDragMove);
+          draggingRow.remove();
+          row.classList.remove("placeholder");
+          document.body.classList.remove("is-dragging");
+          dragState = null;
+          dragCommitPending = true;
+
+          void (async () => {
+              try {
+                  await saveModels();
+                  await readInTable();
+              }
+              catch (error) {
+                  console.error(error);
+              }
+              finally {
+                  dragCommitPending = false;
+              }
+          })();
+      }
+
+      function placePlaceholderForY(clientY) {
+          if (!dragState) return null;
+
+          const tbody = dragState.tbody;
+          const rows = Array.from(tbody.querySelectorAll("tr"));
+
+          if (rows.length === 0) return;
+
+          const firstRowRect = rows[0].getBoundingClientRect();
+          const lastRowRect = rows[rows.length - 1].getBoundingClientRect();
+
+          if (clientY <= firstRowRect.top) {
+              if (dragState.row !== rows[0]) tbody.insertBefore(dragState.row, rows[0]);
+              return;
+          }
+
+          if (clientY >= lastRowRect.bottom) {
+              if (dragState.row !== rows[rows.length - 1]) tbody.appendChild(dragState.row);
+              return;
+          }
+
+          while (true) {
+              const rect = dragState.row.getBoundingClientRect();
+
+              if (clientY >= rect.top && clientY <= rect.bottom) return;
+
+              if (clientY < rect.top) {
+                  const prevRow = dragState.row.previousElementSibling;
+                  if (!prevRow) return;
+                  tbody.insertBefore(dragState.row, prevRow);
+                  continue;
+              }
+
+              const nextRow = dragState.row.nextElementSibling;
+              if (!nextRow) return;
+              tbody.insertBefore(nextRow, dragState.row);
+          }
       }
 
       function getActiveIndex() {
@@ -357,11 +534,11 @@
           return rows.indexOf(activeRow);
       }
 
-      async function saveModels() {
+      function getModelJson() {
           const tbody = document.querySelector("tbody");
           const rows = Array.from(tbody.querySelectorAll("tr"));
 
-          const modelsData = {
+          let modelsData = {
               activeIndex: getActiveIndex(),
               models: [],
           };
@@ -375,10 +552,12 @@
               });
           });
 
+          return modelsData;
+      }
+
+      async function saveModels() {
           const settables = await getSettablesAsJson();
-
-          settables.models = modelsData;
-
+          settables.models = getModelJson();
           await setSettablesByJson(settables);
       }
 
