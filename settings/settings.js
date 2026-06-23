@@ -36,12 +36,6 @@ window.addEventListener("message", (event) => {
         }
         return;
     }
-
-    if (event.source === iframe.contentWindow) return;
-
-    if (iframe.contentWindow) {
-        iframe.contentWindow.postMessage(event.data, "*");
-    }
 });
 
 async function saveMenuState() {

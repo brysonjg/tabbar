@@ -8,12 +8,12 @@ async function getTabID() {
         }
 
         window.addEventListener('message', handleTabIDMessage);
-        window.parent.postMessage({ type: 'fetchTabID' }, '*');
+        window.top.postMessage({ type: 'fetchTabID' }, '*');
     });
 }
 
 function closeSelf() {
-    window.parent.postMessage({ type: 'exitCurrent' }, '*');
+    window.top.postMessage({ type: 'exitCurrent' }, '*');
 }
 
 function makeNewTabWithID(tabID) {
@@ -21,7 +21,7 @@ function makeNewTabWithID(tabID) {
     // so that on the off chance that the ai learns how to
     // script inject it wont open 30 quintilian tabs
 
-    window.parent.postMessage({ type: 'openTabWithID', tabID: tabID }, '*');
+    window.top.postMessage({ type: 'openTabWithID', tabID: tabID }, '*');
 }
 
 async function getGlobalNameQuery() {
@@ -35,7 +35,7 @@ async function getGlobalNameQuery() {
         };
 
         window.addEventListener("message", handleGlobalNameQueryMessage);
-        window.parent.postMessage({ type: "getGlobalNameQuery" }, "*");
+        window.top.postMessage({ type: "getGlobalNameQuery" }, "*");
     });
 }
 
@@ -49,33 +49,33 @@ async function getLocalJson() {
         }
 
         window.addEventListener('message', handleLocalJSONMessage);
-        window.parent.postMessage({ type: 'getLJson' }, '*');
+        window.top.postMessage({ type: 'getLJson' }, '*');
     });
 }
 
 function setLocalJson(json) {
-    window.parent.postMessage({ type: 'setLJson', json: json }, '*');
+    window.top.postMessage({ type: 'setLJson', json: json }, '*');
 }
 
 function setTabTitle(title) {
-    window.parent.postMessage({ type: 'setTitle', title: title }, '*');
+    window.top.postMessage({ type: 'setTitle', title: title }, '*');
 }
 
 function purgeTabMemory(tabid) {
     // privileged function reserved for tab id 0
 
-    window.parent.postMessage({ type: 'purge', tabid: tabid }, '*');
+    window.top.postMessage({ type: 'purge', tabid: tabid }, '*');
 }
 
 function chTitleOfTab(tabid, title) {
     // privileged function reserved for tab id 0
 
-    window.parent.postMessage({ type: 'changeTitle', tabid: tabid, title: title}, '*');
+    window.top.postMessage({ type: 'changeTitle', tabid: tabid, title: title}, '*');
 }
 
 function setSettablesByJson(json) {
     // reserved to tab of id 7
-    window.parent.postMessage({ type: 'setSETTABLES', json: json }, '*');
+    window.top.postMessage({ type: 'setSETTABLES', json: json }, '*');
 }
 
 async function getSettablesAsJson() {
@@ -88,7 +88,7 @@ async function getSettablesAsJson() {
         };
 
         window.addEventListener("message", handler);
-        window.parent.postMessage({ type: "getSETTABLES" }, "*");
+        window.top.postMessage({ type: "getSETTABLES" }, "*");
 
         setTimeout(() => {
             window.removeEventListener("message", handler);
@@ -98,15 +98,16 @@ async function getSettablesAsJson() {
 }
 
 function updateTopLevelTheme() {
+    window.top.postMessage({ type: 'updateTheme' }, '*');
     window.parent.postMessage({ type: 'updateTheme' }, '*');
 }
 
 function toggleBlueDote() {
-    window.parent.postMessage({ type: 'toggleActiveDot' }, '*');
+    window.top.postMessage({ type: 'toggleActiveDot' }, '*');
 }
 
 function setBlueDote(type) {
-    window.parent.postMessage({ type: 'setActiveDot', do: String(type) }, '*');
+    window.top.postMessage({ type: 'setActiveDot', do: String(type) }, '*');
 }
 
 async function getBlueDote(type) {
@@ -119,6 +120,6 @@ async function getBlueDote(type) {
         }
 
         window.addEventListener('message', handleBlueDoteMessage);
-        window.parent.postMessage({ type: 'getActiveDot' }, '*');
+        window.top.postMessage({ type: 'getActiveDot' }, '*');
     });
 }

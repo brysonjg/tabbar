@@ -1,14 +1,12 @@
 TODO:
       add more good themes
-      fix the user interface for keybindings
+      fix the user interface for keybindings editing
       add good documentation (that is not a placeholder)
 
 Known Issues:
-      In chungus, error handling sucks tremendously
-      There are no software checks to make shore there are not any bugs
       When tab bars grow to long they go off the page
-      When git graph commits on a single row grow too long the lines leading up to them and from them are indistinguishable
+      The git graph needs to work better
       the markdown parser sucks
-      OpenRouter API key is only configurable by hand-editing chungus/api-key.js (not in settings)
-      emptydesk.html is bare when all tabs are closed (no prompt to open Index or a new tab)
-      Version history side panel compresses the graph before display so real branch topology is lost
+      The empty tab is bare of anything other than the application name
+      fix the lack of spesific theming for settings (--border is not in any themes)
+      font settings dose not have the same blue as every other theme in contrast light

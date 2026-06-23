@@ -23,7 +23,7 @@
           let json = await getSettablesAsJson();
 
           try {
-              json.kbshortcuts = JSON.parse(txa.value);
+              json.keybindings = JSON.parse(txa.value);
           } catch {
               return;
           }

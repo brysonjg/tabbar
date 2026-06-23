@@ -36,7 +36,6 @@ body, html {
     color: var(--fg-color);
     font-size: var(--menu-font-size);
     font-family: var(--font);
-    line-height: 1.45;
     max-height: 100vh;
     height: 100%;
     width: 100vw;

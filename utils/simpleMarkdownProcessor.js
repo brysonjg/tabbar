@@ -36,7 +36,7 @@ function translateMDtoHTMLDecoupled(md) {
             const url = new URL(value, window.location.href);
             const protocol = url.protocol.toLowerCase();
 
-            if (["http:", "https:", "mailto:", "tel:"].includes(protocol)) {
+            if (["http:", "https:", "mailto:", "tel:", "data:"].includes(protocol)) {
                 return url.href;
             }
         } catch (e) {
