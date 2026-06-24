@@ -192,7 +192,17 @@ window.theme_cnt_dark = {
                             settings: {
                                 "bg-color": "#111214",
                                 "fg-color": "#f0f0f0",
-                                "menu-hover": "#00baff33"
+                                "menu-hover": "#004e7a99",
+                                "menu-border": "#00baff",
+                                "border-color": "#444",
+
+                                "grey-40": "#585b5e40",
+                                "grey-50": "#585b5e50",
+                                "grey-80": "#585b5e80",
+                                "grey-90": "#585b5e90",
+                                "grey-99": "#585b5e99",
+                                "grey-ff": "#585b5eff",
+                                "grey-solid": "#585b5e",
                             },
                             themesettings: {
                                 "fg-color": "#f0f0f0",
@@ -228,7 +238,7 @@ window.theme_cnt_dark = {
                             profile: {
                                 "bg-color": "#111214",
                                 "fg-color": "#f0f0f0",
-                                "hl-blue": "#3daee9",
+                                "hl-blue": "#00baff",
                                 "h-color": "#111214",
                                 "h-filter": "brightness(1)",
                                 "h-border": "#f0f0f0",
@@ -237,10 +247,10 @@ window.theme_cnt_dark = {
                                 "bg-color": "#111214",
                                 "fg-color": "#f0f0f0",
 
-                                "hl-blue-1": "#3daee9",
-                                "hl-blue-2": "#3daee922",
-                                "hl-blue-3": "#2eb7ff",
-                                "hl-blue-4": "#2eb7ff40",
+                                "hl-blue-1": "#00baff",
+                                "hl-blue-2": "#004e7a99",
+                                "hl-blue-3": "#00baff",
+                                "hl-blue-4": "#004e7a",
 
                                 "icon-1": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%)",
                                 "icon-2": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4)",
@@ -257,10 +267,10 @@ window.theme_cnt_dark = {
 
                                 "location-selection": "#3daee9",
 
-                                "hl-blue-1": "#3daee9",
-                                "hl-blue-2": "#3daee922",
-                                "hl-blue-3": "#2eb7ff",
-                                "hl-blue-4": "#2eb7ff40",
+                                "hl-blue-1": "#00baff",
+                                "hl-blue-2": "#004e7a99",
+                                "hl-blue-3": "#00baff",
+                                "hl-blue-4": "#004e7a",
 
                                 "tr-img-filer-na": "brightness(100) grayscale(1) brightness(80%)",
 

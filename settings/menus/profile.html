@@ -165,9 +165,10 @@
     };
 
     const hiddenFileInput = document.querySelector("input.hidden[type='file']");
+    const userAvatarDiv = document.querySelector("div.user-icon");
     const userAvatar = document.querySelector("img");
 
-    userAvatar.addEventListener("click", () => {
+    userAvatarDiv.addEventListener("click", () => {
         hiddenFileInput.value = ""; // reset so same file can be reselected
         hiddenFileInput.click();
     });

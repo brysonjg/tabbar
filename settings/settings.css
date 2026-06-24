@@ -130,3 +130,7 @@ iframe.menu-iframe {
     user-select: none;
     -webkit-user-select: none;
 }
+
+hr {
+    color: var(--fg-color);
+}

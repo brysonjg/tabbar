@@ -192,7 +192,17 @@ window.theme_brz_dark = {
                             settings: {
                                 "bg-color": "#2a2e32",
                                 "fg-color": "#d4d4d4",
-                                "menu-hover": "#1f485e",
+                                "menu-hover": "#24567a99",
+                                "menu-border": "#3daee9",
+                                "border-color": "#64686b",
+
+                                "grey-40": "#585b5e40",
+                                "grey-50": "#585b5e50",
+                                "grey-80": "#585b5e80",
+                                "grey-90": "#585b5e90",
+                                "grey-99": "#585b5e99",
+                                "grey-ff": "#585b5eff",
+                                "grey-solid": "#585b5e",
                             },
                             themesettings: {
                                 "fg-color": "#d4d4d4",
@@ -228,7 +238,7 @@ window.theme_brz_dark = {
                             profile: {
                                 "bg-color": "#2a2e32",
                                 "fg-color": "#d4d4d4",
-                                "hl-blue": "#3daee9",
+                                "hl-blue": "#2eb7ff",
                                 "h-color": "#161616",
                                 "h-filter": "brightness(1.5)",
                                 "h-border": "#8d8d8d",
@@ -238,9 +248,9 @@ window.theme_brz_dark = {
                                 "fg-color": "#d4d4d4",
 
                                 "hl-blue-1": "#3daee9",
-                                "hl-blue-2": "#3daee922",
+                                "hl-blue-2": "#24567a99",
                                 "hl-blue-3": "#2eb7ff",
-                                "hl-blue-4": "#2eb7ff40",
+                                "hl-blue-4": "#24567a",
 
                                 "icon-1": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%)",
                                 "icon-2": "brightness(1000) saturate(6.5%) hue-rotate(206deg) brightness(42%) brightness(1.4)",
@@ -258,9 +268,9 @@ window.theme_brz_dark = {
                                 "location-selection": "#3daee9",
 
                                 "hl-blue-1": "#3daee9",
-                                "hl-blue-2": "#3daee922",
+                                "hl-blue-2": "#24567a99",
                                 "hl-blue-3": "#2eb7ff",
-                                "hl-blue-4": "#2eb7ff40",
+                                "hl-blue-4": "#24567a",
 
                                 "tr-img-filer-na": "brightness(100) grayscale(1) brightness(75%)",
 

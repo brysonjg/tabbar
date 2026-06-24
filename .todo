@@ -8,5 +8,3 @@ Known Issues:
       The git graph needs to work better
       the markdown parser sucks
       The empty tab is bare of anything other than the application name
-      fix the lack of spesific theming for settings (--border is not in any themes)
-      font settings dose not have the same blue as every other theme in contrast light

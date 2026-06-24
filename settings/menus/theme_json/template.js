@@ -194,6 +194,16 @@ window.theme_temp =
         "bg-color": "" <color>,
         "fg-color": "" <color>,
         "menu-hover": "" <color>,
+        "menu-border": "" <color>,
+        "border-color": "" <color>,
+
+        "grey-40": "" <color>,
+        "grey-50": "" <color>,
+        "grey-80": "" <color>,
+        "grey-90": "" <color>,
+        "grey-99": "" <color>,
+        "grey-ff": "" <color>,
+        "grey-solid": "" <color>,
     },
     themesettings: {
         "fg-color": "" <color>,
