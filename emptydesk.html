@@ -58,13 +58,12 @@
     <b>Chat Index</b>
 
     <script src="./controlcommands.js"></script>
-    <script src="./utils/quickyQuery.js"></script>
     <script src="./utils/reftheme.js"></script>
     <script src="./utils/kbutils.js"></script>
     <script>
 
       document.addEventListener('DOMContentLoaded', async () => {
-          await fixThemeOverSettable("chungus");
+          await fixThemeOverSettable();
 
           // Get the root element
           const rootElement = document.documentElement;
@@ -92,6 +91,9 @@
           `
       });
 
+      document.addEventListener('dblclick', () => {
+          window.top.postMessage({type: "newTabEvent"}, "*");
+      });
     </script>
   </body>
 </html>

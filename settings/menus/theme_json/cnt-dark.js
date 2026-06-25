@@ -14,7 +14,6 @@ window.theme_cnt_dark = {
                                 "bg-color": "#111214",
                                 "fg-color": "#f0f0f0",
                                 "hard-outline-color": "#444",
-                                "asset-accent-color": "#333",
                                 "dark-blue-hl": "#004e7a",
                                 "light-blue-hl": "#00baff",
                                 "transparent-blue": "#00baff38",
@@ -69,6 +68,11 @@ window.theme_cnt_dark = {
                                 "table-row-odd-bg": "#16171a",
                                 "table-row-even-bg": "#111214",
                                 "table-header-fg": "#f8f8f8"
+                            },
+                            emptydesk: {
+                                "bg-color": "#111214",
+                                "fg-color": "#f0f0f0",
+                                "asset-accent-color": "#333",
                             },
                             prism: {
                                 "prism-block-bg": "#181a1f",

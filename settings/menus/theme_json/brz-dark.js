@@ -70,6 +70,11 @@ window.theme_brz_dark = {
                                 "table-row-even-bg": "#2a2e32",
                                 "table-header-fg": "#ffffff",
                             },
+                            emptydesk: {
+                                "bg-color": "#2a2e32",
+                                "fg-color": "#d4d4d4",
+                                "asset-accent-color": "#64686b",
+                            },
                             prism: {
                                 "prism-block-bg": "#31353990",
                                 "prism-inline-bg": "#31353990",

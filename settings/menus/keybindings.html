@@ -3,33 +3,219 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keyboard Settings</title> 
-  </head> 
+    <title>Keyboard Settings</title>
+
+    <style>
+
+      :root {
+          --font: 'sourceCodePro';
+          --bg-color: #2a2e32;
+          --fg-color: #d4d4d4;
+
+          --table-container-bg: #2a2e32;
+          --table-header-bg: #585b5e90;
+          --table-row-odd-bg: #2a2e32;
+          --table-row-even-bg: #585b5e40;
+
+          --hl-blue-1: #3daee9;
+          --hl-blue-2: #24567a99;
+          --hl-blue-3: #2eb7ff;
+
+          --grey-40: #585b5e40;
+          --grey-50: #585b5e50;
+          --grey-80: #585b5e80;
+          --grey-90: #585b5e90;
+          --grey-99: #585b5e99;
+          --grey-ff: #585b5eff;
+          --grey-solid: #585b5e;
+      }
+
+      @font-face {
+          font-family: 'sourceCodePro';
+          src: url('../../font/SourceCodePro.ttf') format('truetype');
+          font-weight: normal;
+          font-style: normal;
+      }
+
+      @font-face {
+          font-family: 'sourceCodePro';
+          src: url('../../font/SourceCodePro-Italic.ttf') format('truetype');
+          font-weight: normal;
+          font-style: italic;
+      }
+
+      html, body {
+          height: 100vh;
+          width: 100vw;
+          padding: 0;
+          margin: 0;
+          background-color: var(--bg-color);
+          color: var(--fg-color);
+          font-family: var(--font);
+          font-size: 16px;
+          user-select: none;
+          -webkit-user-select: none;
+          overflow-x: hidden;
+      }
+
+      div.master-container {
+          box-sizing: border-box;
+          width: 100%;
+          height: 100%;
+          padding: 15px 20px;
+      }
+
+      div.container-header {
+          width: 100%;
+          font-size: 25px;
+          border-bottom: 1px solid var(--fg-color);
+          margin-bottom: 10px;
+      }
+
+      div.container-body {
+          box-sizing: border-box;
+          width: 100%;
+          height: calc(100% - 40px);
+          display: flex;
+          flex-direction: column;
+      }
+
+      textarea#txa {
+          box-sizing: border-box;
+          background-color: var(--bg-color);
+          color: var(--fg-color);
+          width: 100%;
+          height: 100%;
+          resize: none;
+          font-family: var(--font);
+          border: 1px solid var(--fg-color);
+          border-radius: 3px;
+          outline: none;
+          box-shadow: none;
+          font-size: 16px;
+      }
+
+      textarea#txa::-webkit-scrollbar {
+          width: 15px;
+      }
+
+      textarea#txa::-webkit-scrollbar-track {
+          background: transparent;
+          border-left: 1px solid var(--grey-50);
+          border-bottom: 1px solid var(--grey-50);
+          border-top: 1px solid var(--grey-50);
+      }
+
+      textarea#txa::-webkit-scrollbar-track:hover {
+          border-left: 1px solid var(--grey-99);
+          border-bottom: 1px solid var(--grey-99);
+          border-top: 1px solid var(--grey-99);
+      }
+
+      textarea#txa::-webkit-scrollbar-track:active {
+          border-left: 1px solid var(--grey-ff);
+          border-bottom: 1px solid var(--grey-ff);
+          border-top: 1px solid var(--grey-ff);
+      }
+
+      textarea#txa::-webkit-scrollbar-thumb {
+          background: var(--grey-50);
+      }
+
+      textarea#txa::-webkit-scrollbar-thumb:hover {
+          background: var(--grey-99);
+      }
+
+      textarea#txa::-webkit-scrollbar-thumb:active {
+          background: var(--grey-ff);
+      }
+
+      div.btncnt {
+          display: flex;
+      }
+
+      div.btnspc {
+          flex-grow: 1;
+      }
+
+      button#submit {
+          display: block;
+          height: 2em;
+          width: fit-content;
+          font-family: var(--font);
+          margin-left: 6px;
+          margin-top: 2px;
+          border-radius: 3px;
+
+          border: 1px solid var(--fg-color);
+          background-color: var(--bg-color);
+          color: var(--fg-color);
+          font-size: 16px;
+      }
+
+      button#submit:hover {
+          border: 1px solid var(--hl-blue-3);
+          background-color: var(--hl-blue-2);
+          color: var(--fg-color);
+      }
+
+      button#submit:active {
+          border: 1px solid var(--hl-blue-1);
+          background-color: var(--hl-blue-1);
+          color: var(--bg-color);
+      }
+
+    </style>
+  </head>
   <body>
 
-    <textarea></textarea>
-    <button>submit</button>
+    <div class="master-container">
+      <div class="container-header">
+        Keybindings
+      </div>
+      <div class="container-body">
+        <textarea id="txa"></textarea>
+        <div class="btncnt">
+          <div class="btnspc"></div>
+          <button id="submit">Submit</button>
+        </div>
+      </div>
+    </div>
 
     <script src="../../controlcommands.js"></script>
-    <script src="../../utils/quickyQuery.js"></script>
     <script src="../../utils/reftheme.js"></script>
     <script src="../../utils/kbutils.js"></script>
     <script>
 
-      let txa = document.querySelector("textarea");
-      let sub = document.querySelector("button");
+      window.onload = async () => {
+          await fixThemeOverSettable('models');
+          await fixThemeOverSettable('chungus');
 
-      sub.addEventListener("click", async () => {
-          let json = await getSettablesAsJson();
+          await setTextareaContentToValue();
 
-          try {
-              json.keybindings = JSON.parse(txa.value);
-          } catch {
-              return;
-          }
+          const submit = document.querySelector("button#submit");
+          const textarea = document.querySelector("textarea#txa");
+          submit.addEventListener("click", async () => {
+              let settables = await getSettablesAsJson();
 
-          setSettablesByJson(json);
-      });
+              if (!settables) settables = {};
+              if (!settables?.keybindings) settables.keybindings = {};
+
+              settables.keybindings = JSON.parse(textarea.value);
+
+              setSettablesByJson(settables);
+          });
+      }
+
+      async function setTextareaContentToValue() {
+          const textarea = document.querySelector("textarea#txa");
+          const settables = await getSettablesAsJson();
+
+          if (!settables) return;
+          if (!settables?.keybindings) return;
+
+          textarea.value = JSON.stringify(settables.keybindings, undefined, "  ");
+      }
 
     </script>
   </body>

@@ -15,7 +15,6 @@ window.theme_temp =
         "bg-color": "" <color>,
         "fg-color": "" <color>,
         "hard-outline-color": "" <color>,
-        "asset-accent-color": "" <color>,
         "dark-blue-hl": "" <color>,
         "light-blue-hl": "" <color>,
         "transparent-blue": "" <color>,
@@ -70,6 +69,11 @@ window.theme_temp =
         "table-row-odd-bg": "" <color>,
         "table-row-even-bg": "" <color>,
         "table-header-fg": "" <color>,
+    },
+    emptydesk: {
+        "bg-color": "" <color>,
+        "fg-color": "" <color>,
+        "asset-accent-color": "" <color>,
     },
     prism: {
         "prism-block-bg": "" <color>,

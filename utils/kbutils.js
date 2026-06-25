@@ -1,6 +1,5 @@
 async function getSettablesWithoutLevelKeybindings() {
     if (window.self === window.top) {
-        await localDB.ensureOpen();
         return await localDB.getSettables();
     }
     else {
@@ -62,15 +61,27 @@ async function executeKeyboardKeybinding(keyboardEvent) {
 }
 
 function keyboardEventStandardNormalization(event) {
-    let keyString = "";
+    const parts = [];
 
-    if (event.ctrlKey) keyString += "ctrl ";
-    if (event.altKey) keyString += "alt ";
-    if (event.shiftKey) keyString += "shift ";
-    if (event.metaKey) keyString += "meta ";
-    if (event.key) keyString += event.key;
+    if (event.ctrlKey) parts.push("ctrl");
+    if (event.altKey) parts.push("alt");
+    if (event.shiftKey) parts.push("shift");
+    if (event.metaKey) parts.push("meta");
 
-    return keyString.trim().toLowerCase();
+    let key = event.key.toLowerCase();
+
+    if (key === " ") key = "space";
+
+    if (
+        key !== "control" &&
+        key !== "alt" &&
+        key !== "shift" &&
+        key !== "meta"
+    ) {
+        parts.push(key);
+    }
+
+    return parts.join(" ");
 }
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -87,6 +98,25 @@ window.addEventListener("DOMContentLoaded", () => {
                 }, "*");
             }
         });
+
+        setInterval(async () => {
+            const settables = await localDB.getSettables();
+
+            if (!settables) {
+                localStorage.setItem("keybindingsCache", "{}");
+                return;
+            }
+            if (!settables?.keybindings) {
+                localStorage.setItem("keybindingsCache", "{}");
+                return;
+            }
+
+            const value = JSON.stringify(settables?.keybindings);
+
+            if (value !== localStorage.getItem("keybindingsCache")) {
+                localStorage.setItem("keybindingsCache", value);
+            }
+        }, 1000/60);
     }
 
     window.addEventListener("message", async (event) => {
@@ -105,14 +135,17 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+
+
     window.addEventListener("keydown", async (event) => {
         const keyString = keyboardEventStandardNormalization(event);
 
-        const settables = await getSettablesWithoutLevelKeybindings();
+        const keybindings = JSON.parse(localStorage.getItem("keybindingsCache"));
 
-        if (!settables) return;
-        if (!settables.keybindings) return;
-        if (!Object.hasOwn(settables.keybindings, keyString)) return;
+        if (!Object.hasOwn(keybindings, keyString)) return;
+
+        event.preventDefault();
+        event.stopPropagation();
 
         window.top.postMessage({
             type: "keyboardUpward",
