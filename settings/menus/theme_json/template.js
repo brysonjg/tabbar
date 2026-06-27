@@ -239,6 +239,19 @@ window.theme_temp =
         "icon-1": "" <filter>,
         "icon-2": "" <filter>,
         "icon-3": "" <filter>,
+
+        "btn-active-border": "" <color>,
+        "btn-active-bg": "" <color>,
+
+        "context-hover-bg": "" <color>,
+
+        "grey-40": "" <color>,
+        "grey-50": "" <color>,
+        "grey-80": "" <color>,
+        "grey-90": "" <color>,
+        "grey-99": "" <color>,
+        "grey-ff": "" <color>,
+        "grey-solid": "" <color>,
     },
     profile: {
         "bg-color": "" <color>,

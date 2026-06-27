@@ -277,7 +277,6 @@ div.usr-input-master-container {
     justify-content: center;
     flex-direction: column;
     box-sizing: border-box;
-    z-index: 5;
 }
 
 body:has(div.right-sidepanel) div.usr-input-master-container {
