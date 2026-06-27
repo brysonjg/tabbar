@@ -237,7 +237,20 @@ window.theme_cnt_light = {
 
                                 "icon-1": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(50%)",
                                 "icon-2": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(35%)",
-                                "icon-3": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(25%)"
+                                "icon-3": "brightness(1000) saturate(5%) hue-rotate(206deg) brightness(25%)",
+
+                                "btn-active-border": "#007bff",
+                                "btn-active-bg": "#007bff",
+
+                                "context-hover-bg": "#007bff33",
+
+                                "grey-40": "#66666640",
+                                "grey-50": "#66666650",
+                                "grey-80": "#66666680",
+                                "grey-90": "#66666690",
+                                "grey-99": "#66666699",
+                                "grey-ff": "#666666ff",
+                                "grey-solid": "#666666",
                             },
                             profile: {
                                 "bg-color": "#ffffff",
@@ -288,7 +301,7 @@ window.theme_cnt_light = {
                                 "topper-color": "#ffffff",
                                 "hard-outline-color": "#333333",
                                 "tab-inactive": "#f1f1f1",
-                                "dark-blue-hl": "#004c97bb",
+                                "dark-blue-hl": "#447cb3",
                                 "lighter-blue-hl": "#007bff",
                                 "blue-outline": "#0057d8",
                                 "tab-inactive-blue": "#e0ebff",

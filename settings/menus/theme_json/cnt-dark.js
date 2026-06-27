@@ -238,6 +238,19 @@ window.theme_cnt_dark = {
                                 "icon-1": "brightness(1000) saturate(40%) hue-rotate(200deg) brightness(60%)",
                                 "icon-2": "brightness(1000) saturate(40%) hue-rotate(200deg) brightness(90%)",
                                 "icon-3": "brightness(1000) saturate(40%) hue-rotate(200deg) brightness(120%)",
+
+                                "btn-active-border": "#00baff",
+                                "btn-active-bg": "#00baff",
+
+                                "context-hover-bg": "#00baff33",
+
+                                "grey-40": "#585b5e40",
+                                "grey-50": "#585b5e50",
+                                "grey-80": "#585b5e80",
+                                "grey-90": "#585b5e90",
+                                "grey-99": "#585b5e99",
+                                "grey-ff": "#585b5eff",
+                                "grey-solid": "#585b5e",
                             },
                             profile: {
                                 "bg-color": "#111214",

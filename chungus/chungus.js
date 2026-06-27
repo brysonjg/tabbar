@@ -1,23 +1,18 @@
 window.onload = async () => {
-    await fixThemeOverSettable(); // correcting theming
-
-    // theme imports
+    await fixThemeOverSettable();
     await fixThemeOverSettable("prism");
     await fixThemeOverSettable("gitgraph");
 
     await fixModelMenu();
 
     // Load account data
-    let accountData = {"displayname": "User"};
+    const settables = await getSettablesAsJson();
+    const accountData = {
+        displayname: "User",
+        avatar: "../icons/default-user.svg",
+        ...(settables?.account)
+    };
     window.account = accountData;
-
-    try {
-        accountData = await getSettablesAsJson();
-        accountData = accountData.account;
-        window.account = accountData;
-    } catch {
-        // nothing
-    }
 
     const json = await getLocalJson();
     if (!json) return;
@@ -42,20 +37,15 @@ window.onload = async () => {
             let icon = "../icons/default-user.svg";
 
             if (accountData && message.role === "user") {
-                username = accountData.displayname || "User";
-                icon = accountData.avatar || "../icons/default-user.svg";
+                username = accountData.displayname;
+                icon = accountData.avatar;
             } else if (message.role === "assistant") {
                 icon = "../icons/ai-default.svg";
                 username = "assistant";
             }
 
-            await renderMD(message.content, username, "", message.files, false, true, icon);
+            await renderMD(message.content, username, message.files, false, icon);
         }
-    }
-
-    const outerer = document.querySelector("div.chat-outerer");
-    if (outerer) {
-        outerer.scrollTop = outerer.scrollHeight;
     }
 
     setTimeout(async () => {
@@ -183,7 +173,8 @@ function startUsrInputOffsetObserver() {
     const master = container.querySelector(".usr-input-master");
     if (master) resizeObserver.observe(master);
 
-    new MutationObserver(() => scheduleUsrInputOffsetUpdate()).observe(container, {
+    const mutationObserver = new MutationObserver(() => scheduleUsrInputOffsetUpdate());
+    mutationObserver.observe(container, {
         attributes: true,
         attributeFilter: ["class"],
     });
@@ -207,11 +198,11 @@ function scheduleBlameSpacerUpdate() {
 
 function updateBlameSpacersFast() {
     const messages = document.querySelectorAll("#chat-container > .chat-message");
-    const blameSpacers = document.querySelectorAll("#blameColumn > .blm-spacer");
-    const blameMains = document.querySelectorAll("#blameColumn > blm");
     const blameColumn = document.getElementById("blameColumn");
+    const blameSpacers = blameColumn.querySelectorAll(".blm-spacer");
+    const blameMains = blameColumn.querySelectorAll("blm");
     const pairCount = Math.min(messages.length, blameSpacers.length, blameMains.length);
-    if (!blameColumn || pairCount === 0) return 0;
+    if (pairCount === 0) return 0;
 
     const columnTop = blameColumn.getBoundingClientRect().top;
     const paddingTop = parseFloat(getComputedStyle(blameColumn).paddingTop) || 0;
@@ -246,7 +237,6 @@ function startBlameSpacerScheduler() {
     window.addEventListener("resize", scheduleBlameSpacerUpdate);
     window.addEventListener("click", scheduleBlameSpacerUpdate);
     window.addEventListener("keydown", scheduleBlameSpacerUpdate);
-    setInterval(updateBlameSpacersFast, 100);
     scheduleBlameSpacerUpdate();
 }
 
@@ -310,6 +300,7 @@ async function reTitleTab() {
             let json = await getLocalJson() || {};
             if (!json.metadata) json.metadata = {};
             json.metadata.title = desiredTitle;
+            
             await setLocalJson(json);
         }
 
@@ -323,6 +314,8 @@ async function reTitleTab() {
         renameBar.classList.add("on-close");
         setTimeout(() => renameBar.remove(), 250);
         clearInterval(topBarFlashForRenameInterval);
+
+        titleBtn.style.top = '5px';  // set height back to its default
     };
 
     submitBtn.addEventListener("click", closeBar);
@@ -454,14 +447,14 @@ async function toggleVersioningSidePanel() {
                 let icon = "../icons/default-user.svg";
 
                 if (window.account && message.role === "user") {
-                    username = window?.account?.displayname || "User";
-                    icon = window.account.avatar || "../icons/default-user.svg";
+                    username = window.account.displayname;
+                    icon = window.account.avatar;
                 } else if (message.role === "assistant") {
                     icon = "../icons/ai-default.svg";
                     username = "assistant";
                 }
 
-                await renderMD(message.content, username, "", message.files, false, true, icon);
+                await renderMD(message.content, username, message.files, false, icon);
             }
         }
 
@@ -530,23 +523,6 @@ document.querySelector('img.change-title-btn').addEventListener("click", async (
     await reTitleTab();
 });
 
-function prismHighlightAllComplete() {
-    return new Promise((resolve) => {
-        const selector =
-            'code[class*="language-"], [class*="language-"] code, code[class*="lang-"], [class*="lang-"] code';
-        const pending = document.querySelectorAll(selector).length;
-        if (pending === 0) {
-            resolve();
-            return;
-        }
-        let done = 0;
-        Prism.highlightAll(false, () => {
-            done += 1;
-            if (done >= pending) resolve();
-        });
-    });
-}
-
 async function updateRules() {
     await batUpdateRules();
 
@@ -556,70 +532,71 @@ async function updateRules() {
 }
 
 function translateMDtoHTML(md) {
-    md = md.split("\uF8FE\uF8FE%%%%%__USER_UPLOADED_FILES_AFTER_THIS__%%%%%\uF8FE\uF8FE")[0];
     md = translateMDtoHTMLDecoupled(md);
     return "<br style=\"user-select: none; -webkit-user-select: none;\">" + md;
 }
 
-async function renderMD(md, username = "user", arbs = "", files = {}, doAnimations = true, useIcons=true, iconScript="../icons/default-user.svg") {
-    document.querySelectorAll("div.usr-input-master-container.before-messages")
-        .forEach((element) => {
-            if (doAnimations) {
-                animateUsrInputContainerTransition(element);
-            } else {
-                element.classList.remove("before-messages");
-                element.querySelector(".initMessage")?.remove();
-                scheduleUsrInputOffsetUpdate();
-            }
-        });
+async function renderMD(md, username = "user", files = {}, doAnimations = true, iconScript="../icons/default-user.svg") {
+    const beforeMessageUserInput = document.querySelector("div.usr-input-master-container.before-messages");
+    if (beforeMessageUserInput) {
+        if (doAnimations) {
+            animateUsrInputContainerTransition(beforeMessageUserInput);
+        } else {
+            beforeMessageUserInput.classList.remove("before-messages");
+            beforeMessageUserInput.querySelector(".initMessage")?.remove();
+            scheduleUsrInputOffsetUpdate();
+        }
+    }
 
     const container = document.getElementById("chat-container");
-    container.insertAdjacentHTML('beforeend', `
-        <div id="message_" class="chat-message" ${arbs}>
-        ${translateMDtoHTML(md)}
-        <div id="__file_field__" class="message-file-field"></div>
-        </div>
-    `);
 
-    const fileField = document.getElementById("__file_field__");
+    const message = document.createElement("div");
+    message.className = "chat-message";
+    message.innerHTML = translateMDtoHTML(md);
 
-    // Display file names only in UI
-    const escapeHTML = (str) =>
-        str.replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
+    const fileField = document.createElement("div");
+    fileField.className = "message-file-field";
 
-    let bufferFileField = "";
+    message.appendChild(fileField);
+    container.appendChild(message);
 
-    Object.keys(files).forEach((file) => {
-        const iconName = files[file].icon || getFileIconFileName(file, files[file].mimetype, null);
-        bufferFileField += `<div class="message-file">
-                                <img src="../icons/type-icons/icons/${iconName}" class="fname-icon" />
-                                ${escapeHTML(file)}
-                            </div>`;
+    Object.entries(files).forEach(([file, meta]) => {
+        const iconName = meta.icon ?? getFileIconFileName(file, meta.mimetype, null);
+        const iconSource = `../icons/type-icons/icons/${iconName}`;
+
+        const div = document.createElement("div");
+        div.className = "message-file";
+
+        const img = document.createElement("img");
+        img.className = "fname-icon";
+        img.src = iconSource;
+
+        div.appendChild(img);
+        div.appendChild(document.createTextNode(file));
+
+        fileField.appendChild(div);
     });
 
-    fileField.innerHTML = bufferFileField;
-
     const blame = document.getElementById("blameColumn");
-    blame.insertAdjacentHTML('beforeend', `
-    <div class="blm-spacer" id="blame_sp_"></div>
-    <blm id="blame_mn_">
-        ${username}
-        ${useIcons ? `<img src="${iconScript}" class="user-icon"></img>` : ""}
-    </blm>
-    `);
 
-    const blameSpacer = document.getElementById("blame_sp_");
-    const blameMain = document.getElementById("blame_mn_");
-    const message = document.getElementById("message_");
+    const blameSpacer = document.createElement('div');
+    blameSpacer.className = "blm-spacer";
+    blame.appendChild(blameSpacer);
 
-    [blameSpacer, blameMain, message, fileField].forEach((el) => el.removeAttribute("id"));
+    const blameTitle = document.createElement('blm');
+    const blameTitleIcon = document.createElement('img');
+    blameTitleIcon.className = "user-icon";
+    blameTitleIcon.src = iconScript;
+
+    blameTitle.append(document.createTextNode(username), blameTitleIcon);
+    blame.appendChild(blameTitle);
 
     await updateRules();
     scheduleBlameSpacerUpdate();
+
+    message.scrollIntoView({behavior: "instant", block: "end"});
+
+    return message;
 }
 
 function collectFiles() {
@@ -663,64 +640,9 @@ let submissionModel = "openai/gpt-oss-120b:free"; // default fallback
     }
 })();
 
-
-async function handleSubmission() {
-    const textArea = document.querySelector("textarea");
-    const message = textArea.value.trim();
-
-    if (message === "") return;
-
-    // indicate that the function is in execution
-    setBlueDote(true);
-
-    const fileStruct = collectFiles();
-
-    // Render user message + file names
-    const userMessageID = "user_message_" + Date.now() + Math.random();
-
-    const userName = window?.account?.displayname || "User";
-    const userIcon = window?.account?.avatar || "../icons/default-user.svg";
-
-    await renderMD(message, userName, `usermessage="${userMessageID}"`, fileStruct, true, true, userIcon);
-    textArea.value = "";
-    const userMessage = document.querySelector(`[usermessage="${userMessageID}"]`);
-    userMessage.scrollIntoView({ behavior: "smooth", block: "end" });
-
-    // Load chat history
-    let json = await getLocalJson();
-    if (!json) json = { chat: VersionObject.newRepository() };
-    
-    // Initialize VersionObject from stored data
-    if (Array.isArray(json.chat)) {
-        // Legacy array format - create empty repo and migrate
-        const repo = VersionObject.newRepository();
-        json.chat.forEach((msg) => {
-            repo[Object.keys(repo).filter(k => k !== 'active').length] = {
-                parent: 0,
-                content: [msg],
-                children: []
-            };
-        });
-        json.chat = new VersionObject(repo);
-    } else if (json.chat && typeof json.chat === 'object' && !json.chat.compile) {
-        // Stored VersionObject data - initialize the class
-        try {
-            json.chat = new VersionObject(json.chat);
-        } catch (err) {
-            console.warn("Failed to initialize chat VersionObject:", err);
-            json.chat = new VersionObject(VersionObject.newRepository());
-        }
-    }
-
-    // Store original message + files in history
-    json.chat.commit([{ role: "user", content: message, files: fileStruct, type: "user" }]);
-    let chatData = json.chat.json;
-    await setLocalJson({ ...json, chat: chatData });
-
-    // Prepare messages array for API submission
-    let apiChat = json.chat.compile().map((msg) => {
+function getAPIChat(chatObject) {
+    return chatObject.compile().map((msg) => {
         if (msg.role === "user" && Object.keys(msg.files || {}).length > 0) {
-            // Merge file content for AI only
             let merged = msg.content;
             for (const [fname, fcontent] of Object.entries(msg.files)) {
                 const contentStr = (typeof fcontent === "string") ? fcontent : (fcontent?.content || "");
@@ -730,11 +652,39 @@ async function handleSubmission() {
         }
         return msg;
     });
+}
+
+async function handleSubmission() {
+    const textArea = document.querySelector("textarea");
+    const message = textArea.value.trim();
+
+    if (message === "") return;
+
+    const fileStruct = collectFiles();
+
+    // Render user message + file names
+    const userMessageID = "user_message_" + Date.now() + Math.random();
+
+    const userName = window.account.displayname;
+    const userIcon = window.account.avatar;
+
+    await renderMD(message, userName, fileStruct, true, userIcon);
+    textArea.value = "";
+
+    // Load chat history
+    let json = await getLocalJson();
+    if (!json) json = { chat: VersionObject.newRepository() };
+
+    // Store original message + files in history
+    let versionObjectJson = new VersionObject(json.chat)
+    versionObjectJson.commit([{ role: "user", content: message, files: fileStruct, type: "user" }]);
+    let chatData = versionObjectJson.json;
+    await setLocalJson({ ...json, chat: chatData });
+
+    let apiChat = getAPIChat(versionObjectJson);
 
     // Placeholder for streaming assistant response
-    const streamId = "streaming_reply_" + Date.now();
-    await renderMD("", "assistant", `streamid="${streamId}"`, [], true, true, "../icons/ai-default.svg");
-    const streamEl = document.querySelector(`[streamid="${streamId}"]`);
+    const streamEl = await renderMD("", "assistant", {}, true, "../icons/ai-default.svg");
 
     let fullReply = "";
 
@@ -745,9 +695,9 @@ async function handleSubmission() {
             globalOffStitch = true;
         };
 
-        document.getElementById("submissionIcon").src = "../icons/cancel-message.svg";
-
-        document.getElementById("submissionIcon").addEventListener("click", submitIconAction);
+        const submissionIcon = document.getElementById("submissionIcon");
+        submissionIcon.src = "../icons/cancel-message.svg";
+        submissionIcon.addEventListener("click", submitIconAction);
 
         const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
             method: "POST",
@@ -801,7 +751,6 @@ async function handleSubmission() {
                         streamEl.innerHTML = translateMDtoHTML(fullReply);
                         await updateRules();
 
-                        streamEl.scrollIntoView({ behavior: "instant", block: "end" });
                         chatOuterer.scrollTop = chatOuterer.scrollHeight;
 
                         if (isItWorthCalculatingScrollbar) {
@@ -819,21 +768,21 @@ async function handleSubmission() {
             }
         }
 
-        document.getElementById("submissionIcon").src = "../icons/sendmessage.svg";
-        document.getElementById("submissionIcon").removeEventListener("click", submitIconAction);
+        submissionIcon.src = "../icons/sendmessage.svg";
+        submissionIcon.removeEventListener("click", submitIconAction);
 
         // Finalize assistant message
         streamEl.innerHTML = translateMDtoHTML(fullReply);
         await updateRules();
-        json.chat.commit([{ role: "assistant", content: fullReply, type: null }]);
-        let chatData = json.chat.json;
+        versionObjectJson.commit([{ role: "assistant", content: fullReply, type: null }]);
+        let chatData = versionObjectJson.json;
         await setLocalJson({ ...json, chat: chatData });
 
         // determine whether the AI should rename the chat
         let letAIRenameChat = false;
         let hasPassedAssistant = false;
 
-        json.chat.compile().forEach((msg) => {
+        versionObjectJson.compile().forEach((msg) => {
             if (msg.role === "assistant") {
                 letAIRenameChat = !hasPassedAssistant; // true only on first assistant message
                 hasPassedAssistant = true;
@@ -851,50 +800,37 @@ async function handleSubmission() {
                 const titleRequest = {
                     role: "user",
                     content:
-    `(this message is generated by the ai interface, not the user, but is placed here on the behalf of the user in order to automatically give they're chat a title)
-
-    Please summarize the chat so far into a short, clear, and easily searchable title.
-    The interface will the first section you provide in double quotes ("this is a title") as the chat title, make it concise and directly descriptive of the conversation.
-    Avoid complex punctuation, unnecessary symbols, or formatting. The chat title should summarize the chat up to but not including this title request message.
-    For the sake of the user please get to the title displaying quotes as soon as possible (while still strictly following the guidelines best you can) so that they wont have to wait much time their chat to get titled.
-
-    Follow these guidelines for good titles:
-
-    A good title:
-        - Clearly reflects the main topic of the chat
-        - Uses simple, everyday words
-        - Is easy to read and remember
-        - Is short (ideally 4 to 7 words)
-        - Is syntactically meaningful (uses words like for and the to describe relationships instead of a pile of keywords)
-        - Gets to the main arguments of the conversation (e.g. if the conversation is talking about Microsoft stocks then the title should mention Microsoft and Stocks somewhere in it, If the conversation is about say how much Fuel needed to get to the moon, then it mentions Rocket, fuel and moon, if it is writing an Essay then it should clearly state that in the title with "Essay on ...") and they should be recognizable from the text of the title alone (it gose without saying that if a conversation is not about the stock market or whatever do not mention it)
-
-    A bad title:
-        - Is vague or generic (e.g., "Chat" or "Conversation")
-        - Uses complex punctuation, emojis, or symbols
-        - Includes irrelevant details
-        - Describes or implies details never mentioned
-        - Is overly long or difficult to scan quickly
-        - Uses markdown or other formatting that is not plaintext (e.g. "**Bad Title**" or "# Uncool Title")
-        - Is stating that this is a summary of the chat: "Chat Recap", "Overview of the Chat", "Chat Summary", "Summary" etc.`
+                        `(this message is generated by the ai interface, not the user, but is placed here on the behalf of the user in order to automatically give they're chat a title)\n` +
+                        `\n` +
+                        `Please summarize the chat so far into a short, clear, and easily searchable title.\n` +
+                        `The interface will the first section you provide in double quotes ("this is a title") as the chat title, make it concise and directly descriptive of the conversation.\n` +
+                        `Avoid complex punctuation, unnecessary symbols, or formatting. The chat title should summarize the chat up to but not including this title request message.\n` +
+                        `For the sake of the user please get to the title displaying quotes as soon as possible (while still strictly following the guidelines best you can) so that they wont have to wait much time their chat to get titled.\n` +
+                        `\n` +
+                        `Follow these guidelines for good titles:\n` +
+                        `\n` +
+                        `A good title:\n` +
+                        `    - Clearly reflects the main topic of the chat\n` +
+                        `    - Uses simple, everyday words\n` +
+                        `    - Is easy to read and remember\n` +
+                        `    - Is short (ideally 4 to 7 words)\n` +
+                        `    - Is syntactically meaningful (uses words like for and the to describe relationships instead of a pile of keywords)\n` +
+                        `    - Gets to the main arguments of the conversation (e.g. if the conversation is talking about Microsoft stocks then the title should mention Microsoft and Stocks somewhere in it, If the conversation is about say how much Fuel needed to get to the moon, then it mentions Rocket, fuel and moon, if it is writing an Essay then it should clearly state that in the title with "Essay on ...") and they should be recognizable from the text of the title alone (it gose without saying that if a conversation is not about the stock market or whatever do not mention it)\n` +
+                        `\n` +
+                        `A bad title:\n` +
+                        `    - Is vague or generic (e.g., "Chat" or "Conversation")\n` +
+                        `    - Uses complex punctuation, emojis, or symbols\n` +
+                        `    - Includes irrelevant details\n` +
+                        `    - Describes or implies details never mentioned\n` +
+                        `    - Is overly long or difficult to scan quickly\n` +
+                        `    - Uses markdown or other formatting that is not plaintext (e.g. "**Bad Title**" or "# Uncool Title")\n` +
+                        `    - Is stating that this is a summary of the chat: "Chat Recap", "Overview of the Chat", "Chat Summary", "Summary" etc.`
                 };
 
-                json.chat.commit([titleRequest]);
-                chatData = json.chat.json;
+                versionObjectJson.commit([titleRequest]);
+                chatData = versionObjectJson.json;
 
-                apiChat = json.chat.compile().map((msg) => {
-                    if (msg.role === "user" && Object.keys(msg.files || {}).length > 0) {
-                        // Merge file content for AI only
-                        let merged = msg.content;
-                        for (const [fname, fcontent] of Object.entries(msg.files)) {
-                            const contentStr = (typeof fcontent === "string") ? fcontent : (fcontent?.content || "");
-                            merged += `\n\nFile: ${fname}\n\`\`\`\n${contentStr}\n\`\`\``;
-                        }
-                        return { ...msg, content: merged };
-                    }
-                    return msg;
-                });
-
-                const abortControler = new AbortController();
+                apiChat = getAPIChat(versionObjectJson);
 
                 const response4title = await fetch("https://openrouter.ai/api/v1/chat/completions", {
                     method: "POST",
@@ -907,7 +843,6 @@ async function handleSubmission() {
                         messages: apiChat,
                         stream: true
                     }),
-                    signal: abortControler.signal,
                 });
 
                 if (!response4title.ok || !response4title.body) {
@@ -946,8 +881,8 @@ async function handleSubmission() {
                                 responseText += delta;
                             }
 
-                            let title =
-                                responseText.replace(/^["'\n\s]+|["'\n\s]+$/g, "").trim() || "Untitled";
+                            const title =
+                                responseText.replace(/^["'](.*?)["']/, "$1").trim() || "Untitled";
 
                             setTabTitle(title);
 
@@ -958,41 +893,49 @@ async function handleSubmission() {
                     }
                 }
 
-                let title =
-                    responseText.replace(/^["'\n\s]+|["'\n\s]+$/g, "").trim() || "Untitled";
+                const title =
+                    responseText.replace(/^["'](.*?)["']/, "$1").trim() || "Untitled";
 
                 setTabTitle(title);
 
-                json = await getLocalJson() || {};
+                json = await getLocalJson();
                 if (!json.metadata) json.metadata = {};
                 json.metadata.title = title;
                 await setLocalJson(json);
             }
             catch (error) {
-                console.error(error.message);
+                console.error("Title error:", error);
+
                 setTabTitle("Untitled (Error State)");
 
-                json = await getLocalJson() || {};
+                json = await getLocalJson();
                 if (!json.metadata) json.metadata = {};
-                delete json.metadata.title;
+                json.metadata.title = "Untitled (Error State)";
                 await setLocalJson(json);
             }
         }
     } catch (error) {
         console.error("Streaming error:", error);
-        streamEl.innerHTML = `<br style="user-select: none; -webkit-user-select: none;"><p><b>Error:</b><br>&nbsp;&nbsp;&nbsp;&nbsp;${error.message || "OpenRouter Error:"}${error.status != null ? `<br>&nbsp;&nbsp;&nbsp;&nbsp;${error.status}` : ""}</p>`;
+
+        const fourIntentation = "\u00a0\u00a0\u00a0\u00a0";
+        const errorMessage = `**Error:**\n${fourIntentation}${error.message || "OpenRouter Error:"}${error.status != null ? `\n${fourIntentation}${error.status}` : ""}`;
+
+        streamEl.innerHTML = translateMDtoHTML(errorMessage);
         streamEl.scrollIntoView({ behavior: "instant", block: "end" });
+
+        json = await getLocalJson();
+        versionObjectJson = new VersionObject(json.chat);
+        versionObjectJson.commit([{ role: "assistant", content: errorMessage, type: null }]);
+        await setLocalJson({...json, chat: versionObjectJson.json});
+
+        document.getElementById("submissionIcon").src = "../icons/sendmessage.svg";
     }
-
-    setBlueDote(false); // indicate that the function is no longer executing
-
 }
 
 document.querySelector("textarea").addEventListener("keydown", async (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
         event.preventDefault();
         await handleSubmission();
-        setBlueDote(false);
         await updateVpanel();
     }
 });
@@ -1000,7 +943,6 @@ document.querySelector("textarea").addEventListener("keydown", async (event) => 
 document.getElementById("submissionIcon").addEventListener("click", async (event) => {
     event.preventDefault();
     await handleSubmission();
-    setBlueDote(false);
     await updateVpanel();
 });
 

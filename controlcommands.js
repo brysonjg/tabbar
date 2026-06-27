@@ -101,25 +101,3 @@ function updateTopLevelTheme() {
     window.top.postMessage({ type: 'updateTheme' }, '*');
     window.parent.postMessage({ type: 'updateTheme' }, '*');
 }
-
-function toggleBlueDote() {
-    window.top.postMessage({ type: 'toggleActiveDot' }, '*');
-}
-
-function setBlueDote(type) {
-    window.top.postMessage({ type: 'setActiveDot', do: String(type) }, '*');
-}
-
-async function getBlueDote(type) {
-    return new Promise((resolve) => {
-        function handleBlueDoteMessage(event) {
-            if (event.data && event.data.type === 'getBlueDotReturn') {
-                window.removeEventListener('message', handleBlueDoteMessage);
-                resolve(event.data.result);
-            }
-        }
-
-        window.addEventListener('message', handleBlueDoteMessage);
-        window.top.postMessage({ type: 'getActiveDot' }, '*');
-    });
-}

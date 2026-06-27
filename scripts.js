@@ -536,38 +536,10 @@ function getTabIDFromSource(sourceWindow) {
     return null;
 }
 
-// Helper function to set tab title, skipping the active dot if present
 function setTabTitle(tab, title) {
     if (!tab) return;
 
-    // Find the title text node, skipping the active dot if present
-    let titleNode = tab.firstChild;
-
-    // Skip the active dot if it's the first child
-    if (titleNode && titleNode.classList && titleNode.classList.contains('active-dot')) {
-        titleNode = titleNode.nextSibling;
-    }
-
-    // If we found a text node, update it directly
-    if (titleNode && titleNode.nodeType === Node.TEXT_NODE) {
-        titleNode.textContent = title;
-    } else if (titleNode && titleNode.nodeType === Node.ELEMENT_NODE) {
-        // If it's an element, update its textContent
-        titleNode.textContent = title;
-    } else {
-        // Fallback: find first non-dot, non-close child
-        for (let child = tab.firstChild; child; child = child.nextSibling) {
-            if (child.nodeType === Node.TEXT_NODE) {
-                child.textContent = title;
-                break;
-            } else if (child.nodeType === Node.ELEMENT_NODE &&
-                      !child.classList.contains('active-dot') &&
-                      !child.classList.contains('close')) {
-                child.textContent = title;
-                break;
-            }
-        }
-    }
+    tab.firstChild.textContent = title;
 }
 
 function handleCloseClick(tabid) {
@@ -952,79 +924,6 @@ window.addEventListener("message", (event) => {
             setActiveTab(newTab);
             fixTabCloseEventListeners();
         }
-    }
-
-    if (type == "toggleActiveDot") {
-        let tabid = getTabIDFromSource(event.source);
-        let tabdiv = document.querySelector(`div.tab[tabid="${tabid}"]`);
-
-        if (!tabdiv) return;
-
-        // Check if the dot already exists
-        let existingDot = tabdiv.querySelector('.active-dot');
-
-        if (existingDot) {
-            // If dot exists, remove it
-            existingDot.remove();
-        } else {
-            // Create new dot element
-            let dot = document.createElement('div');
-            dot.className = 'active-dot';
-            dot.textContent = '●';
-
-            if (tabdiv.firstChild && tabdiv.firstChild.nodeType === Node.TEXT_NODE) {
-                tabdiv.insertBefore(dot, tabdiv.firstChild);
-            } else {
-                // Otherwise insert at the beginning
-                tabdiv.insertBefore(dot, tabdiv.firstElementChild || tabdiv.firstChild);
-            }
-        }
-    }
-
-    if (type == "setActiveDot") {
-        let tabid = getTabIDFromSource(event.source);
-        let tabdiv = document.querySelector(`div.tab[tabid="${tabid}"]`);
-
-        if (!tabdiv) return;
-
-        let wantsBlueDot = (event.data.do == "true");
-
-        if (!(typeof wantsBlueDot == "boolean")) return;
-
-        // Check if the dot already exists
-        let existingDot = tabdiv.querySelector('.active-dot');
-
-        if (!wantsBlueDot) {
-            if (existingDot) {
-                existingDot.remove();
-            }
-        } else {
-            if (!existingDot) {
-                // Create new dot element
-                let dot = document.createElement('div');
-                dot.className = 'active-dot';
-                dot.textContent = '●';
-
-                if (tabdiv.firstChild && tabdiv.firstChild.nodeType === Node.TEXT_NODE) {
-                    tabdiv.insertBefore(dot, tabdiv.firstChild);
-                } else {
-                    // Otherwise insert at the beginning
-                    tabdiv.insertBefore(dot, tabdiv.firstElementChild || tabdiv.firstChild);
-                }
-            }
-        }
-    }
-
-    if (type == "getActiveDot") {
-        let tabid = getTabIDFromSource(event.source);
-        let tabdiv = document.querySelector(`div.tab[tabid="${tabid}"]`);
-
-        if (!tabdiv) return;
-
-        // Check if the dot already exists
-        let existingDot = tabdiv.querySelector('.active-dot');
-
-        event.source.postMessage({type: "getBlueDotReturn", result: String(!!existingDot)}, "*");
     }
 });
 
