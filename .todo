@@ -1,6 +1,9 @@
 TODO:
       in index, tabs need to be in chronological order
       The git graph needs to work better
+            when rows of commits get too long they go off screen
+            when rows of commits get too long the lines connecting them to the next row get hard to read
+            when columns of commits get too long they go off screen
       When tab bars grow to long they go off the page
       add more good themes
       fix the user interface for keybindings editing
