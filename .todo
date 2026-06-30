@@ -1,5 +1,4 @@
 TODO:
-      in index, tabs need to be in chronological order
       The git graph needs to work better
             when rows of commits get too long they go off screen
             when rows of commits get too long the lines connecting them to the next row get hard to read

@@ -296,7 +296,8 @@ async function reTitleTab() {
             let json = await getLocalJson() || {};
             if (!json.metadata) json.metadata = {};
             json.metadata.title = desiredTitle;
-            
+            json.metadata.time = Date.now();
+
             await setLocalJson(json);
         }
 
@@ -897,6 +898,7 @@ async function handleSubmission() {
                 json = await getLocalJson();
                 if (!json.metadata) json.metadata = {};
                 json.metadata.title = title;
+                json.metadata.time = Date.now();
                 await setLocalJson(json);
             }
             catch (error) {
@@ -907,6 +909,7 @@ async function handleSubmission() {
                 json = await getLocalJson();
                 if (!json.metadata) json.metadata = {};
                 json.metadata.title = "Untitled (Error State)";
+                json.metadata.time = Date.now();
                 await setLocalJson(json);
             }
         }

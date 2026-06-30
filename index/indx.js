@@ -118,7 +118,13 @@ function renderJson(json, renderOptions = {}) {
     const keys = (orderedIds ? orderedIds : Object.keys(sourceJson))
         .filter((key) => Number(key) >= 100);
 
-    if (!orderedIds) keys.reverse();
+    if (!orderedIds) {
+        keys.sort((a, b) => {
+            const timeA = sourceJson[a]?.payload?.time ?? sourceJson[a]?.time ?? 0;
+            const timeB = sourceJson[b]?.payload?.time ?? sourceJson[b]?.time ?? 0;
+            return timeB - timeA;
+        });
+    }
 
     const selectedSet = new Set(selectedList);
 
@@ -277,7 +283,7 @@ function submitActiveRename() {
 
     chTitleOfTab(rowDiv.dataset.id, nextTitle);
     const existingRow = window.globalMetadata?.[rowDiv.dataset.id];
-    const nextPayload = Object.assign({}, existingRow?.payload || {}, { title: nextTitle });
+    const nextPayload = Object.assign({}, existingRow?.payload || {}, { title: nextTitle, time: Date.now() });
     upsertLocalMetadataRow(rowDiv.dataset.id, nextPayload);
 
     rowDiv.classList.remove("renaming");
