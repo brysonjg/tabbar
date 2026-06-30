@@ -34,8 +34,7 @@
 
     /* Accent / link colors */
     --link-blue: #0da9f5;
-    --link-purple: #aa00aa;
-    --link-active-red: red;
+    --link-active: #f00;
     --bg-blue-dark: #254455;
 
     /* Code highlight */

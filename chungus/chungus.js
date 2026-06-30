@@ -202,12 +202,11 @@ function updateBlameSpacersFast() {
     const blameSpacers = blameColumn.querySelectorAll(".blm-spacer");
     const blameMains = blameColumn.querySelectorAll("blm");
     const pairCount = Math.min(messages.length, blameSpacers.length, blameMains.length);
-    if (pairCount === 0) return 0;
+    if (pairCount === 0) return;
 
     const columnTop = blameColumn.getBoundingClientRect().top;
     const paddingTop = parseFloat(getComputedStyle(blameColumn).paddingTop) || 0;
     let cursor = paddingTop;
-    let changedCount = 0;
 
     for (let i = 0; i < pairCount; i++) {
         const messageTop = messages[i].getBoundingClientRect().top - columnTop;
@@ -216,13 +215,10 @@ function updateBlameSpacersFast() {
 
         if (blameSpacers[i].style.height !== nextHeight) {
             blameSpacers[i].style.height = nextHeight;
-            changedCount++;
         }
 
         cursor += spacerHeight + blameMains[i].getBoundingClientRect().height;
     }
-
-    return changedCount;
 }
 
 function startBlameSpacerScheduler() {

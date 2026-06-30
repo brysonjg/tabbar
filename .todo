@@ -1,9 +1,7 @@
 TODO:
+      in index, tabs need to be in chronological order
+      The git graph needs to work better
+      When tab bars grow to long they go off the page
       add more good themes
       fix the user interface for keybindings editing
       add good documentation (that is not a placeholder)
-
-Known Issues:
-      When tab bars grow to long they go off the page
-      The git graph needs to work better
-      the markdown parser sucks

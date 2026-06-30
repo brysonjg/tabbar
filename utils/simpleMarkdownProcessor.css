@@ -24,16 +24,12 @@ a {
     text-decoration: none;
 }
 
-a:link {
+a:link, a:visited {
     color: var(--link-blue);
 }
 
-a:visited {
-    color: var(--link-purple);
-}
-
 a:active {
-    color: var(--link-active-red);
+    color: var(--link-active);
 }
 
 /* INLINE CODE */

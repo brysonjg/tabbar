@@ -42,8 +42,7 @@ window.theme_brz_dark = {
                                 "grey-solid": "#585b5e",
 
                                 "link-blue": "#0da9f5",
-                                "link-purple": "#a0a",
-                                "link-active-red": "#f00",
+                                "link-active": "#f00",
                                 "bg-blue-dark": "#254455",
 
                                 "code-bg": "#494c50",

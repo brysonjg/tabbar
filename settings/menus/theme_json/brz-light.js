@@ -41,8 +41,7 @@ window.theme_brz_light = {
                                 "grey-solid": "#7f8c8d",
 
                                 "link-blue": "#0068c0",
-                                "link-purple": "#7a3daa",
-                                "link-active-red": "#c62430",
+                                "link-active": "#c62430",
                                 "bg-blue-dark": "#d7eaf6",
 
                                 "code-bg": "#ddd",

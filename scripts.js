@@ -732,11 +732,11 @@ window.addEventListener("message", (event) => {
         fixTabCloseEventListeners();
     }
 
-    if (event.data.type === "getGlobalNameQuery") {
+    if (event.data.type === "getGlobalMetadata") {
         const activeTab = getActiveTabElement();
         if (!activeTab || activeTab.getAttribute("tabid") !== "0") {
             try {
-                event.source.postMessage({ type: "globalNameQueryReturn", names: null }, "*");
+                event.source.postMessage({ type: "globalMetadataReturn", rows: [] }, "*");
             } catch {}
             return;
         }
@@ -744,12 +744,12 @@ window.addEventListener("message", (event) => {
         (async () => {
             try {
                 await localDB.ensureOpen();
-                const names = await localDB.getGlobalNameQuery();
-                event.source.postMessage({ type: "globalNameQueryReturn", names }, "*");
+                const rows = await localDB.getGlobalMetadata();
+                event.source.postMessage({ type: "globalMetadataReturn", rows }, "*");
             } catch (e) {
-                console.warn("getGlobalNameQuery failed:", e);
+                console.warn("getGlobalMetadata failed:", e);
                 try {
-                    event.source.postMessage({ type: "globalNameQueryReturn", names: {} }, "*");
+                    event.source.postMessage({ type: "globalMetadataReturn", rows: [] }, "*");
                 } catch {}
             }
         })();

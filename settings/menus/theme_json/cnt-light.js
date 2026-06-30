@@ -41,8 +41,7 @@ window.theme_cnt_light = {
                                 "grey-solid": "#666666",
 
                                 "link-blue": "#0057d8",
-                                "link-purple": "#6a00a8",
-                                "link-active-red": "#cc0000",
+                                "link-active": "#cc0000",
                                 "bg-blue-dark": "#eaf3ff",
 
                                 "code-bg": "#f4f4f4",

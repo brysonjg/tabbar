@@ -2,6 +2,73 @@ let selectedList = [];
 let activeRename = null;
 let searchDebounceTimeout = null;
 
+function rowsToMetadataMap(rows) {
+    const out = Object.create(null);
+
+    if (!Array.isArray(rows)) return out;
+
+    for (const row of rows) {
+        if (!row || typeof row !== "object") continue;
+        const id = row.id != null ? String(row.id) : "";
+        if (!id) continue;
+        out[id] = {
+            id,
+            payload: row.payload && typeof row.payload === "object"
+                ? Object.assign({}, row.payload)
+                : row.payload,
+        };
+    }
+
+    return out;
+}
+
+function getRowTitle(row) {
+    if (!row || typeof row !== "object") return "";
+    const title = row.payload && typeof row.payload === "object"
+        ? row.payload.title
+        : row.title;
+    return typeof title === "string" ? title : "";
+}
+
+function upsertLocalMetadataRow(id, payload) {
+    const rowId = String(id);
+    const nextRow = {
+        id: rowId,
+        payload: payload && typeof payload === "object"
+            ? Object.assign({}, payload)
+            : payload,
+    };
+
+    if (!window.globalMetadata) {
+        window.globalMetadata = Object.create(null);
+    }
+
+    window.globalMetadata[rowId] = nextRow;
+
+    if (Array.isArray(window.globalMetadataRows)) {
+        const index = window.globalMetadataRows.findIndex((row) => String(row?.id) === rowId);
+        if (index === -1) {
+            window.globalMetadataRows.push(nextRow);
+        } else {
+            window.globalMetadataRows[index] = nextRow;
+        }
+    }
+}
+
+function deleteLocalMetadataRow(id) {
+    const rowId = String(id);
+    if (window.globalMetadata) {
+        delete window.globalMetadata[rowId];
+    }
+
+    if (Array.isArray(window.globalMetadataRows)) {
+        const index = window.globalMetadataRows.findIndex((row) => String(row?.id) === rowId);
+        if (index !== -1) {
+            window.globalMetadataRows.splice(index, 1);
+        }
+    }
+}
+
 window.addEventListener("message", (event) => {
     if (!event.data || event.data.type !== "saveQuit") return;
     closeSelf();
@@ -12,10 +79,11 @@ window.onload = async () => {
     await fixThemeOverSettable("master");
     await fixThemeOverSettable();
 
-    window.globalNames = await getGlobalNameQuery();
+    window.globalMetadataRows = await getGlobalMetadata();
+    window.globalMetadata = rowsToMetadataMap(window.globalMetadataRows);
     window.hasInitedFuzzysort = false;
 
-    renderJson(window.globalNames);
+    renderJson(window.globalMetadata);
     requestAnimationFrame(updateScrollbarState);
 
     setTimeout(() => {
@@ -45,9 +113,10 @@ function renderJson(json, renderOptions = {}) {
 
     const highlightMap = renderOptions.highlightMap instanceof Map ? renderOptions.highlightMap : null;
     const orderedIds = Array.isArray(renderOptions.orderedIds) ? renderOptions.orderedIds : null;
+    const sourceJson = json && typeof json === "object" ? json : {};
 
-    const keys = (orderedIds ? orderedIds : Object.keys(json))
-        .filter((key) => String(key).length > 2);
+    const keys = (orderedIds ? orderedIds : Object.keys(sourceJson))
+        .filter((key) => Number(key) >= 100);
 
     if (!orderedIds) keys.reverse();
 
@@ -55,10 +124,10 @@ function renderJson(json, renderOptions = {}) {
 
     keys.forEach((key) => {
         const div = document.createElement("div");
-        const raw = json[key];
+        const raw = sourceJson[key];
         const title = typeof raw === "string"
             ? raw
-            : raw?.metadata?.title;
+            : raw?.payload?.title ?? raw?.title ?? raw?.metadata?.title;
         const name = normalizeTitle(title);
 
         div.innerHTML =
@@ -110,7 +179,7 @@ function renderJson(json, renderOptions = {}) {
         deleteImg.addEventListener("click", () => {
             const rowId = div.dataset.id;
             purgeTabMemory(rowId);
-            delete window.globalNames[rowId];
+            deleteLocalMetadataRow(rowId);
             div.remove();
             try {
                 const index = selectedList.indexOf(rowId);
@@ -207,7 +276,9 @@ function submitActiveRename() {
     const nextTitle = nextTitleTrimmed.length ? nextTitleTrimmed : originalTitle;
 
     chTitleOfTab(rowDiv.dataset.id, nextTitle);
-    window.globalNames[rowDiv.dataset.id] = nextTitle;
+    const existingRow = window.globalMetadata?.[rowDiv.dataset.id];
+    const nextPayload = Object.assign({}, existingRow?.payload || {}, { title: nextTitle });
+    upsertLocalMetadataRow(rowDiv.dataset.id, nextPayload);
 
     rowDiv.classList.remove("renaming");
     submitImg.remove();
@@ -463,7 +534,7 @@ document.getElementById("delete-all-btn").addEventListener("click", (event) => {
         if (tab) {
             tab.remove();
             purgeTabMemory(id);
-            delete window.globalNames[id];
+            deleteLocalMetadataRow(id);
         }
     });
     selectedList = [];
@@ -477,18 +548,18 @@ document.getElementById("search-btn").addEventListener("click", () => {
     const main = document.querySelector("main");
 
     const ensureFuzzysortIndex = () => {
-        const entries = Object.entries(window.globalNames || {});
+        const entries = Object.entries(window.globalMetadata || {});
         if (window.hasInitedFuzzysort && window.fuzzysortIndexSourceSize === entries.length) return;
 
         window.fuzzysortIndex = entries
-            .filter(([id, title]) =>
+            .filter(([id, row]) =>
                 Number(id) >= 100 &&
-                String(title ?? "").trim().length > 0
+                String(getRowTitle(row)).trim().length > 0
             )
-            .map(([id, title]) => ({
+            .map(([id, row]) => ({
                 id,
-                title: fuzzysort.prepare(String(title)),
-                ref: { metadata: { title: String(title) } },
+                title: fuzzysort.prepare(String(getRowTitle(row))),
+                ref: row,
             }));
 
         window.hasInitedFuzzysort = true;
@@ -505,7 +576,7 @@ document.getElementById("search-btn").addEventListener("click", () => {
         const inputElementCopy = inputElement.cloneNode(true);
         inputElement.replaceWith(inputElementCopy);
 
-        renderJson(window.globalNames);
+        renderJson(window.globalMetadata);
     };
 
     divCenter.classList.toggle("hidden");

@@ -42,8 +42,7 @@ window.theme_temp =
         "grey-solid": "" <color>,
 
         "link-blue": "" <color>,
-        "link-purple": "" <color>,
-        "link-active-red": "" <color>,
+        "link-active": "" <color>,
         "bg-blue-dark": "" <color>,
 
         "code-bg": "" <color>,

@@ -41,8 +41,7 @@ window.theme_cnt_dark = {
                                 "grey-solid": "#585b5e",
 
                                 "link-blue": "#00baff",
-                                "link-purple": "#c100ff",
-                                "link-active-red": "#ff3b3b",
+                                "link-active": "#ff3b3b",
                                 "bg-blue-dark": "#0d2430",
 
                                 "code-bg": "#191a1f",

@@ -432,7 +432,6 @@ let copyButtonGlobalListenersAttached = false;
 let copyButtonVisibilityObserver = null;
 let copyButtonVisibilityMarginPx = 256;
 let copyButtonObservedParents = new WeakMap();
-let copyButtonUpdateSpeed = 20;
 let _copyButtonsDoCopyMarkdowns = false;
 
 function ensureCopyButtonVisibilityObserver() {
@@ -505,11 +504,13 @@ function attachCopyButtonGlobalListeners() {
     window.addEventListener("wheel", scheduleCopyButtonUpdate, { passive: true });
     window.addEventListener("scroll", scheduleCopyButtonUpdate, { passive: true });
     window.addEventListener("resize", scheduleCopyButtonUpdate);
+    window.addEventListener("click", scheduleCopyButtonUpdate);
+    window.addEventListener("keydown", scheduleCopyButtonUpdate);
+    window.addEventListener("mousedown", scheduleCopyButtonUpdate);
+    window.addEventListener("mousemove", scheduleCopyButtonUpdate);
+    window.addEventListener("mouseup", scheduleCopyButtonUpdate);
 
-    setInterval(scheduleCopyButtonUpdate, copyButtonUpdateSpeed);
-
-    const observer = new MutationObserver(scheduleCopyButtonUpdate);
-    observer.observe(document.body, { attributes: true, childList: true, subtree: true });
+    setInterval(scheduleCopyButtonUpdate, 1000/30); // garentee that if i mised any event that may change the dom that it will look normal ish
 }
 
 function registerCopyButton(element) {
