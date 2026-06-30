@@ -139,68 +139,59 @@ const THEME_STORAGE_KEY = "__tabbar_theme_master";
 const THEME_FONT_STORAGE_KEY = "__tabbar_theme_font";
 
 async function fixThemeOverSettable(name=null) {
-  try {
-    const stylesRoot = document.documentElement;
-    const styles = getComputedStyle(stylesRoot);
-    const customProps = Object.keys(styles).filter(key =>
-      typeof styles[key] === 'string' &&
-      styles[key].startsWith('--versioning-graph-')
-    );
+    try {
+        const stylesRoot = document.documentElement;
+        const styles = getComputedStyle(stylesRoot);
+        const customProps = Object.keys(styles).filter(key =>
+            typeof styles[key] === 'string' &&
+            styles[key].startsWith('--versioning-graph-')
+        );
 
-    customProps.forEach(prop => {
-      stylesRoot.style.removeProperty(prop);
-    });
-  } catch (e) {
-    console.warn("fixThemeOverSettable gitgraph style removal error:", e);
-  }
+        customProps.forEach((prop) => {
+            stylesRoot.style.removeProperty(prop);
+        });
+    } catch (e) {
+        console.warn("fixThemeOverSettable gitgraph style removal error:", e);
+    }
 
-  try {
-    const settables = await getSettablesAsJson();
-    if (settables && settables.theme) {
+    try {
+        const settables = await getSettablesAsJson();
+        if (settables && settables.theme) {
+            const file = location.pathname.split("/").pop().split(".")[0];
 
-      const file = location.pathname.split("/").pop().split(".")[0];
+            const vars =
+                settables.theme[name] ||
+                settables.theme[file] ||
+                settables.theme.master;
 
-      const vars =
-        settables.theme[name] ||
-        settables.theme[file] ||
-        settables.theme.master;
-
-      if (vars) {
-        for (const key in vars) {
-          if (!key) continue;
-          document.documentElement.style.setProperty(
-            `--${key.trim()}`,
-            vars[key]
-          );
+            if (vars) {
+                for (const key in vars) {
+                    if (!key) continue;
+                    document.documentElement.style.setProperty(
+                        `--${key.trim()}`,
+                        vars[key]
+                    );
+                }
+            }
         }
-      }
-    }
-  } catch (e) {
-    console.warn("fixThemeOverSettable error:", e);
-  }
-
-  try {
-    let settables = await getSettablesAsJson();
-    if (!settables) {
-      try {
-        await localDB.ensureOpen();
-        settables = await localDB.getSettables();
-      } catch (e) {
-        console.warn("local fallback getSettables error", e);
-      }
+    } catch (e) {
+        console.warn("fixThemeOverSettable error:", e);
     }
 
-    if (settables && settables.font) {
-      const fontName = normalizeFontName(settables.font.font);
-      await loadFontForThemingSettables(fontName);
-      document.documentElement.style.setProperty(
-        `--font`,
-        fontName
-      );
+    try {
+        const settables = await getSettablesAsJson();
+
+        if (settables && settables.font) {
+            const fontName = normalizeFontName(settables.font.font);
+            await loadFontForThemingSettables(fontName);
+            document.documentElement.style.setProperty(
+                `--font`,
+                fontName
+            );
+        }
+    } catch (e) {
+        console.warn("fixThemeOverSettable font error:", e);
     }
-  } catch (e) {
-    console.warn("fixThemeOverSettable font error:", e);
-  }
 }
 
 
